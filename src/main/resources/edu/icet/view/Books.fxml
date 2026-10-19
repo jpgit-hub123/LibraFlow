@@ -12,7 +12,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.icet.controller.BooksController"
+            fx:controller="edu.icet.controller.BooksPageController"
             styleClass="root-container">
 
     <left>
@@ -31,7 +31,7 @@
                    styleClass="menu-heading"/>
 
             <Button text="Dashboard"
-                    onAction="#showDashboard"
+                    onAction="#showDashboardOnAction"
                     styleClass="menu-button"/>
 
             <Button text="Books"
@@ -70,10 +70,11 @@
 
                 <TextField fx:id="searchField"
                            promptText="Search by title, author or ISBN..."
+                           onKeyReleased="#searchBooks"
                            HBox.hgrow="ALWAYS"/>
 
                 <Button text="+ Add Book"
-                        onAction="#showAddBookForm"
+                        onAction="#showAddBookFormOnAction"
                         styleClass="primary-button"/>
 
             </HBox>

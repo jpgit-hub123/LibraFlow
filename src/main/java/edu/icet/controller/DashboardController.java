@@ -1,6 +1,5 @@
 package edu.icet.controller;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
@@ -9,31 +8,20 @@ import java.io.IOException;
 
 public class DashboardController {
 
-    @FXML
-    private BorderPane rootPane;
+    public void loadPage(String fxmlFile, BorderPane rootPane) {
 
-    @FXML
-    private void showDashboard() {
-        loadPage("/edu/icet/view/Dashboard.fxml");
-    }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 
-    @FXML
-    private void showBooks() {
-        loadPage("/edu/icet/view/Books.fxml");
-    }
-
-    private void loadPage(String path) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(path)
-            );
+            Parent rootNode = loader.load();
 
-            Parent page = loader.load();
-
-            rootPane.getScene().setRoot(page);
+            rootPane.getScene().setRoot(rootNode);
 
         } catch (IOException e) {
-            e.printStackTrace();
+
+            throw new RuntimeException(e);
+
         }
+
     }
 }

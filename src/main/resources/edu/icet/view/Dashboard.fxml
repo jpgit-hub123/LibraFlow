@@ -10,7 +10,7 @@
 <BorderPane fx:id="rootPane"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.icet.controller.DashboardController"
+            fx:controller="edu.icet.controller.DashboardPageController"
             styleClass="root-container">
 
     <!-- Sidebar -->
@@ -31,11 +31,11 @@
                    styleClass="menu-heading"/>
 
             <Button text="Dashboard"
-                    onAction="#showDashboard"
+                    onAction="#showDashboardOnAction"
                     styleClass="menu-button, active-menu"/>
 
             <Button text="Books"
-                    onAction="#showBooks"
+                    onAction="#showBooksOnAction"
                     styleClass="menu-button"/>
 
             <Button text="Members"

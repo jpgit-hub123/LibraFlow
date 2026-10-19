@@ -1,63 +1,70 @@
 package edu.icet.controller;
 
-import javafx.fxml.FXML;
+import edu.icet.model.Book;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 
 public class BooksController {
 
-    @FXML
-    private TextField searchField;
+    private ObservableList<Book> booksList;
 
-    @FXML
-    private TableView<?> booksTable;
-
-    @FXML
-    private TableColumn<?, ?> isbnColumn;
-
-    @FXML
-    private TableColumn<?, ?> titleColumn;
-
-    @FXML
-    private TableColumn<?, ?> authorColumn;
-
-    @FXML
-    private TableColumn<?, ?> categoryColumn;
-
-    @FXML
-    private TableColumn<?, ?> quantityColumn;
-
-    @FXML
-    private void showDashboard() {
-        loadPage("/edu/icet/view/Dashboard.fxml");
-    }
-
-    @FXML
-    private void showAddBookForm() {
-        System.out.println("Add Book button clicked!");
-    }
-
-    private void loadPage(String path) {
+    public void loadPage(String fxmlFile, TextField searchField) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(path)
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 
-            Parent page = loader.load();
+            Parent rootNode = loader.load();
 
-            BorderPane currentRoot =
-                    (BorderPane) searchField.getScene().getRoot();
-
-            currentRoot.getScene().setRoot(page);
+            searchField.getScene().setRoot(rootNode);
 
         } catch (IOException e) {
-            e.printStackTrace();
+
+            throw new RuntimeException(e);
+
         }
+    }
+
+    public void setBooksDataIntoTable(TableColumn<Book, String> isbnColumn, TableColumn<Book, String> titleColumn,
+                                      TableColumn<Book, String> authorColumn, TableColumn<Book, String> categoryColumn,
+                                      TableColumn<Book, Integer> quantityColumn, TableView<Book> booksTable) {
+
+        isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+        booksList = FXCollections.observableArrayList(
+                new Book("9780132350884", "Clean Code", "Robert C. Martin", "Programming", 5),
+                new Book("9780134685991", "Effective Java", "Joshua Bloch", "Programming", 3),
+                new Book("9780596009205", "Head First Java", "Kathy Sierra", "Programming", 7)
+        );
+
+        booksTable.setItems(booksList);
+    }
+
+    public void getRelatedBooks(TextField searchField, TableView<Book> booksTable) {
+
+        String searchWord = searchField.getText().trim().toLowerCase();
+        ObservableList<Book> filterBooks = FXCollections.observableArrayList();
+
+        for (Book book : booksList) {
+
+            if (book.getIsbn().toLowerCase().contains(searchWord)
+                || book.getTitle().toLowerCase().contains(searchWord)
+                || book.getAuthor().toLowerCase().contains(searchWord)
+                || book.getCategory().toLowerCase().contains(searchWord)) {
+
+                filterBooks.add(book);
+            }
+        }
+        booksTable.setItems(filterBooks);
     }
 }
