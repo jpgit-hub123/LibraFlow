@@ -6,8 +6,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<?import javafx.scene.control.Button?>
+<BorderPane fx:id="rootPane"
+            xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.icet.controller.DashboardController"
             styleClass="root-container">
 
     <!-- Sidebar -->
@@ -27,20 +30,22 @@
             <Label text="MAIN MENU"
                    styleClass="menu-heading"/>
 
-            <Label text="Dashboard"
-                   styleClass="menu-item, active-menu"/>
+            <Button text="Dashboard"
+                    onAction="#showDashboard"
+                    styleClass="menu-button, active-menu"/>
 
-            <Label text="Books"
-                   styleClass="menu-item"/>
+            <Button text="Books"
+                    onAction="#showBooks"
+                    styleClass="menu-button"/>
 
-            <Label text="Members"
-                   styleClass="menu-item"/>
+            <Button text="Members"
+                    styleClass="menu-button"/>
 
-            <Label text="Issue &amp; Return"
-                   styleClass="menu-item"/>
+            <Button text="Issue &amp; Return"
+                    styleClass="menu-button"/>
 
-            <Label text="Reports"
-                   styleClass="menu-item"/>
+            <Button text="Reports"
+                    styleClass="menu-button"/>
 
         </VBox>
     </left>

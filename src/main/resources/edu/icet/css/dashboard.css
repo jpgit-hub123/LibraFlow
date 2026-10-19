@@ -21,11 +21,26 @@
     -fx-font-weight: bold;
 }
 
-.menu-item {
+/*.menu-item {
     -fx-text-fill: #cbd5e1;
     -fx-font-size: 14px;
     -fx-padding: 12px;
     -fx-cursor: hand;
+}*/
+
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 14px;
+    -fx-padding: 12px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-max-width: Infinity;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: #1e3a8a;
+    -fx-background-radius: 8px;
 }
 
 .active-menu {
