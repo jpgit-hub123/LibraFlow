@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="root-container">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox prefWidth="220"
+              spacing="20"
+              styleClass="sidebar"
+              BorderPane.alignment="CENTER">
+
+            <padding>
+                <Insets top="30" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="LibraFlow"
+                   styleClass="logo"/>
+
+            <Label text="MAIN MENU"
+                   styleClass="menu-heading"/>
+
+            <Label text="Dashboard"
+                   styleClass="menu-item, active-menu"/>
+
+            <Label text="Books"
+                   styleClass="menu-item"/>
+
+            <Label text="Members"
+                   styleClass="menu-item"/>
+
+            <Label text="Issue &amp; Return"
+                   styleClass="menu-item"/>
+
+            <Label text="Reports"
+                   styleClass="menu-item"/>
+
+        </VBox>
+    </left>
+
+    <!-- Main Content -->
+    <center>
+        <VBox spacing="25"
+              styleClass="main-content">
+
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT">
+                <VBox spacing="5">
+                    <Label text="Dashboard"
+                           styleClass="page-title"/>
+
+                    <Label text="Welcome to your library management system."
+                           styleClass="subtitle"/>
+                </VBox>
+            </HBox>
+
+            <!-- Statistics -->
+            <HBox spacing="20">
+
+                <VBox spacing="12"
+                      HBox.hgrow="ALWAYS"
+                      styleClass="stat-card">
+
+                    <Label text="TOTAL BOOKS"
+                           styleClass="stat-label"/>
+
+                    <Label text="0"
+                           styleClass="stat-value"/>
+
+                    <Label text="Books in the library"
+                           styleClass="stat-description"/>
+
+                </VBox>
+
+                <VBox spacing="12"
+                      HBox.hgrow="ALWAYS"
+                      styleClass="stat-card">
+
+                    <Label text="TOTAL MEMBERS"
+                           styleClass="stat-label"/>
+
+                    <Label text="0"
+                           styleClass="stat-value"/>
+
+                    <Label text="Registered members"
+                           styleClass="stat-description"/>
+
+                </VBox>
+
+                <VBox spacing="12"
+                      HBox.hgrow="ALWAYS"
+                      styleClass="stat-card">
+
+                    <Label text="BORROWED BOOKS"
+                           styleClass="stat-label"/>
+
+                    <Label text="0"
+                           styleClass="stat-value"/>
+
+                    <Label text="Currently borrowed"
+                           styleClass="stat-description"/>
+
+                </VBox>
+
+                <VBox spacing="12"
+                      HBox.hgrow="ALWAYS"
+                      styleClass="stat-card">
+
+                    <Label text="OVERDUE BOOKS"
+                           styleClass="stat-label"/>
+
+                    <Label text="0"
+                           styleClass="stat-value"/>
+
+                    <Label text="Past their due date"
+                           styleClass="stat-description"/>
+
+                </VBox>
+
+            </HBox>
+
+            <!-- Recent Transactions -->
+            <VBox spacing="15"
+                  styleClass="transactions-card">
+
+                <Label text="Recent Transactions"
+                       styleClass="section-title"/>
+
+                <Label text="Recent borrowing activities will appear here."
+                       styleClass="subtitle"/>
+
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

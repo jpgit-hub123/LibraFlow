@@ -1,10 +1,12 @@
 package edu.icet;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class AppStarter extends Application {
     public static void main(String[] args) {
@@ -14,16 +16,24 @@ public class AppStarter extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Label welcomeLabel = new Label("Welcome to LibraFlow Library Management System!");
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/edu/icet/view/Dashboard.fxml")
+        );
 
-        StackPane root = new StackPane(welcomeLabel);
+        Parent root = loader.load();
 
-        Scene scene = new Scene(root, 800, 500);
+        Scene scene = new Scene(root, 1200, 750);
 
-        stage.setTitle("LibraFlow");
+        scene.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource(
+                        "/edu/icet/css/dashboard.css")).toExternalForm()
+        );
+
+        stage.setTitle("LibraFlow | Library Management System");
+        stage.setMinWidth(1000);
+        stage.setMinHeight(650);
         stage.setScene(scene);
         stage.show();
-
     }
 }
 
