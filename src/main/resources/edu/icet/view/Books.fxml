@@ -75,7 +75,17 @@
 
                 <Button text="+ Add Book"
                         onAction="#showAddBookFormOnAction"
+                        style="
+                                -fx-text-fill: black;
+                                -fx-cursor: hand;"
                         styleClass="primary-button"/>
+
+                <Button
+                        text="Edit Book"
+                        onAction="#editBookOnAction"
+                        style="
+                                -fx-text-fill: black;
+                                -fx-cursor: hand;" />
 
             </HBox>
 

@@ -3,9 +3,11 @@ package edu.icet.controller;
 import edu.icet.model.Book;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -99,5 +101,43 @@ public class BooksController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void editTheSelectedBook(TableView<Book> booksTable) {
+        Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
+
+        if (selectedBook == null) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "No Book Selected",
+                    "Please select a book to edit."
+            );
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddBook.fxml"));
+            Parent form = loader.load();
+            AddBookPageController addBookPageController = loader.getController();
+            addBookPageController.toEditBook(selectedBook);
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("LibraFlow | Edit Book");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+
+            Scene scene = new Scene(form);
+            dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String info, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(info);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

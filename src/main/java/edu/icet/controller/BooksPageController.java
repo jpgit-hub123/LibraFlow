@@ -1,6 +1,7 @@
 package edu.icet.controller;
 
 import edu.icet.model.Book;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -49,6 +50,11 @@ public class BooksPageController {
     @FXML
     private void searchBooks() {
         booksController.getRelatedBooks(searchField, booksTable);
+    }
+
+    @FXML
+    public void editBookOnAction(ActionEvent actionEvent) {
+        booksController.editTheSelectedBook(booksTable);
     }
 }
 

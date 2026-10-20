@@ -14,14 +14,11 @@ public class DashboardController {
 
         try {
             Parent rootNode = loader.load();
-
             rootPane.getScene().setRoot(rootNode);
-
         } catch (IOException e) {
 
             throw new RuntimeException(e);
 
         }
-
     }
 }

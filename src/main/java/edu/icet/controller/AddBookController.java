@@ -92,4 +92,14 @@ public class AddBookController {
     public void setExistingBooks(ObservableList<Book> booksList) {
         this.existingBooks = booksList;
     }
+
+
+    public void setBookToEdit(TextField isbnField, TextField titleField, TextField authorField,
+                              TextField categoryField, TextField quantityField, Book book) {
+        isbnField.setText(book.getIsbn());
+        titleField.setText(book.getTitle());
+        authorField.setText(book.getAuthor());
+        categoryField.setText(book.getCategory());
+        quantityField.setText(String.valueOf(book.getQuantity()));
+    }
 }

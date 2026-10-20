@@ -1,5 +1,6 @@
 package edu.icet.controller;
 
+import edu.icet.model.Book;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -29,5 +30,9 @@ public class AddBookPageController {
     @FXML
     private void cancelFormOnAction() {
         addBookController.closedTheAddBookForm(isbnField);
+    }
+
+    public void toEditBook(Book book){
+        addBookController.setBookToEdit(isbnField, titleField, authorField, categoryField, quantityField, book);
     }
 }
