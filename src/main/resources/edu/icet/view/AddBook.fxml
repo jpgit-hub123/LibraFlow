@@ -19,8 +19,9 @@
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
-    <Label text="Add New Book"
-           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <Label  fx:id="titleLabel"
+            text="Add New Book"
+            style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
     <Label text="Enter the book details below."
            style="-fx-text-fill: #64748b;"/>
@@ -65,7 +66,8 @@
                 onAction="#cancelFormOnAction"
                 style="-fx-background-color: #e2e8f0; -fx-cursor: hand;"/>
 
-        <Button text="Save Book"
+        <Button fx:id="saveButton"
+                text="Save Book"
                 onAction="#saveBookOnAction"
                 style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand;"/>
 

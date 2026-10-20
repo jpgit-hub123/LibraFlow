@@ -128,6 +128,8 @@ public class BooksController {
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
+
+            booksTable.refresh();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

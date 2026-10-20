@@ -2,6 +2,8 @@ package edu.icet.controller;
 import edu.icet.model.Book;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -9,6 +11,7 @@ public class AddBookController {
 
     private ObservableList<Book> existingBooks;
     private Book newBook;
+    private Book bookToEdit;
 
     public void validateBookDetails(TextField isbnField, TextField titleField, TextField authorField,
                                     TextField categoryField, TextField quantityField) {
@@ -48,10 +51,18 @@ public class AddBookController {
             return;
         }
 
-        if (!isDuplicateIsbn(isbn)) {
-            newBook = new Book(isbn, title, author, category, quantity);
+        if (bookToEdit == null) {
+            if (!isDuplicateIsbn(isbn)) {
+                newBook = new Book(isbn, title, author, category, quantity);
+            } else {
+                return;
+            }
         } else {
-            return;
+            bookToEdit.setIsbn(isbnField.getText());
+            bookToEdit.setTitle(titleField.getText());
+            bookToEdit.setAuthor(authorField.getText());
+            bookToEdit.setCategory(categoryField.getText());
+            bookToEdit.setQuantity(Integer.parseInt(quantityField.getText()));
         }
 
         Stage stage = (Stage) isbnField.getScene().getWindow();
@@ -95,11 +106,18 @@ public class AddBookController {
 
 
     public void setBookToEdit(TextField isbnField, TextField titleField, TextField authorField,
-                              TextField categoryField, TextField quantityField, Book book) {
+                              TextField categoryField, TextField quantityField, Book book,
+                              Button saveButton, Label titleLabel) {
+
+        this.bookToEdit = book;
+
         isbnField.setText(book.getIsbn());
         titleField.setText(book.getTitle());
         authorField.setText(book.getAuthor());
         categoryField.setText(book.getCategory());
         quantityField.setText(String.valueOf(book.getQuantity()));
+
+        saveButton.setText("Update");
+        titleLabel.setText("Update Book");
     }
 }
