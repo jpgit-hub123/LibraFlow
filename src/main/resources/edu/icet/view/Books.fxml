@@ -87,6 +87,13 @@
                                 -fx-text-fill: black;
                                 -fx-cursor: hand;" />
 
+                <Button
+                        text="Delete Book"
+                        onAction="#deleteBookOnAction"
+                        style="-fx-background-color: #dc2626;
+                                -fx-text-fill: white;
+                                   -fx-cursor: hand;" />
+
             </HBox>
 
             <VBox spacing="15"

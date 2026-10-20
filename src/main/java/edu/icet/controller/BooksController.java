@@ -3,7 +3,6 @@ package edu.icet.controller;
 import edu.icet.model.Book;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -141,5 +140,35 @@ public class BooksController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void deleteSelectedBook(TableView<Book> booksTable) {
+        Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
+
+        if (selectedBook == null) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "No Book Selected",
+                    "Please select a book to delete."
+            );
+            return;
+        }
+
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Delete Book");
+        confirmation.setHeaderText("Delete " + selectedBook.getTitle() + "?");
+        confirmation.setContentText("Are you sure you want to delete this book?");
+
+        confirmation.showAndWait().ifPresent(response -> {
+            if (response == javafx.scene.control.ButtonType.OK) {
+                booksList.remove(selectedBook);
+
+                showAlert(
+                        Alert.AlertType.INFORMATION,
+                        "Book Deleted",
+                        "The book was deleted successfully."
+                );
+            }
+        });
     }
 }

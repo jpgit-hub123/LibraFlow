@@ -56,6 +56,10 @@ public class BooksPageController {
     public void editBookOnAction(ActionEvent actionEvent) {
         booksController.editTheSelectedBook(booksTable);
     }
+
+    public void deleteBookOnAction(ActionEvent actionEvent) {
+        booksController.deleteSelectedBook(booksTable);
+    }
 }
 
 
