@@ -1,13 +1,10 @@
 package edu.icet.controller;
 
 import edu.icet.model.Book;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 public class BooksPageController {
 
@@ -34,8 +31,6 @@ public class BooksPageController {
 
     public BooksController booksController = new BooksController();
 
-    private ObservableList<Book> books;
-
     @FXML
     private void showDashboardOnAction() {
         booksController.loadPage("/edu/icet/view/Dashboard.fxml", searchField);
@@ -43,7 +38,7 @@ public class BooksPageController {
 
     @FXML
     private void showAddBookFormOnAction() {
-        System.out.println("Add Book button clicked!");
+        booksController.loadForm();
     }
 
     @FXML

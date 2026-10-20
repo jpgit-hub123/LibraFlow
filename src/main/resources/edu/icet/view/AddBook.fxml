@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.icet.controller.AddBookPageController"
+      spacing="18"
+      prefWidth="450"
+      style="-fx-background-color: white;">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Add New Book"
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <Label text="Enter the book details below."
+           style="-fx-text-fill: #64748b;"/>
+
+    <GridPane hgap="12" vgap="15">
+
+        <Label text="ISBN:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="isbnField"
+                   promptText="Enter ISBN"
+                   GridPane.rowIndex="0"
+                   GridPane.columnIndex="1"/>
+
+        <Label text="Title:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="titleField"
+                   promptText="Enter book title"
+                   GridPane.rowIndex="1"
+                   GridPane.columnIndex="1"/>
+
+        <Label text="Author:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="authorField"
+                   promptText="Enter author name"
+                   GridPane.rowIndex="2"
+                   GridPane.columnIndex="1"/>
+
+        <Label text="Category:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="categoryField"
+                   promptText="Enter category"
+                   GridPane.rowIndex="3"
+                   GridPane.columnIndex="1"/>
+
+        <Label text="Quantity:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="quantityField"
+                   promptText="Enter quantity"
+                   GridPane.rowIndex="4"
+                   GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <HBox spacing="12" alignment="CENTER_RIGHT">
+
+        <Button text="Cancel"
+                onAction="#cancelFormOnAction"
+                style="-fx-background-color: #e2e8f0; -fx-cursor: hand;"/>
+
+        <Button text="Save Book"
+                onAction="#saveBookOnAction"
+                style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-cursor: hand;"/>
+
+    </HBox>
+
+</VBox>

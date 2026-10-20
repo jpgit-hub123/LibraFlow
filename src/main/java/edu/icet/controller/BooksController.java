@@ -5,10 +5,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -66,5 +69,35 @@ public class BooksController {
             }
         }
         booksTable.setItems(filterBooks);
+    }
+
+    public void loadForm() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddBook.fxml"));
+
+            Parent form = loader.load();
+
+            AddBookPageController addBookPageController = loader.getController();
+            addBookPageController.addBookController.setExistingBooks(booksList);
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("LibraFlow | Add New Book");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+
+            Scene scene = new Scene(form);
+
+            dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
+            dialogStage.showAndWait();
+
+            Book newBook = addBookPageController.addBookController.getNewBook();
+
+            if (newBook != null) {
+                booksList.add(newBook);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
