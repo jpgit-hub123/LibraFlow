@@ -70,13 +70,23 @@ public class AddBookController {
                 return;
             }
         } else {
-            if (!isDuplicateIsbn(isbn)) {
-                bookToEdit.setIsbn(isbnField.getText());
-                bookToEdit.setTitle(titleField.getText());
-                bookToEdit.setAuthor(authorField.getText());
-                bookToEdit.setCategory(categoryField.getText());
-                bookToEdit.setQuantity(Integer.parseInt(quantityField.getText()));
+            Book updatedBook = new Book(isbn, title, author, category, quantity);
+
+            boolean isUpdated = bookDAO.updateBook(updatedBook);
+
+            if (isUpdated) {
+                bookToEdit.setIsbn(isbn);
+                bookToEdit.setTitle(title);
+                bookToEdit.setAuthor(author);
+                bookToEdit.setCategory(category);
+                bookToEdit.setQuantity(quantity);
+
             } else {
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Database Error",
+                        "Failed to update the book. Please try again."
+                );
                 return;
             }
         }

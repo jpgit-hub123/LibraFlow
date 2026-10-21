@@ -66,5 +66,32 @@ public class BookDAO {
         }
         return books;
     }
+
+    public boolean updateBook(Book book) {
+
+        String sql = "UPDATE books SET title = ?, author = ?, category = ?, quantity = ? " +
+                "WHERE isbn = ?";
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, book.getTitle());
+            statement.setString(2, book.getAuthor());
+            statement.setString(3, book.getCategory());
+            statement.setInt(4, book.getQuantity());
+            statement.setString(5, book.getIsbn());
+
+            int rowsUpdated = statement.executeUpdate();
+
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+//    public boolean deleteBook(Book book) {
+//        String sql = ""
+//    }
 }
 
