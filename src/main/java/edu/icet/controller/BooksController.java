@@ -1,5 +1,6 @@
 package edu.icet.controller;
 
+import edu.icet.dao.BookDAO;
 import edu.icet.model.Book;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,11 +46,15 @@ public class BooksController {
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        booksList = FXCollections.observableArrayList(
-                new Book("9780132350884", "Clean Code", "Robert C. Martin", "Programming", 5),
-                new Book("9780134685991", "Effective Java", "Joshua Bloch", "Programming", 3),
-                new Book("9780596009205", "Head First Java", "Kathy Sierra", "Programming", 7)
-        );
+//        booksList = FXCollections.observableArrayList(
+//                new Book("9780132350884", "Clean Code", "Robert C. Martin", "Programming", 5),
+//                new Book("9780134685991", "Effective Java", "Joshua Bloch", "Programming", 3),
+//                new Book("9780596009205", "Head First Java", "Kathy Sierra", "Programming", 7)
+//        );
+
+        BookDAO bookDAO = new BookDAO();
+
+        booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
 
         booksTable.setItems(booksList);
     }
