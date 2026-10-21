@@ -1,4 +1,5 @@
 package edu.icet.controller;
+import edu.icet.dao.BookDAO;
 import edu.icet.model.Book;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -9,6 +10,7 @@ import javafx.stage.Stage;
 
 public class AddBookController {
 
+    private final BookDAO bookDAO = new BookDAO();
     private ObservableList<Book> existingBooks;
     private Book newBook;
     private Book bookToEdit;
@@ -52,9 +54,19 @@ public class AddBookController {
         }
 
         if (bookToEdit == null) {
-            if (!isDuplicateIsbn(isbn)) {
-                newBook = new Book(isbn, title, author, category, quantity);
+            if (isDuplicateIsbn(isbn)){
+                return;
+            }
+            Book book = new Book(isbn, title, author, category, quantity);
+
+            if (bookDAO.saveBook(book)) {
+                newBook = book;
             } else {
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Database Error",
+                        "Failed to save the book. Please try again."
+                );
                 return;
             }
         } else {
