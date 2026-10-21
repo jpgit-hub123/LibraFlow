@@ -57,6 +57,7 @@ public class BooksPageController {
         booksController.editTheSelectedBook(booksTable);
     }
 
+    @FXML
     public void deleteBookOnAction(ActionEvent actionEvent) {
         booksController.deleteSelectedBook(searchField, booksTable);
     }

@@ -20,6 +20,7 @@ import java.io.IOException;
 public class BooksController {
 
     private ObservableList<Book> booksList;
+    private final BookDAO bookDAO = new BookDAO();
 
     public void loadPage(String fxmlFile, TextField searchField) {
         try {
@@ -164,13 +165,22 @@ public class BooksController {
 
         confirmation.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                booksList.remove(selectedBook);
-                getRelatedBooks(searchField, booksTable);
-                showAlert(
-                        Alert.AlertType.INFORMATION,
-                        "Book Deleted",
-                        "The book was deleted successfully."
-                );
+                if (bookDAO.deleteBook(selectedBook.getIsbn())) {
+                    booksList.remove(selectedBook);
+                    getRelatedBooks(searchField, booksTable);
+                    showAlert(
+                            Alert.AlertType.INFORMATION,
+                            "Book Deleted",
+                            "The book was deleted successfully."
+                    );
+                } else {
+                    showAlert(
+                            Alert.AlertType.ERROR,
+                            "Database Error",
+                            "Failed to delete the book from the database."
+                    );
+                }
+
             }
         });
     }
