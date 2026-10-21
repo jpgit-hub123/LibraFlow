@@ -144,7 +144,7 @@ public class BooksController {
         alert.showAndWait();
     }
 
-    public void deleteSelectedBook(TableView<Book> booksTable) {
+    public void deleteSelectedBook(TextField searchField, TableView<Book> booksTable) {
         Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
 
         if (selectedBook == null) {
@@ -164,7 +164,7 @@ public class BooksController {
         confirmation.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
                 booksList.remove(selectedBook);
-
+                getRelatedBooks(searchField, booksTable);
                 showAlert(
                         Alert.AlertType.INFORMATION,
                         "Book Deleted",
