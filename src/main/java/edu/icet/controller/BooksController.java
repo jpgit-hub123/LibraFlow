@@ -72,7 +72,7 @@ public class BooksController {
         booksTable.setItems(filterBooks);
     }
 
-    public void loadForm() {
+    public void loadForm(TextField searchField, TableView<Book> booksTable) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddBook.fxml"));
 
@@ -95,6 +95,7 @@ public class BooksController {
 
             if (newBook != null) {
                 booksList.add(newBook);
+                getRelatedBooks(searchField, booksTable);
             }
 
         } catch (IOException e) {
@@ -118,6 +119,7 @@ public class BooksController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddBook.fxml"));
             Parent form = loader.load();
             AddBookPageController addBookPageController = loader.getController();
+            addBookPageController.addBookController.setExistingBooks(booksList);
             addBookPageController.toEditBook(selectedBook);
             Stage dialogStage = new Stage();
             dialogStage.setTitle("LibraFlow | Edit Book");

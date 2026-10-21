@@ -39,7 +39,7 @@ public class BooksPageController {
 
     @FXML
     private void showAddBookFormOnAction() {
-        booksController.loadForm();
+        booksController.loadForm(searchField, booksTable);
     }
 
     @FXML
@@ -48,7 +48,7 @@ public class BooksPageController {
     }
 
     @FXML
-    private void searchBooks() {
+    public void searchBooks() {
         booksController.getRelatedBooks(searchField, booksTable);
     }
 

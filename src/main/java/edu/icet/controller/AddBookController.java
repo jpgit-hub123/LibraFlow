@@ -58,11 +58,15 @@ public class AddBookController {
                 return;
             }
         } else {
-            bookToEdit.setIsbn(isbnField.getText());
-            bookToEdit.setTitle(titleField.getText());
-            bookToEdit.setAuthor(authorField.getText());
-            bookToEdit.setCategory(categoryField.getText());
-            bookToEdit.setQuantity(Integer.parseInt(quantityField.getText()));
+            if (!isDuplicateIsbn(isbn)) {
+                bookToEdit.setIsbn(isbnField.getText());
+                bookToEdit.setTitle(titleField.getText());
+                bookToEdit.setAuthor(authorField.getText());
+                bookToEdit.setCategory(categoryField.getText());
+                bookToEdit.setQuantity(Integer.parseInt(quantityField.getText()));
+            } else {
+                return;
+            }
         }
 
         Stage stage = (Stage) isbnField.getScene().getWindow();
@@ -71,6 +75,9 @@ public class AddBookController {
 
     private boolean isDuplicateIsbn(String isbn) {
         for (Book book : existingBooks) {
+            if (book == bookToEdit) {
+                continue;
+            }
             if (book.getIsbn().equalsIgnoreCase(isbn)) {
                 showAlert(
                         Alert.AlertType.WARNING,
@@ -103,7 +110,6 @@ public class AddBookController {
     public void setExistingBooks(ObservableList<Book> booksList) {
         this.existingBooks = booksList;
     }
-
 
     public void setBookToEdit(TextField isbnField, TextField titleField, TextField authorField,
                               TextField categoryField, TextField quantityField, Book book,
