@@ -38,15 +38,10 @@ public class MembersController {
     public void loadPage(String fxmlFile, TextField searchField) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-
             Parent rootNode = loader.load();
-
             searchField.getScene().setRoot(rootNode);
-
         } catch (IOException e) {
-
             throw new RuntimeException(e);
-
         }
     }
 }

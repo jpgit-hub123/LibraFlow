@@ -40,6 +40,11 @@ public class DashboardPageController {
     }
 
     @FXML
+    public void showIssueReturnOnAction(ActionEvent actionEvent) {
+        dashboardController.loadPage("/edu/icet/view/IssueReturn.fxml", rootPane);
+    }
+
+    @FXML
     public void initialize() {
         int totalBooks = dashboardController.getTotalBooksCount();
         totalBooksLabel.setText(String.valueOf(totalBooks));
@@ -53,5 +58,4 @@ public class DashboardPageController {
         int totalMembers = dashboardController.getTotalMemberCount();
         totalMembersLabel.setText(String.valueOf(totalMembers));
     }
-
 }

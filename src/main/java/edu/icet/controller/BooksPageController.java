@@ -43,6 +43,11 @@ public class BooksPageController {
     }
 
     @FXML
+    public void showIssueReturnOnAction(ActionEvent actionEvent) {
+        booksController.loadPage("/edu/icet/view/IssueReturn.fxml", searchField);
+    }
+
+    @FXML
     private void showAddBookFormOnAction() {
         booksController.loadForm(searchField, booksTable);
     }

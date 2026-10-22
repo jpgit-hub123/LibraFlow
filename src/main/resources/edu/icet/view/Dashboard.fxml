@@ -44,6 +44,7 @@
                     styleClass="menu-button"/>
 
             <Button text="Issue &amp; Return"
+                    onAction="#showIssueReturnOnAction"
                     styleClass="menu-button"/>
 
             <Button text="Reports"

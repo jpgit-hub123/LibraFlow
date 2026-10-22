@@ -41,7 +41,6 @@ public class MembersPageController {
 
     @FXML
     private void searchMembers() {
-
     }
 
     @FXML
@@ -51,12 +50,10 @@ public class MembersPageController {
 
     @FXML
     private void editMemberOnAction() {
-
     }
 
     @FXML
     private void deleteMemberOnAction() {
-
     }
 
     @FXML
@@ -66,5 +63,9 @@ public class MembersPageController {
 
     public void showBooksOnAction(ActionEvent actionEvent) {
         membersController.loadPage("/edu/icet/view/Books.fxml", searchField);
+    }
+
+    public void showIssueReturnOnAction(ActionEvent actionEvent) {
+        membersController.loadPage("/edu/icet/view/IssueReturn.fxml", searchField);
     }
 }
