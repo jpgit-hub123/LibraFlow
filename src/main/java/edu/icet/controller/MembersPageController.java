@@ -32,8 +32,6 @@ public class MembersPageController {
 
     public MembersController membersController = new MembersController();
 
-
-
     @FXML
     public void initialize() {
         membersController.setMembersDataIntoTable(membersTable, memberIdColumn, nameColumn, emailColumn, phoneColumn, addressColumn);
@@ -45,7 +43,7 @@ public class MembersPageController {
 
     @FXML
     private void addMemberOnAction() {
-
+        membersController.loadForm();
     }
 
     @FXML

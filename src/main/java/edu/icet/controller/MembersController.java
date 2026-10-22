@@ -6,10 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -40,6 +43,25 @@ public class MembersController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent rootNode = loader.load();
             searchField.getScene().setRoot(rootNode);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadForm() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddMember.fxml"));
+            Parent root = loader.load();
+
+            Stage addMemberStage = new Stage();
+            addMemberStage.setTitle("LibraFlow | Add New Member");
+            addMemberStage.initModality(Modality.APPLICATION_MODAL);
+
+            addMemberStage.setScene(new Scene(root));
+            addMemberStage.setResizable(false);
+            addMemberStage.showAndWait();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
