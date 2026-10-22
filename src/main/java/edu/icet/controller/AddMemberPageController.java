@@ -20,10 +20,15 @@ public class AddMemberPageController {
     public TextArea addressField;
 
     @FXML
+    public AddMemberController addMemberController = new AddMemberController();
+
+    @FXML
     public void closeFormOnAction(ActionEvent actionEvent) {
+        addMemberController.closeAddMemberForm(nameField);
     }
 
     @FXML
     public void saveMemberOnAction(ActionEvent actionEvent) {
+        addMemberController.registerNewMember(nameField, emailField, phoneField, addressField);
     }
 }
