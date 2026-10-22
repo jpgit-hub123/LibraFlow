@@ -101,7 +101,7 @@ public class BooksController {
         }
     }
 
-    public void editTheSelectedBook(TableView<Book> booksTable) {
+    public void editTheSelectedBook(TextField searchField, TableView<Book> booksTable) {
         Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
 
         if (selectedBook == null) {
@@ -118,7 +118,7 @@ public class BooksController {
             Parent form = loader.load();
 
             BookDAO bookDAO = new BookDAO();
-            booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
+//            booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
             AddBookPageController addBookPageController = loader.getController();
             addBookPageController.addBookController.setExistingBooks(booksList);
             addBookPageController.toEditBook(selectedBook);
@@ -131,8 +131,8 @@ public class BooksController {
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
-
-            booksTable.refresh();
+            booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
+            getRelatedBooks(searchField, booksTable);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

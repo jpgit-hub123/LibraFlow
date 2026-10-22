@@ -54,7 +54,7 @@ public class BooksPageController {
 
     @FXML
     public void editBookOnAction(ActionEvent actionEvent) {
-        booksController.editTheSelectedBook(booksTable);
+        booksController.editTheSelectedBook(searchField, booksTable);
     }
 
     @FXML

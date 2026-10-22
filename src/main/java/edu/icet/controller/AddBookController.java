@@ -33,6 +33,18 @@ public class AddBookController {
             return;
         }
 
+        if (isbn.length() > 20 || title.length() > 150 || author.length() > 100 || category.length() > 100) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Validation Error",
+                    "ISBN must not exceed 20 characters.\n"
+                            + "Title must not exceed 150 characters.\n"
+                            + "Author must not exceed 100 characters.\n"
+                            + "Category must not exceed 100 characters."
+            );
+            return;
+        }
+
         int quantity;
         try {
             quantity = Integer.parseInt(quantityTxt);
@@ -70,11 +82,16 @@ public class AddBookController {
                 return;
             }
         } else {
+
+            String originalIsbnOfEditedBook = bookToEdit.getIsbn();
+
+            if (isDuplicateIsbn(isbn)) {
+                return;
+            }
+
             Book updatedBook = new Book(isbn, title, author, category, quantity);
 
-            boolean isUpdated = bookDAO.updateBook(updatedBook);
-
-            if (isUpdated) {
+            if (bookDAO.updateBook(originalIsbnOfEditedBook, updatedBook)) {
                 bookToEdit.setIsbn(isbn);
                 bookToEdit.setTitle(title);
                 bookToEdit.setAuthor(author);
@@ -97,8 +114,10 @@ public class AddBookController {
 
     private boolean isDuplicateIsbn(String isbn) {
         for (Book book : existingBooks) {
-            if (book == bookToEdit) {
-                continue;
+            if (book.getIsbn().equalsIgnoreCase(isbn)) {
+                if (bookToEdit != null && book.getIsbn().equalsIgnoreCase(bookToEdit.getIsbn())) {
+                    continue;
+                }
             }
             if (book.getIsbn().equalsIgnoreCase(isbn)) {
                 showAlert(
