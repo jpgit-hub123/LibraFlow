@@ -93,13 +93,14 @@
                       HBox.hgrow="ALWAYS"
                       styleClass="stat-card">
 
-                    <Label text="TOTAL MEMBERS"
+                    <Label text="TOTAL QUANTITY"
                            styleClass="stat-label"/>
 
-                    <Label text="0"
+                    <Label fx:id="totalQuantityLabel"
+                            text="0"
                            styleClass="stat-value"/>
 
-                    <Label text="Registered members"
+                    <Label text="Total copies of all books"
                            styleClass="stat-description"/>
 
                 </VBox>
@@ -108,13 +109,14 @@
                       HBox.hgrow="ALWAYS"
                       styleClass="stat-card">
 
-                    <Label text="BORROWED BOOKS"
+                    <Label text="TOTAL CATEGORIES"
                            styleClass="stat-label"/>
 
-                    <Label text="0"
+                    <Label fx:id="totalCategoryLabel"
+                            text="0"
                            styleClass="stat-value"/>
 
-                    <Label text="Currently borrowed"
+                    <Label text="Different book categories"
                            styleClass="stat-description"/>
 
                 </VBox>

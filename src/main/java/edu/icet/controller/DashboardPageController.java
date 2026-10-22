@@ -1,12 +1,22 @@
 package edu.icet.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 
 public class DashboardPageController {
 
     @FXML
     private BorderPane rootPane;
+
+    @FXML
+    private Label totalBooksLabel;
+
+    @FXML
+    private Label totalQuantityLabel;
+
+    @FXML
+    private Label totalCategoryLabel;
 
     public DashboardController dashboardController = new DashboardController();
 
@@ -18,6 +28,18 @@ public class DashboardPageController {
     @FXML
     private void showBooksOnAction() {
         dashboardController.loadPage("/edu/icet/view/Books.fxml", rootPane);
+    }
+
+    @FXML
+    public void initialize() {
+        int totalBooks = dashboardController.getTotalBooksCount();
+        totalBooksLabel.setText(String.valueOf(totalBooks));
+
+        int totalQuantity = dashboardController.getTotalQuantityCount();
+        totalQuantityLabel.setText(String.valueOf(totalQuantity));
+
+        int totalCategories = dashboardController.getTotalCategories();
+        totalCategoryLabel.setText(String.valueOf(totalCategories));
     }
 
 }

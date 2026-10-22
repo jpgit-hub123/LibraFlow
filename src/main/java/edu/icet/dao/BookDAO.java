@@ -109,5 +109,62 @@ public class BookDAO {
             return false;
         }
     }
+
+    public int getTotalBooks() {
+
+        String sql = "SELECT COUNT(*) FROM books";
+
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+
+        return 0;
+    }
+
+    public int getTotalQuantity() {
+
+        String sql = "SELECT COALESCE(SUM(quantity), 0) FROM books";
+
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+        return 0;
+    }
+
+    public int getTotalCategories() {
+
+        String sql = "SELECT COUNT(DISTINCT category) FROM books";
+
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+        return 0;
+    }
 }
 
