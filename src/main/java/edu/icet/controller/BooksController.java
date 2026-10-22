@@ -118,7 +118,6 @@ public class BooksController {
             Parent form = loader.load();
 
             BookDAO bookDAO = new BookDAO();
-//            booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
             AddBookPageController addBookPageController = loader.getController();
             addBookPageController.addBookController.setExistingBooks(booksList);
             addBookPageController.toEditBook(selectedBook);

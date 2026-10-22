@@ -40,6 +40,7 @@
                     styleClass="menu-button"/>
 
             <Button text="Members"
+                    onAction="#showMembersOnAction"
                     styleClass="menu-button"/>
 
             <Button text="Issue &amp; Return"
@@ -118,6 +119,23 @@
 
                     <Label text="Different book categories"
                            styleClass="stat-description"/>
+
+                </VBox>
+
+                <VBox spacing="12"
+                      HBox.hgrow="ALWAYS"
+                      styleClass="stat-card">
+
+                    <Label text="TOTAL MEMBERS"
+                           styleClass="stat-label"/>
+
+                    <Label fx:id="totalMembersLabel"
+                           text="0"
+                           styleClass="stat-value"/>
+
+                    <Label
+                            text="Registered library members"
+                            styleClass="stat-description"/>
 
                 </VBox>
 

@@ -38,6 +38,11 @@ public class BooksPageController {
     }
 
     @FXML
+    public void showMembersOnAction(ActionEvent actionEvent) {
+        booksController.loadPage("/edu/icet/view/Members.fxml", searchField);
+    }
+
+    @FXML
     private void showAddBookFormOnAction() {
         booksController.loadForm(searchField, booksTable);
     }

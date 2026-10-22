@@ -38,6 +38,7 @@
                     styleClass="menu-button, active-menu"/>
 
             <Button text="Members"
+                    onAction="#showMembersOnAction"
                     styleClass="menu-button"/>
 
             <Button text="Issue &amp; Return"
@@ -65,7 +66,7 @@
                        styleClass="subtitle"/>
             </VBox>
 
-            <HBox spacing="15"
+            <HBox spacing="12"
                   alignment="CENTER_LEFT">
 
                 <TextField fx:id="searchField"
@@ -75,24 +76,22 @@
 
                 <Button text="+ Add Book"
                         onAction="#showAddBookFormOnAction"
-                        style="
-                                -fx-text-fill: black;
+                        style="-fx-text-fill: black;
                                 -fx-cursor: hand;"
                         styleClass="primary-button"/>
 
                 <Button
                         text="Edit Book"
                         onAction="#editBookOnAction"
-                        style="
-                                -fx-text-fill: black;
-                                -fx-cursor: hand;" />
+                        style="-fx-text-fill: black;
+                               -fx-cursor: hand;" />
 
                 <Button
                         text="Delete Book"
                         onAction="#deleteBookOnAction"
                         style="-fx-background-color: #dc2626;
                                 -fx-text-fill: white;
-                                   -fx-cursor: hand;" />
+                                 -fx-cursor: hand;" />
 
             </HBox>
 

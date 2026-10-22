@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.icet.controller.MembersPageController"
+            styleClass="root-container">
+
+    <left>
+        <VBox prefWidth="220"
+              spacing="20"
+              styleClass="sidebar">
+
+            <padding>
+                <Insets top="30" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="LibraFlow"
+                   styleClass="logo"/>
+
+            <Label text="MAIN MENU"
+                   styleClass="menu-heading"/>
+
+            <Button text="Dashboard"
+                    onAction="#showDashboardOnAction"
+                    styleClass="menu-button"/>
+
+            <Button text="Books"
+                    onAction="#showBooksOnAction"
+                    styleClass="menu-button"/>
+
+            <Button text="Members"
+                    styleClass="menu-button, active-menu"/>
+
+            <Button text="Issue &amp; Return"
+                    styleClass="menu-button"/>
+
+            <Button text="Reports"
+                    styleClass="menu-button"/>
+
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="25"
+              styleClass="main-content">
+
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <VBox spacing="5">
+                <Label text="Member Management"
+                       styleClass="page-title"/>
+
+                <Label text="Manage Members registered in the library."
+                       styleClass="subtitle"/>
+            </VBox>
+
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField"
+                           promptText="Search members..."
+                           HBox.hgrow="ALWAYS"
+                           onKeyReleased="#searchMembers"/>
+
+                <Button text="+ Add Member"
+                        styleClass="primary-button"
+                        style="-fx-text-fill: black;
+                                -fx-cursor: hand;"
+                        onAction="#addMemberOnAction"/>
+
+                <Button text="Edit Member"
+                        styleClass="secondary-button"
+                        style="-fx-text-fill: black;
+                                -fx-cursor: hand;"
+                        onAction="#editMemberOnAction"/>
+
+                <Button text="Delete Member"
+                        styleClass="danger-button"
+                        style="-fx-text-fill: white;
+                        -fx-background-color: #dc2626;
+                                -fx-cursor: hand;"
+                        onAction="#deleteMemberOnAction"/>
+            </HBox>
+
+            <VBox
+                spacing="15"
+                styleClass="transactions-card"
+                VBox.vgrow="ALWAYS">
+
+                <Label text="All Members"
+                       styleClass="section-title"/>
+
+                <TableView fx:id="membersTable"
+                           VBox.vgrow="ALWAYS">
+
+                    <columns>
+
+                        <TableColumn fx:id="memberIdColumn"
+                                     text="Member ID"
+                                     prefWidth="130"/>
+
+                        <TableColumn fx:id="nameColumn"
+                                     text="Name"
+                                     prefWidth="200"/>
+
+                        <TableColumn fx:id="emailColumn"
+                                     text="Email"
+                                     prefWidth="160"/>
+
+                        <TableColumn fx:id="phoneColumn"
+                                     text="Phone"
+                                     prefWidth="130"/>
+
+                        <TableColumn fx:id="addressColumn"
+                                     text="Address"
+                                     prefWidth="90"/>
+
+                    </columns>
+
+                </TableView>
+
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>
