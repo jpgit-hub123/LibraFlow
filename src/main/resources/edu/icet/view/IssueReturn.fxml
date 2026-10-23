@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -133,43 +135,61 @@
 
                 <HBox spacing="15">
 
-                    <VBox spacing="8"
-                          HBox.hgrow="ALWAYS">
-
-                        <Label text="Member ID"/>
-
-                        <TextField fx:id="memberIdField"
-                                   promptText="Enter member ID"/>
-
-                    </VBox>
+                    <!-- Select Member -->
 
                     <VBox spacing="8"
                           HBox.hgrow="ALWAYS">
 
-                        <Label text="ISBN"/>
+                        <Label text="Select Member"/>
 
-                        <TextField fx:id="isbnField"
-                                   promptText="Enter book ISBN"/>
+                        <ComboBox fx:id="memberComboBox"
+                                  promptText="Choose a member"
+                                  maxWidth="Infinity"
+                                  prefHeight="38"/>
 
                     </VBox>
+
+                    <!-- Select Book -->
+
+                    <VBox spacing="8"
+                          HBox.hgrow="ALWAYS">
+
+                        <Label text="Select Book"/>
+
+                        <ComboBox fx:id="bookComboBox"
+                                  promptText="Choose a book"
+                                  maxWidth="Infinity"
+                                  prefHeight="38"/>
+
+                    </VBox>
+
+                </HBox>
+
+                <HBox spacing="15">
+
+                    <!-- Issue Date -->
 
                     <VBox spacing="8"
                           HBox.hgrow="ALWAYS">
 
                         <Label text="Issue Date"/>
 
-                        <TextField fx:id="issueDateField"
-                                   promptText="YYYY-MM-DD"/>
+                        <DatePicker fx:id="issueDatePicker"
+                                    maxWidth="Infinity"
+                                    prefHeight="38"/>
 
                     </VBox>
+
+                    <!-- Due Date -->
 
                     <VBox spacing="8"
                           HBox.hgrow="ALWAYS">
 
                         <Label text="Due Date"/>
 
-                        <TextField fx:id="dueDateField"
-                                   promptText="YYYY-MM-DD"/>
+                        <DatePicker fx:id="dueDatePicker"
+                                    maxWidth="Infinity"
+                                    prefHeight="38"/>
 
                     </VBox>
 
@@ -178,11 +198,73 @@
                 <HBox alignment="CENTER_RIGHT">
 
                     <Button text="Issue Book"
+                            onAction="#issueBookOnAction"
                             styleClass="primary-button"/>
 
                 </HBox>
 
             </VBox>
+
+
+
+<!--            <VBox spacing="20"-->
+<!--                  styleClass="transactions-card">-->
+
+<!--                <Label text="Issue a Book"-->
+<!--                       styleClass="section-title"/>-->
+
+<!--                <HBox spacing="15">-->
+
+<!--                    <VBox spacing="8"-->
+<!--                          HBox.hgrow="ALWAYS">-->
+
+<!--                        <Label text="Member ID"/>-->
+
+<!--                        <TextField fx:id="memberIdField"-->
+<!--                                   promptText="Enter member ID"/>-->
+
+<!--                    </VBox>-->
+
+<!--                    <VBox spacing="8"-->
+<!--                          HBox.hgrow="ALWAYS">-->
+
+<!--                        <Label text="ISBN"/>-->
+
+<!--                        <TextField fx:id="isbnField"-->
+<!--                                   promptText="Enter book ISBN"/>-->
+
+<!--                    </VBox>-->
+
+<!--                    <VBox spacing="8"-->
+<!--                          HBox.hgrow="ALWAYS">-->
+
+<!--                        <Label text="Issue Date"/>-->
+
+<!--                        <TextField fx:id="issueDateField"-->
+<!--                                   promptText="YYYY-MM-DD"/>-->
+
+<!--                    </VBox>-->
+
+<!--                    <VBox spacing="8"-->
+<!--                          HBox.hgrow="ALWAYS">-->
+
+<!--                        <Label text="Due Date"/>-->
+
+<!--                        <TextField fx:id="dueDateField"-->
+<!--                                   promptText="YYYY-MM-DD"/>-->
+
+<!--                    </VBox>-->
+
+<!--                </HBox>-->
+
+<!--                <HBox alignment="CENTER_RIGHT">-->
+
+<!--                    <Button text="Issue Book"-->
+<!--                            styleClass="primary-button"/>-->
+
+<!--                </HBox>-->
+
+<!--            </VBox>-->
 
             <!-- Issued books table -->
 

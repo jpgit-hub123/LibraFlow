@@ -23,6 +23,13 @@ public class BookIssue {
         this.returnDate = returnDate;
     }
 
+    public BookIssue(int memberId, String isbn, LocalDate issueDate, LocalDate dueDate) {
+        this.memberId = memberId;
+        this.isbn = isbn;
+        this.issueDate = issueDate;
+        this.dueDate = dueDate;
+    }
+
     public int getIssueId() {
         return issueId;
     }

@@ -1,10 +1,21 @@
 package edu.icet.controller;
 
+import edu.icet.dao.BookDAO;
+import edu.icet.dao.BookIssueDAO;
+import edu.icet.dao.MemberDAO;
+import edu.icet.model.Book;
+import edu.icet.model.BookIssue;
+import edu.icet.model.Member;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class IssueReturnController {
 
@@ -12,15 +23,82 @@ public class IssueReturnController {
     public void loadPage(String fxmlFile, TextField searchField) {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-
         try {
-
             Parent rootNode = loader.load();
             searchField.getScene().setRoot(rootNode);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private void showAlert(Alert.AlertType alertType, String info, String message) {
+
+        Alert alert = new Alert(alertType);
+        alert.setTitle(info);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+
+    }
+
+    public void issuedTheBook(ComboBox<Member> memberComboBox, ComboBox<Book> bookComboBox, DatePicker issueDatePicker,
+                              DatePicker dueDatePicker) {
+
+        Member member = memberComboBox.getValue();
+        Book book = bookComboBox.getValue();
+        LocalDate issueDate = issueDatePicker.getValue();
+        LocalDate dueDate = dueDatePicker.getValue();
+
+        if (member == null || book == null || issueDate == null || dueDate == null) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "No required details selected!",
+                    "Please select details in all fields."
+            );
+            return;
+        }
+
+        if (dueDate.isBefore(issueDate)) {
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Validation Error!",
+                    "Due date cannot be before the issue date."
+            );
+            return;
+        }
+
+        if (book.getQuantity() == 0) {
+            showAlert(
+                    Alert.AlertType.INFORMATION,
+                    "Unavailable!",
+                    "This book is currently out of stock."
+            );
+            return;
+        }
+
+        BookIssue bookIssue = new BookIssue(member.getMemberId(), book.getIsbn(), issueDate, dueDate);
+
+        BookIssueDAO bookIssueDAO = new BookIssueDAO();
+
+        if (bookIssueDAO.issueBook(bookIssue)) {
+            showAlert(
+                    Alert.AlertType.CONFIRMATION,
+                    "Success!",
+                    "Book issued successfully."
+            );
+            memberComboBox.getSelectionModel().clearSelection();
+            bookComboBox.getSelectionModel().clearSelection();
+            issueDatePicker.setValue(LocalDate.now());
+            dueDatePicker.setValue(LocalDate.now().plusDays(14));
+            bookComboBox.setItems(FXCollections.observableArrayList(new BookDAO().getAllBooks()));
+            memberComboBox.setItems(FXCollections.observableArrayList(new MemberDAO().getAllMembers()));
+        } else {
+            showAlert(
+                    Alert.AlertType.INFORMATION,
+                    "Unsuccess!",
+                    "Book not issued successfully, Try again."
+            );
+        }
     }
 }

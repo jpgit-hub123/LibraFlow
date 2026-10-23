@@ -47,4 +47,71 @@ public class BookIssueDAO {
 
         return issues;
     }
+
+    public boolean issueBook(BookIssue bookIssue) {
+
+        String checkBookSql = "SELECT quantity FROM books WHERE isbn = ? FOR UPDATE";
+
+        String updateBookSql = "UPDATE books SET quantity = quantity - 1 WHERE isbn = ?";
+
+        String insertIssueSql = "INSERT INTO book_issues " + "(member_id, isbn, issue_date, due_date, status) " +
+                                "VALUES (?, ?, ?, ?, 'BORROWED')";
+
+        try {
+            Connection connection = DBConnection.getConnection();
+            connection.setAutoCommit(false);
+            try {
+                // 1. Check book availability
+                int quantity;
+                try (PreparedStatement checkStatement =
+                             connection.prepareStatement(checkBookSql)) {
+
+                    checkStatement.setString(1, bookIssue.getIsbn());
+                    try (ResultSet resultSet = checkStatement.executeQuery()) {
+
+                        if (!resultSet.next()) {
+                            connection.rollback();
+                            return false;
+                        }
+                        quantity = resultSet.getInt("quantity");
+                    }
+                }
+                if (quantity <= 0) {
+                    connection.rollback();
+                    return false;
+                }
+                // 2. Reduce available quantity
+                try (PreparedStatement updateStatement =
+                             connection.prepareStatement(updateBookSql)) {
+
+                    updateStatement.setString(1, bookIssue.getIsbn());
+                    updateStatement.executeUpdate();
+                }
+                // 3. Save issue details
+                try (PreparedStatement insertStatement =
+                             connection.prepareStatement(insertIssueSql)) {
+
+                    insertStatement.setInt(1, bookIssue.getMemberId());
+                    insertStatement.setString(2, bookIssue.getIsbn());
+                    insertStatement.setDate(
+                            3, Date.valueOf(bookIssue.getIssueDate()));
+                    insertStatement.setDate(
+                            4, Date.valueOf(bookIssue.getDueDate()));
+
+                    insertStatement.executeUpdate();
+                }
+                // 4. Save both changes
+                connection.commit();
+                return true;
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            } finally {
+                connection.setAutoCommit(true);
+            }
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }

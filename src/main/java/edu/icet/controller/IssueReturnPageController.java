@@ -1,24 +1,30 @@
 package edu.icet.controller;
 
+import edu.icet.dao.BookDAO;
+import edu.icet.dao.MemberDAO;
+import edu.icet.model.Book;
+import edu.icet.model.Member;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.util.StringConverter;
+
+import java.time.LocalDate;
 
 public class IssueReturnPageController {
 
     @FXML
-    private TextField memberIdField;
+    public ComboBox<Member> memberComboBox;
 
     @FXML
-    private TextField isbnField;
+    public ComboBox<Book> bookComboBox;
 
     @FXML
-    private TextField issueDateField;
+    public DatePicker issueDatePicker;
 
     @FXML
-    private TextField dueDateField;
+    public DatePicker dueDatePicker;
 
     @FXML
     private TextField searchField;
@@ -48,7 +54,44 @@ public class IssueReturnPageController {
 
     @FXML
     public void initialize() {
-        System.out.println("Issue & Return page loaded successfully!");
+        MemberDAO memberDAO = new MemberDAO();
+        memberComboBox.setItems(FXCollections.observableArrayList(memberDAO.getAllMembers()));
+
+        memberComboBox.setConverter(new StringConverter<Member>() {
+            @Override
+            public String toString(Member member) {
+                if (member == null) {
+                    return "";
+                }
+                return member.getMemberId() + " - " + member.getName();
+            }
+
+            @Override
+            public Member fromString(String s) {
+                return null;
+            }
+        });
+
+        BookDAO bookDAO = new BookDAO();
+        bookComboBox.setItems(FXCollections.observableArrayList(bookDAO.getAllBooks()));
+
+        bookComboBox.setConverter(new StringConverter<Book>() {
+            @Override
+            public String toString(Book book) {
+                if (book == null) {
+                    return "";
+                }
+                return book.getIsbn() + " - " + book.getTitle() + " (Available: " + book.getQuantity() + ")";
+            }
+
+            @Override
+            public Book fromString(String s) {
+                return null;
+            }
+        });
+
+        issueDatePicker.setValue(LocalDate.now());
+        dueDatePicker.setValue(LocalDate.now().plusDays(14));
     }
 
     public void showDashboardOnAction(ActionEvent actionEvent) {
@@ -61,5 +104,9 @@ public class IssueReturnPageController {
 
     public void showMembersOnAction(ActionEvent actionEvent) {
         issueReturnController.loadPage("/edu/icet/view/Members.fxml", searchField);
+    }
+
+    public void issueBookOnAction(ActionEvent actionEvent) {
+        issueReturnController.issuedTheBook(memberComboBox, bookComboBox, issueDatePicker, dueDatePicker);
     }
 }
