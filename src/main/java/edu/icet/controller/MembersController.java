@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -17,8 +18,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MembersController {
-
-    private ObservableList<Member> membersList;
 
     public void setMembersDataIntoTable(TableView<Member> membersTable,
                                         TableColumn<Member, Number> memberIdColumn,
@@ -33,8 +32,12 @@ public class MembersController {
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
 
+        loadMembers(membersTable);
+    }
+
+    public void loadMembers(TableView<Member> membersTable) {
         MemberDAO memberDAO = new MemberDAO();
-        membersList = FXCollections.observableArrayList(memberDAO.getAllMembers());
+        ObservableList<Member> membersList = FXCollections.observableArrayList(memberDAO.getAllMembers());
         membersTable.setItems(membersList);
     }
 
@@ -48,22 +51,56 @@ public class MembersController {
         }
     }
 
-    public void loadForm() {
+    public void loadForm(TableView<Member> membersTable) {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddMember.fxml"));
             Parent root = loader.load();
-
             Stage addMemberStage = new Stage();
             addMemberStage.setTitle("LibraFlow | Add New Member");
             addMemberStage.initModality(Modality.APPLICATION_MODAL);
-
             addMemberStage.setScene(new Scene(root));
             addMemberStage.setResizable(false);
             addMemberStage.showAndWait();
+            loadMembers(membersTable);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void editMembersInfo(TableView<Member> membersTable) {
+        Member selectedMember = membersTable.getSelectionModel().getSelectedItem();
+        if (selectedMember == null) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "No Book Selected",
+                    "Please select a book to delete."
+            );
+            return;
+        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddMember.fxml"));
+        try {
+            Parent root = loader.load();
+            AddMemberPageController addMemberPageController = loader.getController();
+            addMemberPageController.selectedMemberToEdit(selectedMember);
+            Stage addMemberStage = new Stage();
+            addMemberStage.setTitle("LibraFlow | Update Member");
+            addMemberStage.initModality(Modality.APPLICATION_MODAL);
+            addMemberStage.setScene(new Scene(root));
+            addMemberStage.setResizable(false);
+            addMemberStage.showAndWait();
+            loadMembers(membersTable);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String info, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(info);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

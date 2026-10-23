@@ -60,4 +60,29 @@ public class MemberDAO {
 
         return members;
     }
+
+    public boolean saveMember(Member member) {
+        String sql = "INSERT INTO members (name, email, phone, address) VALUES (?, ?, ?, ?)";
+
+        try {
+
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, member.getName());
+            statement.setString(2, member.getEmail());
+            statement.setString(3, member.getPhone());
+            statement.setString(4, member.getAddress());
+
+            int rowsInserted = statement.executeUpdate();
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean updateMember() {
+
+    }
 }

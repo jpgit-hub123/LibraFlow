@@ -36,12 +36,14 @@
             </StackPane>
 
             <VBox spacing="5" HBox.hgrow="ALWAYS">
-                <Label text="Add New Member"
+                <Label fx:id="titleLabel"
+                        text="Add New Member"
                        style="-fx-font-size: 22;
                               -fx-font-weight: bold;
                               -fx-text-fill: #172B4D;"/>
 
-                <Label text="Enter the member details below to register a new member."
+                <Label fx:id="subTitleLabel"
+                        text="Enter the member details below to register a new member."
                        wrapText="true"
                        style="-fx-font-size: 12;
                               -fx-text-fill: #718096;"/>
@@ -149,7 +151,8 @@
                            -fx-background-radius: 6;
                            -fx-cursor: hand;"/>
 
-            <Button text="Save Member"
+            <Button fx:id="btnSave"
+                    text="Save Member"
                     onAction="#saveMemberOnAction"
                     prefHeight="42"
                     prefWidth="145"

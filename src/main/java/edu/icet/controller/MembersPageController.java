@@ -43,11 +43,12 @@ public class MembersPageController {
 
     @FXML
     private void addMemberOnAction() {
-        membersController.loadForm();
+        membersController.loadForm(membersTable);
     }
 
     @FXML
     private void editMemberOnAction() {
+        membersController.editMembersInfo(membersTable);
     }
 
     @FXML
