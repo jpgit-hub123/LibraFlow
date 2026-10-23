@@ -34,7 +34,7 @@ public class MembersPageController {
 
     @FXML
     public void initialize() {
-        membersController.setMembersDataIntoTable(membersTable, memberIdColumn, nameColumn, emailColumn, phoneColumn, addressColumn);
+        membersController.setMembersDataIntoTable(searchField, membersTable, memberIdColumn, nameColumn, emailColumn, phoneColumn, addressColumn);
     }
 
     @FXML
@@ -44,17 +44,17 @@ public class MembersPageController {
 
     @FXML
     private void addMemberOnAction() {
-        membersController.loadForm(membersTable);
+        membersController.loadForm(searchField, membersTable);
     }
 
     @FXML
     private void editMemberOnAction() {
-        membersController.editMembersInfo(membersTable);
+        membersController.editMembersInfo(searchField, membersTable);
     }
 
     @FXML
     private void deleteMemberOnAction() {
-        membersController.removeMember(membersTable);
+        membersController.removeMember(searchField, membersTable);
     }
 
     @FXML

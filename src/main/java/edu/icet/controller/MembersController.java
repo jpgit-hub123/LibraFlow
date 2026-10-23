@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class MembersController {
 
-    public void setMembersDataIntoTable(TableView<Member> membersTable,
+    public void setMembersDataIntoTable(TextField searchField, TableView<Member> membersTable,
                                         TableColumn<Member, Number> memberIdColumn,
                                         TableColumn<Member, String> nameColumn,
                                         TableColumn<Member, String> emailColumn,
@@ -32,13 +32,14 @@ public class MembersController {
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
 
-        loadMembers(membersTable);
+        loadMembers(searchField, membersTable);
     }
 
-    public void loadMembers(TableView<Member> membersTable) {
-        MemberDAO memberDAO = new MemberDAO();
-        ObservableList<Member> membersList = FXCollections.observableArrayList(memberDAO.getAllMembers());
-        membersTable.setItems(membersList);
+    public void loadMembers(TextField searchField, TableView<Member> membersTable) {
+//        MemberDAO memberDAO = new MemberDAO();
+//        ObservableList<Member> membersList = FXCollections.observableArrayList(memberDAO.getAllMembers());
+        getSearchMember(searchField, membersTable);
+//        membersTable.setItems(membersList);
     }
 
     public void loadPage(String fxmlFile, TextField searchField) {
@@ -51,7 +52,7 @@ public class MembersController {
         }
     }
 
-    public void loadForm(TableView<Member> membersTable) {
+    public void loadForm(TextField searchField, TableView<Member> membersTable) {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddMember.fxml"));
@@ -62,14 +63,14 @@ public class MembersController {
             addMemberStage.setScene(new Scene(root));
             addMemberStage.setResizable(false);
             addMemberStage.showAndWait();
-            loadMembers(membersTable);
+            loadMembers(searchField, membersTable);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void editMembersInfo(TableView<Member> membersTable) {
+    public void editMembersInfo(TextField searchField, TableView<Member> membersTable) {
         Member selectedMember = membersTable.getSelectionModel().getSelectedItem();
         if (selectedMember == null) {
             showAlert(
@@ -90,7 +91,7 @@ public class MembersController {
             addMemberStage.setScene(new Scene(root));
             addMemberStage.setResizable(false);
             addMemberStage.showAndWait();
-            loadMembers(membersTable);
+            loadMembers(searchField, membersTable);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -104,7 +105,7 @@ public class MembersController {
         alert.showAndWait();
     }
 
-    public void removeMember(TableView<Member> membersTable) {
+    public void removeMember(TextField searchField, TableView<Member> membersTable) {
         Member selectedMember = membersTable.getSelectionModel().getSelectedItem();
         if (selectedMember == null) {
             showAlert(
@@ -126,7 +127,7 @@ public class MembersController {
                             "Book Deleted",
                             "The book was deleted successfully."
                     );
-                    loadMembers(membersTable);
+                    loadMembers(searchField, membersTable);
                 }
             } else {
                 showAlert(
