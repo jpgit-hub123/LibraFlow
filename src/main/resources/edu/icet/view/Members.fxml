@@ -69,7 +69,7 @@
 
             <HBox spacing="12" alignment="CENTER_LEFT">
                 <TextField fx:id="searchField"
-                           promptText="Search members..."
+                           promptText="Search members, email, phone..."
                            HBox.hgrow="ALWAYS"
                            onKeyReleased="#searchMembers"/>
 

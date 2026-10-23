@@ -39,6 +39,7 @@ public class MembersPageController {
 
     @FXML
     private void searchMembers() {
+        membersController.getSearchMember(searchField, membersTable);
     }
 
     @FXML

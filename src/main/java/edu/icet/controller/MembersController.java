@@ -137,4 +137,20 @@ public class MembersController {
             }
         });
     }
+
+    public void getSearchMember(TextField searchField, TableView<Member> membersTable) {
+        final String searchData = searchField.getText().trim();
+        MemberDAO memberDAO = new MemberDAO();
+        ObservableList<Member> filteredMemberList = FXCollections.observableArrayList();
+        ObservableList<Member> membersList = FXCollections.observableArrayList(memberDAO.getAllMembers());
+        for (Member member : membersList) {
+            if (member.getName().toLowerCase().contains(searchData)
+                || member.getEmail().toLowerCase().contains(searchData)
+                || member.getPhone().toLowerCase().contains(searchData)) {
+
+                filteredMemberList.add(member);
+            }
+        }
+        membersTable.setItems(filteredMemberList);
+    }
 }
