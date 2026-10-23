@@ -82,7 +82,19 @@ public class MemberDAO {
         }
     }
 
-    public boolean updateMember() {
-
+    public boolean updateMember(String memberId, Member member) {
+        String sql = "UPDATE members SET name = ?, email = ?, phone = ?, address = ? WHERE member_id = ?";
+        try {
+            Connection connection = DBConnection.getConnection();
+            final PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, member.getName());
+            preparedStatement.setString(2, member.getEmail());
+            preparedStatement.setString(3, member.getPhone());
+            preparedStatement.setString(4, member.getAddress());
+            preparedStatement.setString(5, memberId);
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

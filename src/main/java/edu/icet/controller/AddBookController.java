@@ -97,7 +97,6 @@ public class AddBookController {
                 bookToEdit.setAuthor(author);
                 bookToEdit.setCategory(category);
                 bookToEdit.setQuantity(quantity);
-
             } else {
                 showAlert(
                         Alert.AlertType.ERROR,

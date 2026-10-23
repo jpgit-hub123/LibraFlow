@@ -43,27 +43,31 @@ public class AddMemberController {
         }
 
         if (memberToEdit == null) {
+            Member member = new Member(name, email, phone, address);
 
+            if (memberDAO.saveMember(member)) {
+                showAlert(
+                        Alert.AlertType.INFORMATION,
+                        "Success",
+                        "Member registered successfully!"
+                );
+            } else {
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Save Failed",
+                        "Unable to register the member. Please check whether the email already exists."
+                );
+                return;
+            }
         } else {
-
+            if (!memberDAO.updateMember(String.valueOf(memberToEdit.getMemberId()), new Member(name, email, phone, address))) {
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Database Error",
+                        "Failed to update the member. Please try again."
+                );
+            }
         }
-
-//        Member member = new Member(name, email, phone, address);
-//
-//        if (memberDAO.saveMember(member)) {
-//            showAlert(
-//                    Alert.AlertType.INFORMATION,
-//                    "Success",
-//                    "Member registered successfully!"
-//            );
-//        } else {
-//            showAlert(
-//                    Alert.AlertType.ERROR,
-//                    "Save Failed",
-//                    "Unable to register the member. Please check whether the email already exists."
-//            );
-//            return;
-//        }
 
         Stage currentWindow = (Stage) nameField.getScene().getWindow();
         currentWindow.close();

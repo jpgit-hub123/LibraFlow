@@ -69,11 +69,11 @@ public class BookDAO {
 
     public boolean updateBook(String originalIsbn, Book book) {
 
-        String sql = "UPDATE books SET isbn = ?, title = ?, author = ?, " +
-                "category = ?, quantity = ? WHERE isbn = ?";
+        String sql = "UPDATE books SET isbn = ?, title = ?, author = ?, " + "category = ?, quantity = ? WHERE isbn = ?";
 
-        try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, book.getIsbn());
             statement.setString(2, book.getTitle());
