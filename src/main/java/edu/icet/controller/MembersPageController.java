@@ -53,6 +53,7 @@ public class MembersPageController {
 
     @FXML
     private void deleteMemberOnAction() {
+        membersController.removeMember(membersTable);
     }
 
     @FXML

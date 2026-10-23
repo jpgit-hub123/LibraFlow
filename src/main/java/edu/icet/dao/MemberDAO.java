@@ -97,4 +97,17 @@ public class MemberDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean deleteMember(String memberId) {
+        String sql = "DELETE FROM members WHERE member_id = ?";
+
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, memberId);
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }

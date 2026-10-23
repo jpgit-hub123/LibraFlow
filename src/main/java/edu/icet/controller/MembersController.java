@@ -103,4 +103,38 @@ public class MembersController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public void removeMember(TableView<Member> membersTable) {
+        Member selectedMember = membersTable.getSelectionModel().getSelectedItem();
+        if (selectedMember == null) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "No Book Selected",
+                    "Please select a book to delete."
+            );
+            return;
+        }
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Delete Member");
+        confirmation.setHeaderText("Delete " + selectedMember.getName() + "?");
+        confirmation.setContentText("Are you sure you want to delete this Member?");
+        confirmation.showAndWait().ifPresent(response -> {
+            if (response == javafx.scene.control.ButtonType.OK) {
+                if (new MemberDAO().deleteMember(String.valueOf(selectedMember.getMemberId()))) {
+                    showAlert(
+                            Alert.AlertType.INFORMATION,
+                            "Book Deleted",
+                            "The book was deleted successfully."
+                    );
+                    loadMembers(membersTable);
+                }
+            } else {
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Database Error",
+                        "Failed to delete the book from the database."
+                );
+            }
+        });
+    }
 }
