@@ -105,4 +105,9 @@ public class BookIssue {
         }
         return java.time.temporal.ChronoUnit.DAYS.between(dueDate, java.time.LocalDate.now());
     }
+
+    public double getFineAmount() {
+        double finePerDay = 20.0;
+        return getOverdueDays() * finePerDay;
+    }
 }

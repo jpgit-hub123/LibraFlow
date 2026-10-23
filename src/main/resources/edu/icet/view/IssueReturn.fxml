@@ -257,6 +257,10 @@
                                      text="Overdue Days"
                                      prefWidth="110"/>
 
+                        <TableColumn fx:id="fineAmountColumn"
+                                     text="Fine (Rs.)"
+                                     prefWidth="100"/>
+
                     </columns>
 
                 </TableView>

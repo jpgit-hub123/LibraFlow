@@ -28,6 +28,8 @@ public class IssueReturnPageController {
     @FXML
     public DatePicker dueDatePicker;
 
+    public TableColumn<BookIssue, Double> fineAmountColumn;
+
     @FXML
     private TableColumn<BookIssue, Long> overdueDaysColumn;
 
@@ -114,6 +116,11 @@ public class IssueReturnPageController {
         overdueDaysColumn.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleLongProperty(
                         cellData.getValue().getOverdueDays()
+                ).asObject()
+        );
+        fineAmountColumn.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleDoubleProperty(
+                        cellData.getValue().getFineAmount()
                 ).asObject()
         );
 
