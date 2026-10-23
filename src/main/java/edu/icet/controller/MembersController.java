@@ -36,10 +36,7 @@ public class MembersController {
     }
 
     public void loadMembers(TextField searchField, TableView<Member> membersTable) {
-//        MemberDAO memberDAO = new MemberDAO();
-//        ObservableList<Member> membersList = FXCollections.observableArrayList(memberDAO.getAllMembers());
         getSearchMember(searchField, membersTable);
-//        membersTable.setItems(membersList);
     }
 
     public void loadPage(String fxmlFile, TextField searchField) {
@@ -128,13 +125,13 @@ public class MembersController {
                             "The book was deleted successfully."
                     );
                     loadMembers(searchField, membersTable);
+                } else {
+                    showAlert(
+                            Alert.AlertType.ERROR,
+                            "Database Error",
+                            "Failed to delete the book from the database."
+                    );
                 }
-            } else {
-                showAlert(
-                        Alert.AlertType.ERROR,
-                        "Database Error",
-                        "Failed to delete the book from the database."
-                );
             }
         });
     }
