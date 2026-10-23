@@ -114,4 +114,83 @@ public class BookIssueDAO {
             return false;
         }
     }
+
+    public boolean returnBook(int issueId) {
+
+        String selectSql =
+                "SELECT isbn FROM book_issues " +
+                        "WHERE issue_id = ? AND status = 'BORROWED' FOR UPDATE";
+
+        String updateIssueSql =
+                "UPDATE book_issues " +
+                        "SET status = 'RETURNED', return_date = ? " +
+                        "WHERE issue_id = ? AND status = 'BORROWED'";
+
+        String updateBookSql =
+                "UPDATE books SET quantity = quantity + 1 WHERE isbn = ?";
+
+        try (Connection connection = DBConnection.getConnection()) {
+
+            connection.setAutoCommit(false);
+
+            try {
+                String isbn;
+
+                // 1. Find the borrowed book
+                try (PreparedStatement statement =
+                             connection.prepareStatement(selectSql)) {
+
+                    statement.setInt(1, issueId);
+
+                    try (ResultSet resultSet = statement.executeQuery()) {
+
+                        if (!resultSet.next()) {
+                            connection.rollback();
+                            return false;
+                        }
+
+                        isbn = resultSet.getString("isbn");
+                    }
+                }
+
+                // 2. Update issue status and return date
+                try (PreparedStatement statement =
+                             connection.prepareStatement(updateIssueSql)) {
+
+                    statement.setDate(1, Date.valueOf(java.time.LocalDate.now()));
+                    statement.setInt(2, issueId);
+
+                    if (statement.executeUpdate() != 1) {
+                        connection.rollback();
+                        return false;
+                    }
+                }
+
+                // 3. Increase available book quantity
+                try (PreparedStatement statement =
+                             connection.prepareStatement(updateBookSql)) {
+
+                    statement.setString(1, isbn);
+
+                    if (statement.executeUpdate() != 1) {
+                        throw new SQLException("Book quantity could not be updated.");
+                    }
+                }
+
+                // 4. Commit both changes
+                connection.commit();
+                return true;
+
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+
+            } finally {
+                connection.setAutoCommit(true);
+            }
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }

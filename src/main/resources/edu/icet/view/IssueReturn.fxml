@@ -205,67 +205,6 @@
 
             </VBox>
 
-
-
-<!--            <VBox spacing="20"-->
-<!--                  styleClass="transactions-card">-->
-
-<!--                <Label text="Issue a Book"-->
-<!--                       styleClass="section-title"/>-->
-
-<!--                <HBox spacing="15">-->
-
-<!--                    <VBox spacing="8"-->
-<!--                          HBox.hgrow="ALWAYS">-->
-
-<!--                        <Label text="Member ID"/>-->
-
-<!--                        <TextField fx:id="memberIdField"-->
-<!--                                   promptText="Enter member ID"/>-->
-
-<!--                    </VBox>-->
-
-<!--                    <VBox spacing="8"-->
-<!--                          HBox.hgrow="ALWAYS">-->
-
-<!--                        <Label text="ISBN"/>-->
-
-<!--                        <TextField fx:id="isbnField"-->
-<!--                                   promptText="Enter book ISBN"/>-->
-
-<!--                    </VBox>-->
-
-<!--                    <VBox spacing="8"-->
-<!--                          HBox.hgrow="ALWAYS">-->
-
-<!--                        <Label text="Issue Date"/>-->
-
-<!--                        <TextField fx:id="issueDateField"-->
-<!--                                   promptText="YYYY-MM-DD"/>-->
-
-<!--                    </VBox>-->
-
-<!--                    <VBox spacing="8"-->
-<!--                          HBox.hgrow="ALWAYS">-->
-
-<!--                        <Label text="Due Date"/>-->
-
-<!--                        <TextField fx:id="dueDateField"-->
-<!--                                   promptText="YYYY-MM-DD"/>-->
-
-<!--                    </VBox>-->
-
-<!--                </HBox>-->
-
-<!--                <HBox alignment="CENTER_RIGHT">-->
-
-<!--                    <Button text="Issue Book"-->
-<!--                            styleClass="primary-button"/>-->
-
-<!--                </HBox>-->
-
-<!--            </VBox>-->
-
             <!-- Issued books table -->
 
             <VBox spacing="15"
@@ -279,9 +218,9 @@
                            styleClass="section-title"
                            HBox.hgrow="ALWAYS"/>
 
-                    <TextField fx:id="searchField"
-                               promptText="Search issued books..."
-                               prefWidth="280"/>
+<!--                    <TextField fx:id="searchField"-->
+<!--                               promptText="Search issued books..."-->
+<!--                               prefWidth="280"/>-->
 
                 </HBox>
 
@@ -317,6 +256,14 @@
                     </columns>
 
                 </TableView>
+
+                <HBox alignment="CENTER_RIGHT">
+
+                    <Button text="Return Book"
+                            onAction="#returnBookOnAction"
+                            styleClass="primary-button"/>
+
+                </HBox>
 
             </VBox>
 

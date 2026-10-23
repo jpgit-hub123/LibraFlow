@@ -17,12 +17,12 @@ import java.time.LocalDate;
 public class IssueReturnController {
 
 
-    public void loadPage(String fxmlFile, TextField searchField) {
+    public void loadPage(String fxmlFile, ComboBox<Member> memberComboBox) {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         try {
             Parent rootNode = loader.load();
-            searchField.getScene().setRoot(rootNode);
+            memberComboBox.getScene().setRoot(rootNode);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -103,5 +103,50 @@ public class IssueReturnController {
     public void loadIssuedBooks(TableView<BookIssue> issuedBooksTable) {
         BookIssueDAO bookIssueDAO = new BookIssueDAO();
         issuedBooksTable.setItems(FXCollections.observableArrayList(bookIssueDAO.getAllIssues()));
+    }
+
+    public void returnBook(TableView<BookIssue> issuedBooksTable, ComboBox<Book> bookComboBox, ComboBox<Member> memberComboBox) {
+
+        BookIssue selectedIssue = issuedBooksTable.getSelectionModel().getSelectedItem();
+
+        if (selectedIssue == null) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "No any issued book Selected!",
+                    "Please select a book to return."
+            );
+            return;
+        }
+
+        if ("RETURNED".equals(selectedIssue.getStatus())) {
+            showAlert(
+                    Alert.AlertType.INFORMATION,
+                    "Already Returned!",
+                    "This book has already been returned."
+            );
+            return;
+        }
+
+        BookIssueDAO bookIssueDAO = new BookIssueDAO();
+
+        if (bookIssueDAO.returnBook(selectedIssue.getIssueId())) {
+
+            showAlert(
+                    Alert.AlertType.CONFIRMATION,
+                    "Success!",
+                    "Book returned successfully."
+            );
+
+            loadIssuedBooks(issuedBooksTable);
+            bookComboBox.setItems(FXCollections.observableArrayList(new BookDAO().getAllBooks()));
+            memberComboBox.setItems(FXCollections.observableArrayList(new MemberDAO().getAllMembers()));
+        } else {
+
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Return Failed!",
+                    "Unable to return this book. Please try again."
+            );
+        }
     }
 }

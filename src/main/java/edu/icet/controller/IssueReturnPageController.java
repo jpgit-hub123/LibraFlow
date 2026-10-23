@@ -29,9 +29,6 @@ public class IssueReturnPageController {
     public DatePicker dueDatePicker;
 
     @FXML
-    private TextField searchField;
-
-    @FXML
     private TableView<BookIssue> issuedBooksTable;
 
     @FXML
@@ -106,18 +103,22 @@ public class IssueReturnPageController {
     }
 
     public void showDashboardOnAction(ActionEvent actionEvent) {
-        issueReturnController.loadPage("/edu/icet/view/Dashboard.fxml", searchField);
+        issueReturnController.loadPage("/edu/icet/view/Dashboard.fxml", memberComboBox);
     }
 
     public void showBooksOnAction(ActionEvent actionEvent) {
-        issueReturnController.loadPage("/edu/icet/view/Books.fxml", searchField);
+        issueReturnController.loadPage("/edu/icet/view/Books.fxml", memberComboBox);
     }
 
     public void showMembersOnAction(ActionEvent actionEvent) {
-        issueReturnController.loadPage("/edu/icet/view/Members.fxml", searchField);
+        issueReturnController.loadPage("/edu/icet/view/Members.fxml", memberComboBox);
     }
 
     public void issueBookOnAction(ActionEvent actionEvent) {
         issueReturnController.issuedTheBook(memberComboBox, bookComboBox, issueDatePicker, dueDatePicker, issuedBooksTable);
+    }
+
+    public void returnBookOnAction(ActionEvent actionEvent) {
+        issueReturnController.returnBook(issuedBooksTable, bookComboBox, memberComboBox);
     }
 }
