@@ -193,4 +193,93 @@ public class BookIssueDAO {
             return false;
         }
     }
+
+    public int getTotalIssuedBooks() {
+
+        String sql = "SELECT COUNT(*) FROM book_issues";
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public int getCurrentlyBorrowedBooks() {
+
+        String sql = """
+            SELECT COUNT(*)
+            FROM book_issues
+            WHERE status = 'BORROWED'
+            """;
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public int getOverdueBooks() {
+
+        String sql = """
+            SELECT COUNT(*)
+            FROM book_issues
+            WHERE status = 'BORROWED'
+              AND due_date < CURRENT_DATE
+            """;
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public int getReturnedBooks() {
+
+        String sql = """
+            SELECT COUNT(*)
+            FROM book_issues
+            WHERE status = 'RETURNED'
+            """;
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 }

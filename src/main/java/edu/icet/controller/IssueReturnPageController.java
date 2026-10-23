@@ -1,6 +1,7 @@
 package edu.icet.controller;
 
 import edu.icet.dao.BookDAO;
+import edu.icet.dao.BookIssueDAO;
 import edu.icet.dao.MemberDAO;
 import edu.icet.model.Book;
 import edu.icet.model.BookIssue;
@@ -54,10 +55,24 @@ public class IssueReturnPageController {
     @FXML
     private TableColumn<BookIssue, String> statusColumn;
 
+    @FXML
+    private Label totalIssuedLabel;
+
+    @FXML
+    private Label borrowedLabel;
+
+    @FXML
+    private Label overdueLabel;
+
+    @FXML
+    private Label returnedLabel;
+
+    @FXML
     public IssueReturnController issueReturnController = new IssueReturnController();
 
     @FXML
     public void initialize() {
+
         MemberDAO memberDAO = new MemberDAO();
         memberComboBox.setItems(FXCollections.observableArrayList(memberDAO.getAllMembers()));
 
@@ -125,6 +140,7 @@ public class IssueReturnPageController {
         );
 
         issueReturnController.loadIssuedBooks(issuedBooksTable);
+        issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, overdueLabel, returnedLabel);
     }
 
     public void showDashboardOnAction(ActionEvent actionEvent) {

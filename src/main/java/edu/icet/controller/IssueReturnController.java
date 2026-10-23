@@ -161,4 +161,24 @@ public class IssueReturnController {
                 FXCollections.observableArrayList(overdueIssues)
         );
     }
+
+    public void updateStatCards(Label totalIssuedLabel, Label borrowedLabel, Label overdueLabel, Label returnedLabel) {
+        BookIssueDAO bookIssueDAO = new BookIssueDAO();
+
+        totalIssuedLabel.setText(
+                String.valueOf(bookIssueDAO.getTotalIssuedBooks())
+        );
+
+        borrowedLabel.setText(
+                String.valueOf(bookIssueDAO.getCurrentlyBorrowedBooks())
+        );
+
+        overdueLabel.setText(
+                String.valueOf(bookIssueDAO.getOverdueBooks())
+        );
+
+        returnedLabel.setText(
+                String.valueOf(bookIssueDAO.getReturnedBooks())
+        );
+    }
 }

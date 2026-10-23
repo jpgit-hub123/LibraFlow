@@ -82,7 +82,8 @@
                     <Label text="TOTAL ISSUED BOOKS"
                            styleClass="stat-label"/>
 
-                    <Label text="0"
+                    <Label fx:id="totalIssuedLabel"
+                           text="0"
                            styleClass="stat-value"/>
 
                 </VBox>
@@ -94,7 +95,8 @@
                     <Label text="CURRENTLY BORROWED"
                            styleClass="stat-label"/>
 
-                    <Label text="0"
+                    <Label fx:id="borrowedLabel"
+                            text="0"
                            styleClass="stat-value"/>
 
                 </VBox>
@@ -106,7 +108,8 @@
                     <Label text="RETURNED BOOKS"
                            styleClass="stat-label"/>
 
-                    <Label text="0"
+                    <Label fx:id="overdueLabel"
+                            text="0"
                            styleClass="stat-value"/>
 
                 </VBox>
@@ -118,7 +121,8 @@
                     <Label text="OVERDUE BOOKS"
                            styleClass="stat-label"/>
 
-                    <Label text="0"
+                    <Label fx:id="returnedLabel"
+                            text="0"
                            styleClass="stat-value"/>
 
                 </VBox>
