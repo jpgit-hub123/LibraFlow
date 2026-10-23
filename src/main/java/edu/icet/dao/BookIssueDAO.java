@@ -15,11 +15,10 @@ public class BookIssueDAO {
 
     public List<BookIssue> getAllIssues() {
 
-        List<BookIssue> issues = new ArrayList<>();
+        List<BookIssue> issuedBooks = new ArrayList<>();
 
-        String sql = "SELECT issue_id, member_id, isbn, issue_date, due_date, return_date, status FROM book_issues " +
-                "ORDER BY issue_id DESC";
-
+        String sql = "SELECT bi.issue_id, bi.member_id, bi.isbn, b.title AS book_title, bi.issue_date, bi.due_date, bi.return_date, " +
+                "bi.status FROM book_issues bi JOIN books b ON bi.isbn = b.isbn ORDER BY bi.issue_id DESC";
         try {
             Connection connection = DBConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -29,7 +28,7 @@ public class BookIssueDAO {
 
                 Date returnDate = resultSet.getDate("return_date");
 
-                BookIssue issue = new BookIssue(
+                BookIssue issuedBook = new BookIssue(
                         resultSet.getInt("issue_id"),
                         resultSet.getInt("member_id"),
                         resultSet.getString("isbn"),
@@ -38,14 +37,15 @@ public class BookIssueDAO {
                         returnDate == null ? null : returnDate.toLocalDate(),
                         resultSet.getString("status")
                 );
-                issues.add(issue);
+                issuedBook.setBookTitle(resultSet.getString("book_title"));
+                issuedBooks.add(issuedBook);
             }
 
         } catch (SQLException e) {
             throw new RuntimeException();
         }
 
-        return issues;
+        return issuedBooks;
     }
 
     public boolean issueBook(BookIssue bookIssue) {

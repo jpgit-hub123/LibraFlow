@@ -9,10 +9,7 @@ import edu.icet.model.Member;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -43,7 +40,7 @@ public class IssueReturnController {
     }
 
     public void issuedTheBook(ComboBox<Member> memberComboBox, ComboBox<Book> bookComboBox, DatePicker issueDatePicker,
-                              DatePicker dueDatePicker) {
+                              DatePicker dueDatePicker, TableView<BookIssue> issuedBooksTable) {
 
         Member member = memberComboBox.getValue();
         Book book = bookComboBox.getValue();
@@ -93,6 +90,7 @@ public class IssueReturnController {
             dueDatePicker.setValue(LocalDate.now().plusDays(14));
             bookComboBox.setItems(FXCollections.observableArrayList(new BookDAO().getAllBooks()));
             memberComboBox.setItems(FXCollections.observableArrayList(new MemberDAO().getAllMembers()));
+            loadIssuedBooks(issuedBooksTable);
         } else {
             showAlert(
                     Alert.AlertType.INFORMATION,
@@ -100,5 +98,10 @@ public class IssueReturnController {
                     "Book not issued successfully, Try again."
             );
         }
+    }
+
+    public void loadIssuedBooks(TableView<BookIssue> issuedBooksTable) {
+        BookIssueDAO bookIssueDAO = new BookIssueDAO();
+        issuedBooksTable.setItems(FXCollections.observableArrayList(bookIssueDAO.getAllIssues()));
     }
 }

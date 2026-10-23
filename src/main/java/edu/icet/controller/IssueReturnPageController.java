@@ -3,11 +3,13 @@ package edu.icet.controller;
 import edu.icet.dao.BookDAO;
 import edu.icet.dao.MemberDAO;
 import edu.icet.model.Book;
+import edu.icet.model.BookIssue;
 import edu.icet.model.Member;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
@@ -30,25 +32,25 @@ public class IssueReturnPageController {
     private TextField searchField;
 
     @FXML
-    private TableView<?> issuedBooksTable;
+    private TableView<BookIssue> issuedBooksTable;
 
     @FXML
-    private TableColumn<?, ?> memberIdColumn;
+    private TableColumn<BookIssue, Integer> memberIdColumn;
 
     @FXML
-    private TableColumn<?, ?> isbnColumn;
+    private TableColumn<BookIssue, String> isbnColumn;
 
     @FXML
-    private TableColumn<?, ?> bookTitleColumn;
+    private TableColumn<BookIssue, String> bookTitleColumn;
 
     @FXML
-    private TableColumn<?, ?> issueDateColumn;
+    private TableColumn<BookIssue, LocalDate> issueDateColumn;
 
     @FXML
-    private TableColumn<?, ?> dueDateColumn;
+    private TableColumn<BookIssue, LocalDate> dueDateColumn;
 
     @FXML
-    private TableColumn<?, ?> statusColumn;
+    private TableColumn<BookIssue, String> statusColumn;
 
     public IssueReturnController issueReturnController = new IssueReturnController();
 
@@ -92,6 +94,15 @@ public class IssueReturnPageController {
 
         issueDatePicker.setValue(LocalDate.now());
         dueDatePicker.setValue(LocalDate.now().plusDays(14));
+
+        memberIdColumn.setCellValueFactory(new PropertyValueFactory<>("memberId"));
+        isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+        bookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
+        issueDateColumn.setCellValueFactory(new PropertyValueFactory<>("issueDate"));
+        dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        issueReturnController.loadIssuedBooks(issuedBooksTable);
     }
 
     public void showDashboardOnAction(ActionEvent actionEvent) {
@@ -107,6 +118,6 @@ public class IssueReturnPageController {
     }
 
     public void issueBookOnAction(ActionEvent actionEvent) {
-        issueReturnController.issuedTheBook(memberComboBox, bookComboBox, issueDatePicker, dueDatePicker);
+        issueReturnController.issuedTheBook(memberComboBox, bookComboBox, issueDatePicker, dueDatePicker, issuedBooksTable);
     }
 }

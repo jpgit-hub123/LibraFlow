@@ -7,6 +7,7 @@ public class BookIssue {
     private int issueId;
     private int memberId;
     private String isbn;
+    private String bookTitle;
     private LocalDate issueDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
@@ -52,6 +53,14 @@ public class BookIssue {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public String getBookTitle() {
+        return bookTitle;
+    }
+
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
     }
 
     public LocalDate getIssueDate() {
