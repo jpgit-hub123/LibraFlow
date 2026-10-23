@@ -97,7 +97,17 @@ public class IssueReturnPageController {
         bookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
         issueDateColumn.setCellValueFactory(new PropertyValueFactory<>("issueDate"));
         dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusColumn.setCellValueFactory(cellData -> {
+            BookIssue issue = cellData.getValue();
+            String displayStatus;
+            if (issue.isOverdue()) {
+                displayStatus = "OVERDUE";
+            } else {
+                displayStatus = issue.getStatus();
+            }
+
+            return new javafx.beans.property.SimpleStringProperty(displayStatus);
+        });
 
         issueReturnController.loadIssuedBooks(issuedBooksTable);
     }

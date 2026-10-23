@@ -51,7 +51,7 @@ public class IssueReturnController {
             showAlert(
                     Alert.AlertType.WARNING,
                     "No required details selected!",
-                    "Please select details in all fields."
+                    "Please fill details in all fields."
             );
             return;
         }

@@ -63,10 +63,10 @@ public class BookIssueDAO {
             try {
                 // 1. Check book availability
                 int quantity;
-                try (PreparedStatement checkStatement =
-                             connection.prepareStatement(checkBookSql)) {
+                try (PreparedStatement checkStatement = connection.prepareStatement(checkBookSql)) {
 
                     checkStatement.setString(1, bookIssue.getIsbn());
+
                     try (ResultSet resultSet = checkStatement.executeQuery()) {
 
                         if (!resultSet.next()) {

@@ -72,8 +72,8 @@ public class MembersController {
         if (selectedMember == null) {
             showAlert(
                     Alert.AlertType.WARNING,
-                    "No Book Selected",
-                    "Please select a book to delete."
+                    "No Member Selected",
+                    "Please select a Member to edit."
             );
             return;
         }
@@ -107,8 +107,8 @@ public class MembersController {
         if (selectedMember == null) {
             showAlert(
                     Alert.AlertType.WARNING,
-                    "No Book Selected",
-                    "Please select a book to delete."
+                    "No Member Selected",
+                    "Please select a member to delete."
             );
             return;
         }

@@ -94,4 +94,15 @@ public class BookIssue {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public boolean isOverdue() {
+        return "BORROWED".equals(status) && dueDate != null && dueDate.isBefore(java.time.LocalDate.now());
+    }
+
+    public long getOverdueDays() {
+        if (!isOverdue()) {
+            return 0;
+        }
+        return java.time.temporal.ChronoUnit.DAYS.between(dueDate, java.time.LocalDate.now());
+    }
 }
