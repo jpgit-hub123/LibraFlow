@@ -1,9 +1,13 @@
 package edu.icet.controller;
 
 import edu.icet.dao.BookDAO;
+import edu.icet.dao.BookIssueDAO;
 import edu.icet.dao.MemberDAO;
+import edu.icet.model.BookIssue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
@@ -45,5 +49,18 @@ public class DashboardController {
     public int getTotalMemberCount() {
         memberDAO = new MemberDAO();
         return memberDAO.getTotalMembers();
+    }
+
+    public void loadRecentTransactions(TableView<BookIssue> recentTransactionsTable) {
+        BookIssueDAO bookIssueDAO = new BookIssueDAO();
+
+        recentTransactionsTable.setItems(
+                FXCollections.observableArrayList(
+                        bookIssueDAO.getAllIssues()
+                                .stream()
+                                .limit(10)
+                                .toList()
+                )
+        );
     }
 }
