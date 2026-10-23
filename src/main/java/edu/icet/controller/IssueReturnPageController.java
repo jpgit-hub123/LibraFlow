@@ -29,6 +29,9 @@ public class IssueReturnPageController {
     public DatePicker dueDatePicker;
 
     @FXML
+    private TableColumn<BookIssue, Long> overdueDaysColumn;
+
+    @FXML
     private TableView<BookIssue> issuedBooksTable;
 
     @FXML
@@ -108,6 +111,11 @@ public class IssueReturnPageController {
 
             return new javafx.beans.property.SimpleStringProperty(displayStatus);
         });
+        overdueDaysColumn.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleLongProperty(
+                        cellData.getValue().getOverdueDays()
+                ).asObject()
+        );
 
         issueReturnController.loadIssuedBooks(issuedBooksTable);
     }
@@ -130,5 +138,13 @@ public class IssueReturnPageController {
 
     public void returnBookOnAction(ActionEvent actionEvent) {
         issueReturnController.returnBook(issuedBooksTable, bookComboBox, memberComboBox);
+    }
+
+    public void showOverdueBooksOnAction(ActionEvent actionEvent) {
+        issueReturnController.showOverdueBooks(issuedBooksTable);
+    }
+
+    public void showAllIssuesOnAction(ActionEvent actionEvent) {
+        issueReturnController.loadIssuedBooks(issuedBooksTable);
     }
 }

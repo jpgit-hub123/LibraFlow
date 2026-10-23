@@ -253,11 +253,24 @@
                                      text="Status"
                                      prefWidth="110"/>
 
+                        <TableColumn fx:id="overdueDaysColumn"
+                                     text="Overdue Days"
+                                     prefWidth="110"/>
+
                     </columns>
 
                 </TableView>
 
-                <HBox alignment="CENTER_RIGHT">
+                <HBox alignment="CENTER_RIGHT"
+                    spacing="20">
+
+                    <Button text="Show All Books"
+                            onAction="#showAllIssuesOnAction"
+                            styleClass="primary-button"/>
+
+                    <Button text="Show Overdue Books"
+                            onAction="#showOverdueBooksOnAction"
+                            styleClass="primary-button"/>
 
                     <Button text="Return Book"
                             onAction="#returnBookOnAction"

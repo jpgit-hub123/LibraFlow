@@ -149,4 +149,16 @@ public class IssueReturnController {
             );
         }
     }
+
+    public void showOverdueBooks(TableView<BookIssue> issuedBooksTable) {
+        BookIssueDAO bookIssueDAO = new BookIssueDAO();
+        var overdueIssues = bookIssueDAO.getAllIssues()
+                .stream()
+                .filter(BookIssue::isOverdue)
+                .toList();
+
+        issuedBooksTable.setItems(
+                FXCollections.observableArrayList(overdueIssues)
+        );
+    }
 }
