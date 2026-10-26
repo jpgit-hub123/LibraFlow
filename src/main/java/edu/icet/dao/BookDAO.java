@@ -2,7 +2,6 @@ package edu.icet.dao;
 
 import edu.icet.db.DBConnection;
 import edu.icet.model.Book;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -101,13 +100,52 @@ public class BookDAO {
 
             statement.setString(1, isbn);
 
-            int rowsDeleted = statement.executeUpdate();
-
-            return rowsDeleted > 0;
+            return statement.executeUpdate() > 0;
 
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    public boolean hasIssueHistory(String isbn) {
+
+        String sql = "SELECT COUNT(*) FROM book_issues WHERE isbn = ?";
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, isbn);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1) > 0;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private boolean hasAnIssueHistory(String isbn) {
+
+        String sql = "SELECT COUNT(*) FROM book_issues where isbn = ? AND status != 'RETURNED'";
+
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, isbn);
+
+            return statement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            return false;
+        }
+
+
     }
 
     public int getTotalBooks() {

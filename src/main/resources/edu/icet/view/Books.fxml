@@ -44,10 +44,6 @@
             <Button text="Issue &amp; Return"
                     onAction="#showIssueReturnOnAction"
                     styleClass="menu-button"/>
-
-            <Button text="Reports"
-                    styleClass="menu-button"/>
-
         </VBox>
     </left>
 
@@ -127,14 +123,9 @@
                         <TableColumn fx:id="quantityColumn"
                                      text="Quantity"
                                      prefWidth="90"/>
-
                     </columns>
-
                 </TableView>
-
             </VBox>
-
         </VBox>
     </center>
-
 </BorderPane>

@@ -46,15 +46,11 @@
 
             <Button text="Issue &amp; Return"
                     styleClass="menu-button, active-menu"/>
-
-            <Button text="Reports"
-                    styleClass="menu-button"/>
-
         </VBox>
     </left>
 
     <center>
-        <VBox spacing="20"
+        <VBox spacing="10"
               styleClass="main-content">
 
             <padding>
@@ -75,7 +71,7 @@
 
             <HBox spacing="15">
 
-                <VBox spacing="10"
+                <VBox spacing="5"
                       HBox.hgrow="ALWAYS"
                       styleClass="stat-card">
 
@@ -88,7 +84,7 @@
 
                 </VBox>
 
-                <VBox spacing="10"
+                <VBox spacing="5"
                       HBox.hgrow="ALWAYS"
                       styleClass="stat-card">
 
@@ -101,27 +97,27 @@
 
                 </VBox>
 
-                <VBox spacing="10"
+                <VBox spacing="5"
                       HBox.hgrow="ALWAYS"
                       styleClass="stat-card">
 
                     <Label text="RETURNED BOOKS"
                            styleClass="stat-label"/>
 
-                    <Label fx:id="overdueLabel"
+                    <Label fx:id="returnedLabel"
                             text="0"
                            styleClass="stat-value"/>
 
                 </VBox>
 
-                <VBox spacing="10"
+                <VBox spacing="5"
                       HBox.hgrow="ALWAYS"
                       styleClass="stat-card">
 
                     <Label text="OVERDUE BOOKS"
                            styleClass="stat-label"/>
 
-                    <Label fx:id="returnedLabel"
+                    <Label fx:id="overdueLabel"
                             text="0"
                            styleClass="stat-value"/>
 
@@ -131,7 +127,7 @@
 
             <!-- Issue book form -->
 
-            <VBox spacing="20"
+            <VBox spacing="10"
                   styleClass="transactions-card">
 
                 <Label text="Issue a Book"
@@ -211,8 +207,9 @@
 
             <!-- Issued books table -->
 
-            <VBox spacing="15"
+            <VBox spacing="10"
                   styleClass="transactions-card"
+                  minHeight="300.0"
                   VBox.vgrow="ALWAYS">
 
                 <HBox alignment="CENTER_LEFT"
@@ -229,6 +226,8 @@
                 </HBox>
 
                 <TableView fx:id="issuedBooksTable"
+                           minHeight="150.0"
+                           prefHeight="250.0"
                            VBox.vgrow="ALWAYS">
 
                     <columns>

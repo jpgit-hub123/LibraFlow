@@ -157,6 +157,15 @@ public class BooksController {
             return;
         }
 
+        if (bookDAO.hasIssueHistory(selectedBook.getIsbn())) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Cannot Delete Book",
+                    "This book cannot be deleted because it has transaction history."
+            );
+            return;
+        }
+
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.setTitle("Delete Book");
         confirmation.setHeaderText("Delete " + selectedBook.getTitle() + "?");

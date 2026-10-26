@@ -207,7 +207,7 @@ public class BookIssueDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
 
         return 0;
@@ -215,11 +215,7 @@ public class BookIssueDAO {
 
     public int getCurrentlyBorrowedBooks() {
 
-        String sql = """
-            SELECT COUNT(*)
-            FROM book_issues
-            WHERE status = 'BORROWED'
-            """;
+        String sql = "SELECT COUNT(*) FROM book_issues WHERE status = 'BORROWED'";
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -230,7 +226,7 @@ public class BookIssueDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
 
         return 0;
@@ -238,12 +234,14 @@ public class BookIssueDAO {
 
     public int getOverdueBooks() {
 
-        String sql = """
-            SELECT COUNT(*)
-            FROM book_issues
-            WHERE status = 'BORROWED'
-              AND due_date < CURRENT_DATE
-            """;
+        String sql = "SELECT COUNT(*) FROM book_issues WHERE return_date is NULL AND due_date < CURRENT_DATE";
+
+//        String sql = """
+//            SELECT COUNT(*)
+//            FROM book_issues
+//            WHERE status = 'BORROWED'
+//              AND due_date < CURRENT_DATE
+//            """;
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -254,7 +252,7 @@ public class BookIssueDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
 
         return 0;
@@ -277,7 +275,7 @@ public class BookIssueDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
 
         return 0;

@@ -140,7 +140,7 @@ public class IssueReturnPageController {
         );
 
         issueReturnController.loadIssuedBooks(issuedBooksTable);
-        issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, overdueLabel, returnedLabel);
+        issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
     }
 
     public void showDashboardOnAction(ActionEvent actionEvent) {
@@ -157,10 +157,12 @@ public class IssueReturnPageController {
 
     public void issueBookOnAction(ActionEvent actionEvent) {
         issueReturnController.issuedTheBook(memberComboBox, bookComboBox, issueDatePicker, dueDatePicker, issuedBooksTable);
+        issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
     }
 
     public void returnBookOnAction(ActionEvent actionEvent) {
         issueReturnController.returnBook(issuedBooksTable, bookComboBox, memberComboBox);
+        issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
     }
 
     public void showOverdueBooksOnAction(ActionEvent actionEvent) {

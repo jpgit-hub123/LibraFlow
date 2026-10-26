@@ -162,7 +162,8 @@ public class IssueReturnController {
         );
     }
 
-    public void updateStatCards(Label totalIssuedLabel, Label borrowedLabel, Label overdueLabel, Label returnedLabel) {
+    public void updateStatCards(Label totalIssuedLabel, Label borrowedLabel, Label returnedLabel, Label overdueLabel) {
+
         BookIssueDAO bookIssueDAO = new BookIssueDAO();
 
         totalIssuedLabel.setText(

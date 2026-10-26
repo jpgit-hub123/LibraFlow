@@ -44,10 +44,6 @@
             <Button text="Issue &amp; Return"
                     onAction="#showIssueReturnOnAction"
                     styleClass="menu-button"/>
-
-            <Button text="Reports"
-                    styleClass="menu-button"/>
-
         </VBox>
     </left>
 

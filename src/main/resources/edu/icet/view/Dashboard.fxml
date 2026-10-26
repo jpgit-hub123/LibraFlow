@@ -48,10 +48,6 @@
             <Button text="Issue &amp; Return"
                     onAction="#showIssueReturnOnAction"
                     styleClass="menu-button"/>
-
-            <Button text="Reports"
-                    styleClass="menu-button"/>
-
         </VBox>
     </left>
 
@@ -142,20 +138,20 @@
 
                 </VBox>
 
-                <VBox spacing="12"
-                      HBox.hgrow="ALWAYS"
-                      styleClass="stat-card">
+<!--                <VBox spacing="12"-->
+<!--                      HBox.hgrow="ALWAYS"-->
+<!--                      styleClass="stat-card">-->
 
-                    <Label text="OVERDUE BOOKS"
-                           styleClass="stat-label"/>
+<!--                    <Label text="OVERDUE BOOKS"-->
+<!--                           styleClass="stat-label"/>-->
 
-                    <Label text="0"
-                           styleClass="stat-value"/>
+<!--                    <Label text="0"-->
+<!--                           styleClass="stat-value"/>-->
 
-                    <Label text="Past their due date"
-                           styleClass="stat-description"/>
+<!--                    <Label text="Past their due date"-->
+<!--                           styleClass="stat-description"/>-->
 
-                </VBox>
+<!--                </VBox>-->
 
             </HBox>
 

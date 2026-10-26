@@ -53,6 +53,11 @@ public class BooksPageController {
     }
 
     @FXML
+    public void showReportsOnAction(ActionEvent actionEvent) {
+        booksController.loadPage("/edu/icet/view/Reports.fxml", searchField);
+    }
+
+    @FXML
     public void initialize() {
         booksController.setBooksDataIntoTable(isbnColumn, titleColumn, authorColumn, categoryColumn, quantityColumn, booksTable);
     }
