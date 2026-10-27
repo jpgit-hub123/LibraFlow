@@ -17,21 +17,22 @@ public class AppStarter extends Application {
     public void start(Stage stage) throws Exception {
 
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/edu/icet/view/Dashboard.fxml")
+                getClass().getResource("/edu/icet/view/LoginPage.fxml")
         );
 
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, 1200, 750);
+        Scene scene = new Scene(root);
 
         scene.getStylesheets().add(
                 Objects.requireNonNull(getClass().getResource(
                         "/edu/icet/css/dashboard.css")).toExternalForm()
         );
 
-        stage.setTitle("LibraFlow | Library Management System");
-        stage.setMinWidth(1000);
-        stage.setMinHeight(650);
+        stage.setTitle("LibraFlow | Login");
+        stage.setResizable(false);
+//        stage.setMinWidth(1000);
+//        stage.setMinHeight(650);
         stage.setScene(scene);
         stage.show();
     }
