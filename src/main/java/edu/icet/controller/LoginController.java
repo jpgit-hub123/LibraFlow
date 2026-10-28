@@ -1,18 +1,26 @@
 package edu.icet.controller;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+
+import java.io.IOException;
 
 public class LoginController {
-    public void handleLoginPage(TextField usernameField, PasswordField passwordField, Label messageLabel) {
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText();
-        if (username.isEmpty() || password.isEmpty()) {
-            messageLabel.setText("Please enter username and password.");
-            return;
+
+    public void loadPage(String fxmlFile, BorderPane rootPane) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+        try {
+            Parent rootNode = loader.load();
+            rootPane.getScene().setRoot(rootNode);
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
         }
-        messageLabel.setText("Login validation is ready.");
+    }
+
+    public boolean authenticate(TextField usernameField, TextField passwordField) {
+        return (usernameField.getText().equals("admin") && passwordField.getText().equals("admin123"));
     }
 }

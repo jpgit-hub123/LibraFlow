@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -11,7 +12,15 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="563.0" prefWidth="862.0" styleClass="login-root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.icet.controller.LoginPageController">
+<BorderPane fx:id="rootPane"
+            maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="563.0" prefWidth="862.0"
+            styleClass="login-root"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.icet.controller.LoginPageController">
+
    <center>
       <HBox prefHeight="100.0" prefWidth="200.0" styleClass="login-layout" BorderPane.alignment="CENTER">
          <children>
@@ -28,7 +37,7 @@
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" styleClass="login-brand" text="LibraFlow" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                      <VBox.margin>
-                        <Insets top="50.0" />
+                        <Insets top="15.0" />
                      </VBox.margin>
                   </Label>
                   <Label styleClass="login-subtitle" text="Library Management System" textAlignment="CENTER" />
@@ -43,7 +52,7 @@
                         <Insets right="220.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="270.0" promptText="Enter your username">
+                  <TextField fx:id="usernameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="270.0" promptText="Enter your username">
                      <VBox.margin>
                         <Insets right="12.0" />
                      </VBox.margin>
@@ -53,17 +62,31 @@
                         <Insets right="220.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="270.0" promptText="Enter your password">
+                  <TextField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="270.0" promptText="Enter your password">
                      <VBox.margin>
                         <Insets right="12.0" />
                      </VBox.margin>
                   </TextField>
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="270.0" text="Login">
+                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="270.0" text="Login" onAction="#handleLoginOnAction">
                      <VBox.margin>
                         <Insets right="12.0" top="30.0" />
                      </VBox.margin>
                   </Button>
                   <Label text="--------Access to you Library--------" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Don't have an account ?">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Hyperlink onAction="#joinOnAction" text="Join here">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Hyperlink>
+                     </children>
+                  </HBox>
                </children>
                <padding>
                   <Insets top="50.0" />

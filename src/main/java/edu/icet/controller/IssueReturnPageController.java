@@ -155,6 +155,10 @@ public class IssueReturnPageController {
         issueReturnController.loadPage("/edu/icet/view/Members.fxml", memberComboBox);
     }
 
+    public void logoutOnAction(ActionEvent actionEvent) {
+        issueReturnController.loadPage("/edu/icet/view/LoginPage.fxml", memberComboBox);
+    }
+
     public void issueBookOnAction(ActionEvent actionEvent) {
         issueReturnController.issuedTheBook(memberComboBox, bookComboBox, issueDatePicker, dueDatePicker, issuedBooksTable);
         issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);

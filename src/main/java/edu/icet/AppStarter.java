@@ -16,23 +16,15 @@ public class AppStarter extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/edu/icet/view/LoginPage.fxml")
-        );
-
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/LoginPage.fxml"));
         Parent root = loader.load();
-
         Scene scene = new Scene(root);
-
         scene.getStylesheets().add(
                 Objects.requireNonNull(getClass().getResource(
                         "/edu/icet/css/dashboard.css")).toExternalForm()
         );
-
         stage.setTitle("LibraFlow | Login");
-        stage.setResizable(false);
-//        stage.setMinWidth(1000);
-//        stage.setMinHeight(650);
+        stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
     }

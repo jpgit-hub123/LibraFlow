@@ -71,6 +71,10 @@ public class DashboardPageController {
         dashboardController.loadPage("/edu/icet/view/IssueReturn.fxml", rootPane);
     }
 
+    public void logoutOnAction(ActionEvent actionEvent) {
+        dashboardController.loadPage("/edu/icet/view/LoginPage.fxml", rootPane);
+    }
+
     @FXML
     public void initialize() {
         int totalBooks = dashboardController.getTotalBooksCount();

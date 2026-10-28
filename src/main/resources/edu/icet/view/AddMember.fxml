@@ -15,10 +15,8 @@
            fx:controller="edu.icet.controller.AddMemberPageController"
            style="-fx-background-color: rgba(20, 35, 55, 0.55);">
 
-    <VBox maxWidth="520"
-          spacing="18"
+    <VBox spacing="18"
           style="-fx-background-color: white;
-                 -fx-background-radius: 12;
                  -fx-padding: 30;
                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 20, 0.2, 0, 5);">
 

@@ -69,4 +69,8 @@ public class MembersPageController {
     public void showIssueReturnOnAction(ActionEvent actionEvent) {
         membersController.loadPage("/edu/icet/view/IssueReturn.fxml", searchField);
     }
+
+    public void logoutOnAction(ActionEvent actionEvent) {
+        membersController.loadPage("/edu/icet/view/LoginPage.fxml", searchField);
+    }
 }

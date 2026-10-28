@@ -48,13 +48,13 @@ public class BooksPageController {
     }
 
     @FXML
-    private void showAddBookFormOnAction() {
-        booksController.loadForm(searchField, booksTable);
+    public void logoutOnAction(ActionEvent actionEvent) {
+        booksController.loadPage("/edu/icet/view/LoginPage.fxml", searchField);
     }
 
     @FXML
-    public void showReportsOnAction(ActionEvent actionEvent) {
-        booksController.loadPage("/edu/icet/view/Reports.fxml", searchField);
+    private void showAddBookFormOnAction() {
+        booksController.loadForm(searchField, booksTable);
     }
 
     @FXML

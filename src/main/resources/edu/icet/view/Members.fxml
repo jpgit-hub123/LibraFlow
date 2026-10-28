@@ -44,6 +44,10 @@
             <Button text="Issue &amp; Return"
                     onAction="#showIssueReturnOnAction"
                     styleClass="menu-button"/>
+
+            <Button text="Logout"
+                    onAction="#logoutOnAction"
+                    styleClass="menu-button"/>
         </VBox>
     </left>
 

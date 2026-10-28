@@ -42,6 +42,7 @@ public class AddMemberPageController {
     @FXML
     public void saveMemberOnAction(ActionEvent actionEvent) {
         addMemberController.registerNewMember(nameField, emailField, phoneField, addressField);
+//        addMemberController.createUsernameAndPassword();
     }
 
     @FXML
