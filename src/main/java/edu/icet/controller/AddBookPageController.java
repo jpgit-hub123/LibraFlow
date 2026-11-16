@@ -30,12 +30,14 @@ public class AddBookPageController {
     @FXML
     private TextField quantityField;
 
+    @FXML
     public AddBookController addBookController = new AddBookController();
 
     @FXML
     private void saveBookOnAction() {
         addBookController.validateBookDetails(isbnField, titleField, authorField, categoryField, quantityField);
     }
+
     @FXML
     private void cancelFormOnAction() {
         addBookController.closedTheAddBookForm(isbnField);

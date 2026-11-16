@@ -2,9 +2,6 @@ package edu.icet.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
@@ -18,12 +15,6 @@ public class LoginPageController {
 
     @FXML
     private TextField passwordField;
-
-    @FXML
-    private Label messageLabel;
-
-    @FXML
-    private Button loginButton;
 
     @FXML
     private final LoginController loginController = new LoginController();
