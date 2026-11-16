@@ -14,8 +14,7 @@ import java.io.IOException;
 
 public class DashboardController {
 
-    BookDAO bookDAO;
-    MemberDAO memberDAO;
+    BookDAO bookDAO = new BookDAO();
 
     public void loadPage(String fxmlFile, BorderPane rootPane) {
 
@@ -32,31 +31,25 @@ public class DashboardController {
     }
 
     public int getTotalBooksCount() {
-        bookDAO = new BookDAO();
         return bookDAO.getTotalBooks();
     }
 
     public int getTotalQuantityCount() {
-        bookDAO = new BookDAO();
         return bookDAO.getTotalQuantity();
     }
 
     public int getTotalCategories() {
-        bookDAO = new BookDAO();
         return bookDAO.getTotalCategories();
     }
 
     public int getTotalMemberCount() {
-        memberDAO = new MemberDAO();
-        return memberDAO.getTotalMembers();
+        return new MemberDAO().getTotalMembers();
     }
 
     public void loadRecentTransactions(TableView<BookIssue> recentTransactionsTable) {
-        BookIssueDAO bookIssueDAO = new BookIssueDAO();
-
         recentTransactionsTable.setItems(
                 FXCollections.observableArrayList(
-                        bookIssueDAO.getAllIssues()
+                        new BookIssueDAO().getAllIssues()
                                 .stream()
                                 .limit(10)
                                 .toList()

@@ -16,9 +16,10 @@ import java.util.List;
 
 public class BookDAO {
 
+    Session session = DBConnection.getSession();
+
     public boolean saveBook(Book book) {
         try {
-            Session session = DBConnection.getSession();
             Transaction transaction = session.beginTransaction();
             session.persist(book);
             transaction.commit();
@@ -60,7 +61,6 @@ public class BookDAO {
     }
 
     public boolean updateBook(String originalIsbn, Book book) {
-        Session session = DBConnection.getSession();
         Transaction transaction = session.beginTransaction();
         Book existingBook = session.find(Book.class, originalIsbn);
         if (existingBook == null) {
@@ -77,7 +77,6 @@ public class BookDAO {
 
     public boolean deleteBook(String isbn) {
         try {
-            Session session = DBConnection.getSession();
             Transaction transaction = session.beginTransaction();
             Book book = session.find(Book.class, isbn);
             if (book == null) {
@@ -92,7 +91,6 @@ public class BookDAO {
     }
 
     public boolean hasIssueHistory(String isbn) {
-        Session session = DBConnection.getSession();
         return !session
                 .createQuery("FROM bookIssue bi WHERE bi.isbn = :isbn", BookIssue.class)
                 .setParameter("isbn", isbn)
@@ -102,48 +100,25 @@ public class BookDAO {
     }
 
     public int getTotalBooks() {
-        Session session = DBConnection.getSession();
-        Long singleResult = session
+        Long totalBooksResult = session
                 .createQuery("SELECT COUNT(b) FROM Book b", Long.class)
                 .getSingleResult();
-        return singleResult.intValue();
+        return totalBooksResult.intValue();
     }
 
     public int getTotalQuantity() {
-
-        String sql = "SELECT COALESCE(SUM(quantity), 0) FROM books";
-
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-        return 0;
+        Long totalBookQuantityResult = session
+                .createQuery("SELECT SUM(b.quantity) FROM Book b", Long.class)
+                .getSingleResult();
+        return totalBookQuantityResult.intValue();
     }
 
     public int getTotalCategories() {
-
-        String sql = "SELECT COUNT(DISTINCT category) FROM books";
-
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-        return 0;
+        Long totalCategoryResult = session
+                .createQuery("SELECT COUNT(DISTINCT b.category) FROM Book b", Long.class)
+                .getSingleResult();
+        return totalCategoryResult.intValue();
     }
+
 }
 
