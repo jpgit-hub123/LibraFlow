@@ -38,6 +38,6 @@ public class LoginPageController {
     }
 
     public void joinOnAction(ActionEvent actionEvent) {
-//        loginController.loadPage("/edu/icet/view/RegisterUser.fxml", rootPane);
+
     }
 }

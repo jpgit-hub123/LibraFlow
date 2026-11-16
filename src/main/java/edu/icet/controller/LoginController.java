@@ -1,5 +1,6 @@
 package edu.icet.controller;
 
+import edu.icet.dao.UserDAO;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
@@ -21,6 +22,10 @@ public class LoginController {
     }
 
     public boolean authenticate(TextField usernameField, TextField passwordField) {
-        return (usernameField.getText().equals("admin") && passwordField.getText().equals("admin123"));
+//        return (usernameField.getText().equals("admin") && passwordField.getText().equals("admin123"));
+
+        UserDAO userDAO = new UserDAO();
+        return userDAO.checkLoginDetails(usernameField, passwordField);
+
     }
 }

@@ -1,17 +1,24 @@
 package edu.icet.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import edu.icet.model.User;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 public class DBConnection {
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/LibraFlow",
-                "root",
-                "JP26@MySQL"
-        );
-    }
-}
+    private static final SessionFactory sessionFactory =
+            new Configuration()
+                    .setProperty("hibernate.connection.url",
+                            "jdbc:mysql://localhost:3306/LibraFlow?createDatabaseIfNotExist=true")
+                    .setProperty("hibernate.connection.username", "root")
+                    .setProperty("hibernate.connection.password", "JP26@MySQL")
+                    .setProperty("hibernate.hbm2ddl.auto", "update")
+                    .addAnnotatedClass(User.class)
+                    .buildSessionFactory();
 
+    public static Session getSession() {
+        return sessionFactory.openSession();
+    }
+
+}
