@@ -76,6 +76,7 @@ public class BooksPageController {
     public void deleteBookOnAction(ActionEvent actionEvent) {
         booksController.deleteSelectedBook(searchField, booksTable);
     }
+
 }
 
 

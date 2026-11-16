@@ -74,19 +74,18 @@ public class BookDAO {
     }
 
     public boolean deleteBook(String isbn) {
-
-        String sql = "DELETE FROM books WHERE isbn = ?";
-
         try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            statement.setString(1, isbn);
-
-            return statement.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            return false;
+            Session session = DBConnection.getSession();
+            Transaction transaction = session.beginTransaction();
+            Book book = session.find(Book.class, isbn);
+            if (book == null) {
+                return false;
+            }
+            session.remove(book);
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
