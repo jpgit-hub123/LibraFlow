@@ -94,50 +94,19 @@ public class BookDAO {
     public boolean hasIssueHistory(String isbn) {
         Session session = DBConnection.getSession();
         return !session
-                .createQuery("FROM bookIssues bi WHERE bi.isbn = :isbn", BookIssue.class)
+                .createQuery("FROM bookIssue bi WHERE bi.isbn = :isbn", BookIssue.class)
                 .setParameter("isbn", isbn)
                 .setMaxResults(1)
                 .getResultList()
                 .isEmpty();
     }
 
-    private boolean hasAnIssueHistory(String isbn) {
-
-        String sql = "SELECT COUNT(*) FROM book_issues where isbn = ? AND status != 'RETURNED'";
-
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            statement.setString(1, isbn);
-
-            return statement.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            return false;
-        }
-
-
-    }
-
     public int getTotalBooks() {
-
-        String sql = "SELECT COUNT(*) FROM books";
-
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-
-        return 0;
+        Session session = DBConnection.getSession();
+        Long singleResult = session
+                .createQuery("SELECT COUNT(b) FROM Book b", Long.class)
+                .getSingleResult();
+        return singleResult.intValue();
     }
 
     public int getTotalQuantity() {
