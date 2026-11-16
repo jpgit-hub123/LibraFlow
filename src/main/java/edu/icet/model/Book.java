@@ -1,12 +1,24 @@
 package edu.icet.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "books")
 public class Book {
 
+    @Id
+    @Column(name = "isbn", length = 20)
     private String isbn;
     private String title;
     private String author;
     private String category;
     private int quantity;
+
+    public Book() {
+    }
 
     public Book(String isbn, String title, String author, String category, int quantity) {
         this.isbn = isbn;

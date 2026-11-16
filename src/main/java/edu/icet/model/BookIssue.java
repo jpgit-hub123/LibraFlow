@@ -1,17 +1,29 @@
 package edu.icet.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "book_issues")
 public class BookIssue {
 
+    @Id
     private int issueId;
     private int memberId;
+    @Column(name = "isbn", length = 20)
     private String isbn;
     private String bookTitle;
     private LocalDate issueDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
     private String status;
+
+    public BookIssue() {
+    }
 
     public BookIssue(int issueId, int memberId, String isbn, LocalDate issueDate, LocalDate dueDate, LocalDate returnDate,
                      String status) {

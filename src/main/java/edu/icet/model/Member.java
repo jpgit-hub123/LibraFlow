@@ -1,12 +1,22 @@
 package edu.icet.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "members")
 public class Member {
 
+    @Id
     private int memberId;
     private String name;
     private String email;
     private String phone;
     private String address;
+
+    public Member() {
+    }
 
     public Member(int memberId, String name, String email, String phone, String address) {
         this.memberId = memberId;

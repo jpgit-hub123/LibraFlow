@@ -2,47 +2,35 @@ package edu.icet.dao;
 
 import edu.icet.db.DBConnection;
 import edu.icet.model.BookIssue;
-
+import jakarta.persistence.LockModeType;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import edu.icet.model.Book;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookIssueDAO {
 
+    Session session = DBConnection.getSession();
+
     public List<BookIssue> getAllIssues() {
+
+        List<Object[]> issueBookResults = session
+                .createQuery("SELECT bi, b.title FROM BookIssue bi JOIN Book b ON bi.isbn = b.isbn ORDER BY bi.issueId DESC", Object[].class)
+                .getResultList();
 
         List<BookIssue> issuedBooks = new ArrayList<>();
 
-        String sql = "SELECT bi.issue_id, bi.member_id, bi.isbn, b.title AS book_title, bi.issue_date, bi.due_date, bi.return_date, " +
-                "bi.status FROM book_issues bi JOIN books b ON bi.isbn = b.isbn ORDER BY bi.issue_id DESC";
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-
-                Date returnDate = resultSet.getDate("return_date");
-
-                BookIssue issuedBook = new BookIssue(
-                        resultSet.getInt("issue_id"),
-                        resultSet.getInt("member_id"),
-                        resultSet.getString("isbn"),
-                        resultSet.getDate("issue_date").toLocalDate(),
-                        resultSet.getDate("due_date").toLocalDate(),
-                        returnDate == null ? null : returnDate.toLocalDate(),
-                        resultSet.getString("status")
-                );
-                issuedBook.setBookTitle(resultSet.getString("book_title"));
-                issuedBooks.add(issuedBook);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException();
+        for (Object[] row : issueBookResults) {
+            BookIssue issuedBook = (BookIssue) row[0];
+            String issuedBookTitle = (String) row[1];
+            issuedBook.setBookTitle(issuedBookTitle);
+            issuedBooks.add(issuedBook);
         }
 
         return issuedBooks;
@@ -50,234 +38,94 @@ public class BookIssueDAO {
 
     public boolean issueBook(BookIssue bookIssue) {
 
-        String checkBookSql = "SELECT quantity FROM books WHERE isbn = ? FOR UPDATE";
+        Transaction transaction = session.beginTransaction();
 
-        String updateBookSql = "UPDATE books SET quantity = quantity - 1 WHERE isbn = ?";
+        Book book = session.find(Book.class, bookIssue.getIsbn(), LockModeType.PESSIMISTIC_WRITE);
 
-        String insertIssueSql = "INSERT INTO book_issues " + "(member_id, isbn, issue_date, due_date, status) " +
-                                "VALUES (?, ?, ?, ?, 'BORROWED')";
-
-        try {
-            Connection connection = DBConnection.getConnection();
-            connection.setAutoCommit(false);
-            try {
-                // 1. Check book availability
-                int quantity;
-                try (PreparedStatement checkStatement = connection.prepareStatement(checkBookSql)) {
-
-                    checkStatement.setString(1, bookIssue.getIsbn());
-
-                    try (ResultSet resultSet = checkStatement.executeQuery()) {
-
-                        if (!resultSet.next()) {
-                            connection.rollback();
-                            return false;
-                        }
-                        quantity = resultSet.getInt("quantity");
-                    }
-                }
-                if (quantity <= 0) {
-                    connection.rollback();
-                    return false;
-                }
-                // 2. Reduce available quantity
-                try (PreparedStatement updateStatement =
-                             connection.prepareStatement(updateBookSql)) {
-
-                    updateStatement.setString(1, bookIssue.getIsbn());
-                    updateStatement.executeUpdate();
-                }
-                // 3. Save issue details
-                try (PreparedStatement insertStatement =
-                             connection.prepareStatement(insertIssueSql)) {
-
-                    insertStatement.setInt(1, bookIssue.getMemberId());
-                    insertStatement.setString(2, bookIssue.getIsbn());
-                    insertStatement.setDate(
-                            3, Date.valueOf(bookIssue.getIssueDate()));
-                    insertStatement.setDate(
-                            4, Date.valueOf(bookIssue.getDueDate()));
-
-                    insertStatement.executeUpdate();
-                }
-                // 4. Save both changes
-                connection.commit();
-                return true;
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-            } finally {
-                connection.setAutoCommit(true);
-            }
-
-        } catch (SQLException e) {
+        if (book == null) {
+            transaction.rollback();
             return false;
         }
+
+        if (book.getQuantity() == 0) {
+            transaction.rollback();
+            return false;
+        }
+
+        book.setQuantity(book.getQuantity() - 1);
+
+        bookIssue.setStatus("BORROWED");
+
+        session.persist(bookIssue);
+
+        transaction.commit();
+
+        return true;
+    }
+
+    public int getTotalIssuedBooks() {
+        Long totalIssuedBooksResult = session
+                .createQuery("SELECT COUNT(bi) FROM BookIssue bi", Long.class)
+                .getSingleResult();
+        return totalIssuedBooksResult.intValue();
+    }
+
+    public int getCurrentlyBorrowedBooks() {
+        Long totalIssuedBooksResult = session
+                .createQuery("SELECT COUNT(bi) FROM BookIssue bi WHERE status = :status", Long.class)
+                .setParameter("status", "BORROWED")
+                .getSingleResult();
+        return totalIssuedBooksResult.intValue();
+    }
+
+    public int getOverdueBooks() {
+        Long overdueBooksResult = session.createQuery(
+                "SELECT COUNT(bi) FROM BookIssue bi WHERE bi.returnDate IS NULL AND bi.dueDate < CURRENT_DATE",
+                Long.class
+        ).getSingleResult();
+
+        return overdueBooksResult.intValue();
+    }
+
+    public int getReturnedBooks() {
+        Long totalIssuedBooksResult = session
+                .createQuery("SELECT COUNT(bi) FROM BookIssue bi WHERE status = :status", Long.class)
+                .setParameter("status", "RETURNED")
+                .getSingleResult();
+        return totalIssuedBooksResult.intValue();
     }
 
     public boolean returnBook(int issueId) {
 
-        String selectSql =
-                "SELECT isbn FROM book_issues " +
-                        "WHERE issue_id = ? AND status = 'BORROWED' FOR UPDATE";
+        Transaction transaction = session.beginTransaction();
 
-        String updateIssueSql =
-                "UPDATE book_issues " +
-                        "SET status = 'RETURNED', return_date = ? " +
-                        "WHERE issue_id = ? AND status = 'BORROWED'";
+        BookIssue bookIssue = session.find(BookIssue.class, issueId, LockModeType.PESSIMISTIC_WRITE);
 
-        String updateBookSql =
-                "UPDATE books SET quantity = quantity + 1 WHERE isbn = ?";
-
-        try (Connection connection = DBConnection.getConnection()) {
-
-            connection.setAutoCommit(false);
-
-            try {
-                String isbn;
-
-                // 1. Find the borrowed book
-                try (PreparedStatement statement =
-                             connection.prepareStatement(selectSql)) {
-
-                    statement.setInt(1, issueId);
-
-                    try (ResultSet resultSet = statement.executeQuery()) {
-
-                        if (!resultSet.next()) {
-                            connection.rollback();
-                            return false;
-                        }
-
-                        isbn = resultSet.getString("isbn");
-                    }
-                }
-
-                // 2. Update issue status and return date
-                try (PreparedStatement statement =
-                             connection.prepareStatement(updateIssueSql)) {
-
-                    statement.setDate(1, Date.valueOf(java.time.LocalDate.now()));
-                    statement.setInt(2, issueId);
-
-                    if (statement.executeUpdate() != 1) {
-                        connection.rollback();
-                        return false;
-                    }
-                }
-
-                // 3. Increase available book quantity
-                try (PreparedStatement statement =
-                             connection.prepareStatement(updateBookSql)) {
-
-                    statement.setString(1, isbn);
-
-                    if (statement.executeUpdate() != 1) {
-                        throw new SQLException("Book quantity could not be updated.");
-                    }
-                }
-
-                // 4. Commit both changes
-                connection.commit();
-                return true;
-
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-
-            } finally {
-                connection.setAutoCommit(true);
-            }
-
-        } catch (SQLException e) {
+        if (bookIssue == null) {
+            transaction.rollback();
             return false;
         }
-    }
 
-    public int getTotalIssuedBooks() {
-
-        String sql = "SELECT COUNT(*) FROM book_issues";
-
-        try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException();
+        if (bookIssue.getReturnDate() != null) {
+            transaction.rollback();
+            return false;
         }
 
-        return 0;
-    }
+        Book book = session.find(Book.class, bookIssue.getIsbn(), LockModeType.PESSIMISTIC_WRITE);
 
-    public int getCurrentlyBorrowedBooks() {
-
-        String sql = "SELECT COUNT(*) FROM book_issues WHERE status = 'BORROWED'";
-
-        try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException();
+        if (book == null) {
+            transaction.rollback();
+            return false;
         }
 
-        return 0;
-    }
+        book.setQuantity(book.getQuantity() + 1);
 
-    public int getOverdueBooks() {
+        bookIssue.setReturnDate(LocalDate.now());
 
-        String sql = "SELECT COUNT(*) FROM book_issues WHERE return_date is NULL AND due_date < CURRENT_DATE";
+        bookIssue.setStatus("RETURNED");
 
-//        String sql = """
-//            SELECT COUNT(*)
-//            FROM book_issues
-//            WHERE status = 'BORROWED'
-//              AND due_date < CURRENT_DATE
-//            """;
+        transaction.commit();
 
-        try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-
-        return 0;
-    }
-
-    public int getReturnedBooks() {
-
-        String sql = """
-            SELECT COUNT(*)
-            FROM book_issues
-            WHERE status = 'RETURNED'
-            """;
-
-        try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-
-        return 0;
+        return true;
     }
 }
