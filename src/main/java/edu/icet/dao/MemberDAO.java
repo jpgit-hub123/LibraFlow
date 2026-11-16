@@ -2,6 +2,7 @@ package edu.icet.dao;
 
 import edu.icet.db.DBConnection;
 import edu.icet.model.Member;
+import org.hibernate.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,23 +13,13 @@ import java.util.List;
 
 public class MemberDAO {
 
+    Session session = DBConnection.getSession();
+
     public int getTotalMembers() {
-
-        String sql = "SELECT COUNT(*) FROM members";
-
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-
-        return 0;
+        Long totalMembersResult = session
+                .createQuery("SELECT COUNT(m) FROM Member m", Long.class)
+                .getSingleResult();
+        return totalMembersResult.intValue();
     }
 
     public List<Member> getAllMembers() {
