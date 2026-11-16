@@ -3,15 +3,8 @@ package edu.icet.dao;
 import edu.icet.db.DBConnection;
 import edu.icet.model.Book;
 import edu.icet.model.BookIssue;
-import javafx.collections.ObservableList;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BookDAO {
@@ -30,34 +23,9 @@ public class BookDAO {
     }
 
     public List<Book> getAllBooks() {
-
-        List<Book> books = new ArrayList<>();
-
-        String sql = "SELECT isbn, title, author, category, quantity FROM books";
-
-        try {
-
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-
-                Book book = new Book(
-                        resultSet.getString("isbn"),
-                        resultSet.getString("title"),
-                        resultSet.getString("author"),
-                        resultSet.getString("category"),
-                        resultSet.getInt("quantity")
-                );
-
-                books.add(book);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-        return books;
+        return session
+                .createQuery("FROM Book", Book.class)
+                .getResultList();
     }
 
     public boolean updateBook(String originalIsbn, Book book) {
