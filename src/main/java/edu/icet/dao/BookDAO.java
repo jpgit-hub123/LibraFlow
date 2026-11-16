@@ -2,6 +2,8 @@ package edu.icet.dao;
 
 import edu.icet.db.DBConnection;
 import edu.icet.model.Book;
+import edu.icet.model.BookIssue;
+import javafx.collections.ObservableList;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -90,25 +92,13 @@ public class BookDAO {
     }
 
     public boolean hasIssueHistory(String isbn) {
-
-        String sql = "SELECT COUNT(*) FROM book_issues WHERE isbn = ?";
-
-        try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, isbn);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt(1) > 0;
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        Session session = DBConnection.getSession();
+        return !session
+                .createQuery("FROM bookIssues bi WHERE bi.isbn = :isbn", BookIssue.class)
+                .setParameter("isbn", isbn)
+                .setMaxResults(1)
+                .getResultList()
+                .isEmpty();
     }
 
     private boolean hasAnIssueHistory(String isbn) {
