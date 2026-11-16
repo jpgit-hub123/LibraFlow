@@ -70,6 +70,7 @@ public class AddBookPageController {
         }));
     }
 
+    @FXML
     public void toEditBook(Book book){
         addBookController.setBookToEdit(isbnField, titleField, authorField, categoryField, quantityField, book,
                 saveButton, titleLabel);

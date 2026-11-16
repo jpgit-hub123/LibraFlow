@@ -58,27 +58,19 @@ public class BookDAO {
     }
 
     public boolean updateBook(String originalIsbn, Book book) {
-
-        String sql = "UPDATE books SET isbn = ?, title = ?, author = ?, " + "category = ?, quantity = ? WHERE isbn = ?";
-
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            statement.setString(1, book.getIsbn());
-            statement.setString(2, book.getTitle());
-            statement.setString(3, book.getAuthor());
-            statement.setString(4, book.getCategory());
-            statement.setInt(5, book.getQuantity());
-            statement.setString(6, originalIsbn);
-
-            int rowsUpdated = statement.executeUpdate();
-
-            return rowsUpdated > 0;
-
-        } catch (SQLException e) {
+        Session session = DBConnection.getSession();
+        Transaction transaction = session.beginTransaction();
+        Book existingBook = session.find(Book.class, originalIsbn);
+        if (existingBook == null) {
             return false;
         }
+        existingBook.setIsbn(book.getIsbn());
+        existingBook.setTitle(book.getTitle());
+        existingBook.setAuthor(book.getAuthor());
+        existingBook.setCategory(book.getCategory());
+        existingBook.setQuantity(book.getQuantity());
+        transaction.commit();
+        return true;
     }
 
     public boolean deleteBook(String isbn) {
