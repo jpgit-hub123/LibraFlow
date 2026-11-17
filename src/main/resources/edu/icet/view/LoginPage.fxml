@@ -22,77 +22,73 @@
             fx:controller="edu.icet.controller.LoginPageController">
 
    <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" styleClass="login-layout" BorderPane.alignment="CENTER">
-         <children>
-            <StackPane alignment="CENTER_LEFT" prefHeight="524.0" prefWidth="814.0" styleClass="login-left" HBox.hgrow="ALWAYS">
-               <children>
-                  <ImageView fitHeight="563.0" fitWidth="539.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
-                     <image>
-                        <Image url="@../images/Login.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <VBox alignment="TOP_CENTER" prefHeight="587.0" prefWidth="644.0" spacing="8.0">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" styleClass="login-brand" text="LibraFlow" textAlignment="CENTER" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets top="15.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Label styleClass="login-subtitle" text="Library Management System" textAlignment="CENTER" />
-                  <Label text="Welcome Back!">
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Label text="Please enter your username and password to continue." />
-                  <Label text="Useraname">
-                     <VBox.margin>
-                        <Insets right="220.0" top="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="usernameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="270.0" promptText="Enter your username">
-                     <VBox.margin>
-                        <Insets right="12.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Label text="Password">
-                     <VBox.margin>
-                        <Insets right="220.0" top="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="270.0" promptText="Enter your password">
-                     <VBox.margin>
-                        <Insets right="12.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="270.0" text="Login" onAction="#handleLoginOnAction">
-                     <VBox.margin>
-                        <Insets right="12.0" top="30.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Label text="--------Access to you Library--------" />
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Don't have an account ?">
-                           <HBox.margin>
-                              <Insets left="20.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Hyperlink onAction="#joinOnAction" text="Join here">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Hyperlink>
-                     </children>
-                  </HBox>
-               </children>
+       <HBox prefHeight="100.0" prefWidth="200.0" styleClass="login-layout" BorderPane.alignment="CENTER">
+           <StackPane alignment="CENTER_LEFT" prefHeight="524.0" prefWidth="814.0" styleClass="login-left"
+                      HBox.hgrow="ALWAYS">
+               <ImageView fitHeight="563.0" fitWidth="539.0" pickOnBounds="true" preserveRatio="true"
+                          StackPane.alignment="CENTER_LEFT">
+                   <Image url="@../images/Login.png"/>
+               </ImageView>
+           </StackPane>
+           <VBox alignment="TOP_CENTER" prefHeight="587.0" prefWidth="644.0" spacing="8.0">
                <padding>
-                  <Insets top="50.0" />
+                   <Insets top="50.0"/>
                </padding>
-            </VBox>
-         </children>
-      </HBox>
+               <Label alignment="CENTER" contentDisplay="CENTER" styleClass="login-brand" text="LibraFlow"
+                      textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                   <VBox.margin>
+                       <Insets top="15.0"/>
+                   </VBox.margin>
+               </Label>
+               <Label styleClass="login-subtitle" text="Library Management System" textAlignment="CENTER"/>
+               <Label text="Welcome Back!">
+                   <VBox.margin>
+                       <Insets top="20.0"/>
+                   </VBox.margin>
+               </Label>
+               <Label text="Please enter your username and password to continue."/>
+               <Label text="Username">
+                   <VBox.margin>
+                       <Insets right="220.0" top="10.0"/>
+                   </VBox.margin>
+               </Label>
+               <TextField fx:id="usernameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                          minWidth="-Infinity" prefHeight="35.0" prefWidth="270.0" promptText="Enter your username">
+                   <VBox.margin>
+                       <Insets right="12.0"/>
+                   </VBox.margin>
+               </TextField>
+               <Label text="Password">
+                   <VBox.margin>
+                       <Insets right="220.0" top="5.0"/>
+                   </VBox.margin>
+               </Label>
+               <TextField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                          minWidth="-Infinity" prefHeight="35.0" prefWidth="270.0" promptText="Enter your password">
+                   <VBox.margin>
+                       <Insets right="12.0"/>
+                   </VBox.margin>
+               </TextField>
+               <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="270.0" text="Login"
+                       onAction="#handleLoginOnAction">
+                   <VBox.margin>
+                       <Insets right="12.0" top="30.0"/>
+                   </VBox.margin>
+               </Button>
+               <Label text="--------Access to you Library--------"/>
+               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                   <Label text="Don't have an account ?">
+                       <HBox.margin>
+                           <Insets left="20.0"/>
+                       </HBox.margin>
+                   </Label>
+                   <Hyperlink onAction="#joinOnAction" text="Join here">
+                       <HBox.margin>
+                           <Insets left="5.0"/>
+                       </HBox.margin>
+                   </Hyperlink>
+               </HBox>
+           </VBox>
+       </HBox>
    </center>
 </BorderPane>

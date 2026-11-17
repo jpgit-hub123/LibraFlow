@@ -3,7 +3,6 @@ package edu.icet.controller;
 import edu.icet.model.BookIssue;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -62,16 +61,16 @@ public class DashboardPageController {
     }
 
     @FXML
-    public void showMembersOnAction(ActionEvent actionEvent) {
+    public void showMembersOnAction() {
         dashboardController.loadPage("/edu/icet/view/Members.fxml", rootPane);
     }
 
     @FXML
-    public void showIssueReturnOnAction(ActionEvent actionEvent) {
+    public void showIssueReturnOnAction() {
         dashboardController.loadPage("/edu/icet/view/IssueReturn.fxml", rootPane);
     }
 
-    public void logoutOnAction(ActionEvent actionEvent) {
+    public void logoutOnAction() {
         dashboardController.loadPage("/edu/icet/view/LoginPage.fxml", rootPane);
     }
 
@@ -90,7 +89,7 @@ public class DashboardPageController {
         totalMembersLabel.setText(String.valueOf(totalMembers));
 
         recentTransactionsTable.setColumnResizePolicy(
-                TableView.CONSTRAINED_RESIZE_POLICY
+                TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS
         );
 
         transactionMemberColumn.setCellValueFactory(

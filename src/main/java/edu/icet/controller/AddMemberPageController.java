@@ -1,7 +1,6 @@
 package edu.icet.controller;
 
 import edu.icet.model.Member;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,14 +34,13 @@ public class AddMemberPageController {
     public Button btnSave;
 
     @FXML
-    public void closeFormOnAction(ActionEvent actionEvent) {
+    public void closeFormOnAction() {
         addMemberController.closeAddMemberForm(nameField);
     }
 
     @FXML
-    public void saveMemberOnAction(ActionEvent actionEvent) {
+    public void saveMemberOnAction() {
         addMemberController.registerNewMember(nameField, emailField, phoneField, addressField);
-//        addMemberController.createUsernameAndPassword();
     }
 
     @FXML

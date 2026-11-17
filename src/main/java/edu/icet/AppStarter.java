@@ -21,7 +21,7 @@ public class AppStarter extends Application {
         Scene scene = new Scene(root);
         scene.getStylesheets().add(
                 Objects.requireNonNull(getClass().getResource(
-                        "/edu/icet/css/dashboard.css")).toExternalForm()
+                        "/edu/icet/css/style.css")).toExternalForm()
         );
         stage.setTitle("LibraFlow | Login");
         stage.setResizable(true);

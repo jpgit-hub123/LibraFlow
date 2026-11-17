@@ -101,8 +101,7 @@ public class IssueReturnController {
     }
 
     public void loadIssuedBooks(TableView<BookIssue> issuedBooksTable) {
-        BookIssueDAO bookIssueDAO = new BookIssueDAO();
-        issuedBooksTable.setItems(FXCollections.observableArrayList(bookIssueDAO.getAllIssues()));
+        issuedBooksTable.setItems(FXCollections.observableArrayList(new BookIssueDAO().getAllIssues()));
     }
 
     public void returnBook(TableView<BookIssue> issuedBooksTable, ComboBox<Book> bookComboBox, ComboBox<Member> memberComboBox) {
@@ -127,9 +126,7 @@ public class IssueReturnController {
             return;
         }
 
-        BookIssueDAO bookIssueDAO = new BookIssueDAO();
-
-        if (bookIssueDAO.returnBook(selectedIssue.getIssueId())) {
+        if (new BookIssueDAO().returnBook(selectedIssue.getIssueId())) {
 
             showAlert(
                     Alert.AlertType.CONFIRMATION,

@@ -21,13 +21,6 @@
     -fx-font-weight: bold;
 }
 
-/*.menu-item {
-    -fx-text-fill: #cbd5e1;
-    -fx-font-size: 14px;
-    -fx-padding: 12px;
-    -fx-cursor: hand;
-}*/
-
 .menu-button {
     -fx-background-color: transparent;
     -fx-text-fill: #cbd5e1;

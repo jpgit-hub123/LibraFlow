@@ -60,7 +60,7 @@ public class BookDAO {
 
     public boolean hasIssueHistory(String isbn) {
         return !session
-                .createQuery("FROM bookIssue bi WHERE bi.isbn = :isbn", BookIssue.class)
+                .createQuery("FROM BookIssue bi WHERE bi.isbn = :isbn", BookIssue.class)
                 .setParameter("isbn", isbn)
                 .setMaxResults(1)
                 .getResultList()

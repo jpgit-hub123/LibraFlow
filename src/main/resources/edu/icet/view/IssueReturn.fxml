@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -222,10 +221,6 @@
                     <Label text="Issued Books"
                            styleClass="section-title"
                            HBox.hgrow="ALWAYS"/>
-
-<!--                    <TextField fx:id="searchField"-->
-<!--                               promptText="Search issued books..."-->
-<!--                               prefWidth="280"/>-->
 
                 </HBox>
 

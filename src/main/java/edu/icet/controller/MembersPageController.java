@@ -1,7 +1,6 @@
 package edu.icet.controller;
 
 import edu.icet.model.Member;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -58,19 +57,23 @@ public class MembersPageController {
     }
 
     @FXML
-    public void showDashboardOnAction(ActionEvent actionEvent) {
+    public void showDashboardOnAction() {
         membersController.loadPage("/edu/icet/view/Dashboard.fxml", searchField);
     }
 
-    public void showBooksOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void showBooksOnAction() {
         membersController.loadPage("/edu/icet/view/Books.fxml", searchField);
     }
 
-    public void showIssueReturnOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void showIssueReturnOnAction() {
         membersController.loadPage("/edu/icet/view/IssueReturn.fxml", searchField);
     }
 
-    public void logoutOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void logoutOnAction() {
         membersController.loadPage("/edu/icet/view/LoginPage.fxml", searchField);
     }
+
 }

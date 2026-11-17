@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-
 import java.io.IOException;
 
 public class LoginController {
@@ -22,10 +21,6 @@ public class LoginController {
     }
 
     public boolean authenticate(TextField usernameField, TextField passwordField) {
-//        return (usernameField.getText().equals("admin") && passwordField.getText().equals("admin123"));
-
-        UserDAO userDAO = new UserDAO();
-        return userDAO.checkLoginDetails(usernameField, passwordField);
-
+        return new UserDAO().checkLoginDetails(usernameField, passwordField);
     }
 }

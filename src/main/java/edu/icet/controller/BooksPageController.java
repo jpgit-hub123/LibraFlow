@@ -1,7 +1,6 @@
 package edu.icet.controller;
 
 import edu.icet.model.Book;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -38,17 +37,17 @@ public class BooksPageController {
     }
 
     @FXML
-    public void showMembersOnAction(ActionEvent actionEvent) {
+    public void showMembersOnAction() {
         booksController.loadPage("/edu/icet/view/Members.fxml", searchField);
     }
 
     @FXML
-    public void showIssueReturnOnAction(ActionEvent actionEvent) {
+    public void showIssueReturnOnAction() {
         booksController.loadPage("/edu/icet/view/IssueReturn.fxml", searchField);
     }
 
     @FXML
-    public void logoutOnAction(ActionEvent actionEvent) {
+    public void logoutOnAction() {
         booksController.loadPage("/edu/icet/view/LoginPage.fxml", searchField);
     }
 
@@ -68,12 +67,12 @@ public class BooksPageController {
     }
 
     @FXML
-    public void editBookOnAction(ActionEvent actionEvent) {
+    public void editBookOnAction() {
         booksController.editTheSelectedBook(searchField, booksTable);
     }
 
     @FXML
-    public void deleteBookOnAction(ActionEvent actionEvent) {
+    public void deleteBookOnAction() {
         booksController.deleteSelectedBook(searchField, booksTable);
     }
 

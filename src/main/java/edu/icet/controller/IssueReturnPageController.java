@@ -1,13 +1,11 @@
 package edu.icet.controller;
 
 import edu.icet.dao.BookDAO;
-import edu.icet.dao.BookIssueDAO;
 import edu.icet.dao.MemberDAO;
 import edu.icet.model.Book;
 import edu.icet.model.BookIssue;
 import edu.icet.model.Member;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -29,6 +27,7 @@ public class IssueReturnPageController {
     @FXML
     public DatePicker dueDatePicker;
 
+    @FXML
     public TableColumn<BookIssue, Double> fineAmountColumn;
 
     @FXML
@@ -73,10 +72,8 @@ public class IssueReturnPageController {
     @FXML
     public void initialize() {
 
-        MemberDAO memberDAO = new MemberDAO();
-        memberComboBox.setItems(FXCollections.observableArrayList(memberDAO.getAllMembers()));
-
-        memberComboBox.setConverter(new StringConverter<Member>() {
+        memberComboBox.setItems(FXCollections.observableArrayList(new MemberDAO().getAllMembers()));
+        memberComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(Member member) {
                 if (member == null) {
@@ -91,10 +88,8 @@ public class IssueReturnPageController {
             }
         });
 
-        BookDAO bookDAO = new BookDAO();
-        bookComboBox.setItems(FXCollections.observableArrayList(bookDAO.getAllBooks()));
-
-        bookComboBox.setConverter(new StringConverter<Book>() {
+        bookComboBox.setItems(FXCollections.observableArrayList(new BookDAO().getAllBooks()));
+        bookComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(Book book) {
                 if (book == null) {
@@ -143,37 +138,45 @@ public class IssueReturnPageController {
         issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
     }
 
-    public void showDashboardOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void showDashboardOnAction() {
         issueReturnController.loadPage("/edu/icet/view/Dashboard.fxml", memberComboBox);
     }
 
-    public void showBooksOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void showBooksOnAction() {
         issueReturnController.loadPage("/edu/icet/view/Books.fxml", memberComboBox);
     }
 
-    public void showMembersOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void showMembersOnAction() {
         issueReturnController.loadPage("/edu/icet/view/Members.fxml", memberComboBox);
     }
 
-    public void logoutOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void logoutOnAction() {
         issueReturnController.loadPage("/edu/icet/view/LoginPage.fxml", memberComboBox);
     }
 
-    public void issueBookOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void issueBookOnAction() {
         issueReturnController.issuedTheBook(memberComboBox, bookComboBox, issueDatePicker, dueDatePicker, issuedBooksTable);
         issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
     }
 
-    public void returnBookOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void returnBookOnAction() {
         issueReturnController.returnBook(issuedBooksTable, bookComboBox, memberComboBox);
         issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
     }
 
-    public void showOverdueBooksOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void showOverdueBooksOnAction() {
         issueReturnController.showOverdueBooks(issuedBooksTable);
     }
 
-    public void showAllIssuesOnAction(ActionEvent actionEvent) {
+    @FXML
+    public void showAllIssuesOnAction() {
         issueReturnController.loadIssuedBooks(issuedBooksTable);
     }
 }

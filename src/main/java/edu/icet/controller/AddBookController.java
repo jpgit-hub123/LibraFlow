@@ -38,10 +38,11 @@ public class AddBookController {
             showAlert(
                     Alert.AlertType.WARNING,
                     "Validation Error",
-                    "ISBN must not exceed 20 characters.\n"
-                            + "Title must not exceed 150 characters.\n"
-                            + "Author must not exceed 100 characters.\n"
-                            + "Category must not exceed 100 characters."
+                    """
+                            ISBN must not exceed 20 characters.
+                            Title must not exceed 150 characters.
+                            Author must not exceed 100 characters.
+                            Category must not exceed 100 characters."""
             );
             return;
         }
