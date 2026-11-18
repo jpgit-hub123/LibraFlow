@@ -1,16 +1,16 @@
 package edu.icet.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "books")
 public class Book {
 
     @Id
-    @Column(name = "isbn", length = 20)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "book_id")
+    private Long bookId;
+    @Column(name = "isbn", length = 20, nullable = false, unique = true)
     private String isbn;
     private String title;
     private String author;
@@ -26,6 +26,14 @@ public class Book {
         this.author = author;
         this.category = category;
         this.quantity = quantity;
+    }
+
+    public Long getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
     }
 
     public String getIsbn() {

@@ -30,7 +30,10 @@ public class BookDAO {
 
     public boolean updateBook(String originalIsbn, Book book) {
         Transaction transaction = session.beginTransaction();
-        Book existingBook = session.find(Book.class, originalIsbn);
+        Book existingBook = session.createQuery(
+                "FROM Book b WHERE b.isbn = :isbn", Book.class)
+                .setParameter("isbn", originalIsbn)
+                .uniqueResult();
         if (existingBook == null) {
             return false;
         }

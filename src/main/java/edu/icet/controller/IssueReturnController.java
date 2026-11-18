@@ -74,7 +74,7 @@ public class IssueReturnController {
             return;
         }
 
-        BookIssue bookIssue = new BookIssue(member.getMemberId(), book.getIsbn(), issueDate, dueDate);
+        BookIssue bookIssue = new BookIssue(member.getMemberId(), book, issueDate, dueDate);
 
         BookIssueDAO bookIssueDAO = new BookIssueDAO();
 

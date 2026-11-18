@@ -1,5 +1,6 @@
 package edu.icet.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -9,6 +10,7 @@ import jakarta.persistence.Table;
 public class Member {
 
     @Id
+    @Column(name = "member_id")
     private int memberId;
     private String name;
     private String email;

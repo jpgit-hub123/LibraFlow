@@ -1,9 +1,6 @@
 package edu.icet.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -12,36 +9,51 @@ import java.time.LocalDate;
 public class BookIssue {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "issue_id")
     private int issueId;
+
+    @Column(name = "member_id")
     private int memberId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
+
     @Column(name = "isbn", length = 20)
     private String isbn;
+
+    @Transient
     private String bookTitle;
+
+    @Column(name = "issue_date")
     private LocalDate issueDate;
+
+    @Column(name = "due_date")
     private LocalDate dueDate;
+
+    @Column(name = "return_date")
     private LocalDate returnDate;
+
     private String status;
 
     public BookIssue() {
     }
 
-    public BookIssue(int issueId, int memberId, String isbn, LocalDate issueDate, LocalDate dueDate, LocalDate returnDate,
-                     String status) {
-        this.issueId = issueId;
+    public BookIssue(int memberId, Book book, LocalDate issueDate, LocalDate dueDate) {
         this.memberId = memberId;
-        this.isbn = isbn;
+        this.book = book;
+        this.isbn = book.getIsbn();
         this.issueDate = issueDate;
         this.dueDate = dueDate;
-        this.status = status;
-        this.returnDate = returnDate;
     }
 
-    public BookIssue(int memberId, String isbn, LocalDate issueDate, LocalDate dueDate) {
-        this.memberId = memberId;
-        this.isbn = isbn;
-        this.issueDate = issueDate;
-        this.dueDate = dueDate;
-    }
+//    public BookIssue(int memberId, String isbn, LocalDate issueDate, LocalDate dueDate) {
+//        this.memberId = memberId;
+//        this.isbn = isbn;
+//        this.issueDate = issueDate;
+//        this.dueDate = dueDate;
+//    }
 
     public int getIssueId() {
         return issueId;
@@ -59,6 +71,15 @@ public class BookIssue {
         this.memberId = memberId;
     }
 
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+        this.isbn = book != null ? book.getIsbn() : null;
+    }
+
     public String getIsbn() {
         return isbn;
     }
@@ -68,6 +89,9 @@ public class BookIssue {
     }
 
     public String getBookTitle() {
+        if (book != null) {
+            return book.getTitle();
+        }
         return bookTitle;
     }
 

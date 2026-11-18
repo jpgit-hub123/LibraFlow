@@ -27,6 +27,7 @@ public class AppStarter extends Application {
         stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
+
     }
 }
 

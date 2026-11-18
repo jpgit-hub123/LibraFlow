@@ -47,7 +47,6 @@ public class BooksController {
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        BookDAO bookDAO = new BookDAO();
         booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
         booksTable.setItems(booksList);
     }
@@ -117,7 +116,6 @@ public class BooksController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddBook.fxml"));
             Parent form = loader.load();
 
-            BookDAO bookDAO = new BookDAO();
             AddBookPageController addBookPageController = loader.getController();
             addBookPageController.addBookController.setExistingBooks(booksList);
             addBookPageController.toEditBook(selectedBook);
@@ -130,7 +128,8 @@ public class BooksController {
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
-            booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
+//            booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
+            booksList.setAll(bookDAO.getAllBooks());
             getRelatedBooks(searchField, booksTable);
         } catch (IOException e) {
             throw new RuntimeException(e);
