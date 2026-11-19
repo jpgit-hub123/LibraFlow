@@ -35,8 +35,10 @@ public class BookIssueDAO {
     public boolean issueBook(BookIssue bookIssue) {
 
         Transaction transaction = session.beginTransaction();
-
-        Book book = session.find(Book.class, bookIssue.getIsbn(), LockModeType.PESSIMISTIC_WRITE);
+        Book book = session.createQuery(
+                "FROM Book b WHERE b.isbn = :isbn", Book.class)
+                .setParameter("isbn", bookIssue.getIsbn())
+                .uniqueResult();
 
         if (book == null) {
             transaction.rollback();
@@ -49,15 +51,13 @@ public class BookIssueDAO {
         }
 
         book.setQuantity(book.getQuantity() - 1);
-
+        bookIssue.setBook(book);
         bookIssue.setStatus("BORROWED");
-
         session.persist(bookIssue);
-
         transaction.commit();
-
         return true;
     }
+
 
     public int getTotalIssuedBooks() {
         Long totalIssuedBooksResult = session
@@ -94,7 +94,6 @@ public class BookIssueDAO {
     public boolean returnBook(int issueId) {
 
         Transaction transaction = session.beginTransaction();
-
         BookIssue bookIssue = session.find(BookIssue.class, issueId, LockModeType.PESSIMISTIC_WRITE);
 
         if (bookIssue == null) {
@@ -115,13 +114,10 @@ public class BookIssueDAO {
         }
 
         book.setQuantity(book.getQuantity() + 1);
-
         bookIssue.setReturnDate(LocalDate.now());
-
         bookIssue.setStatus("RETURNED");
-
         transaction.commit();
-
         return true;
+
     }
 }

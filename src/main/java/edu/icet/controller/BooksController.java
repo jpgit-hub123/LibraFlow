@@ -128,7 +128,6 @@ public class BooksController {
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
-//            booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
             booksList.setAll(bookDAO.getAllBooks());
             getRelatedBooks(searchField, booksTable);
         } catch (IOException e) {

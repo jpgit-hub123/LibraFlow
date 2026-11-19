@@ -49,7 +49,10 @@ public class BookDAO {
     public boolean deleteBook(String isbn) {
         try {
             Transaction transaction = session.beginTransaction();
-            Book book = session.find(Book.class, isbn);
+            Book book = session.createQuery(
+                    "FROM Book b WHERE b.isbn = :isbn", Book.class)
+                    .setParameter("isbn", isbn)
+                    .uniqueResult();
             if (book == null) {
                 return false;
             }

@@ -16,6 +16,7 @@ import java.time.LocalDate;
 
 public class IssueReturnController {
 
+    BookIssueDAO bookIssueDAO = new BookIssueDAO();
 
     public void loadPage(String fxmlFile, ComboBox<Member> memberComboBox) {
 
@@ -76,8 +77,6 @@ public class IssueReturnController {
 
         BookIssue bookIssue = new BookIssue(member.getMemberId(), book, issueDate, dueDate);
 
-        BookIssueDAO bookIssueDAO = new BookIssueDAO();
-
         if (bookIssueDAO.issueBook(bookIssue)) {
             showAlert(
                     Alert.AlertType.CONFIRMATION,
@@ -98,10 +97,11 @@ public class IssueReturnController {
                     "Book not issued successfully, Try again."
             );
         }
+
     }
 
     public void loadIssuedBooks(TableView<BookIssue> issuedBooksTable) {
-        issuedBooksTable.setItems(FXCollections.observableArrayList(new BookIssueDAO().getAllIssues()));
+        issuedBooksTable.setItems(FXCollections.observableArrayList(bookIssueDAO.getAllIssues()));
     }
 
     public void returnBook(TableView<BookIssue> issuedBooksTable, ComboBox<Book> bookComboBox, ComboBox<Member> memberComboBox) {
@@ -126,7 +126,7 @@ public class IssueReturnController {
             return;
         }
 
-        if (new BookIssueDAO().returnBook(selectedIssue.getIssueId())) {
+        if (bookIssueDAO.returnBook(selectedIssue.getIssueId())) {
 
             showAlert(
                     Alert.AlertType.CONFIRMATION,
@@ -148,7 +148,6 @@ public class IssueReturnController {
     }
 
     public void showOverdueBooks(TableView<BookIssue> issuedBooksTable) {
-        BookIssueDAO bookIssueDAO = new BookIssueDAO();
         var overdueIssues = bookIssueDAO.getAllIssues()
                 .stream()
                 .filter(BookIssue::isOverdue)
@@ -160,8 +159,6 @@ public class IssueReturnController {
     }
 
     public void updateStatCards(Label totalIssuedLabel, Label borrowedLabel, Label returnedLabel, Label overdueLabel) {
-
-        BookIssueDAO bookIssueDAO = new BookIssueDAO();
 
         totalIssuedLabel.setText(
                 String.valueOf(bookIssueDAO.getTotalIssuedBooks())

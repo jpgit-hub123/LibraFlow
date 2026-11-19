@@ -44,6 +44,7 @@ public class BookIssue {
         this.memberId = memberId;
         this.book = book;
         this.isbn = book.getIsbn();
+        this.bookTitle = book.getTitle();
         this.issueDate = issueDate;
         this.dueDate = dueDate;
     }
