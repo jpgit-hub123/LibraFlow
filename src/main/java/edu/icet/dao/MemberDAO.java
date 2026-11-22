@@ -1,6 +1,7 @@
 package edu.icet.dao;
 
 import edu.icet.db.DBConnection;
+import edu.icet.model.BookIssue;
 import edu.icet.model.Member;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -40,7 +41,6 @@ public class MemberDAO {
         if (existingMember == null) {
             return false;
         }
-        existingMember.setMemberId(member.getMemberId());
         existingMember.setName(member.getName());
         existingMember.setEmail(member.getEmail());
         existingMember.setPhone(member.getPhone());
@@ -64,5 +64,11 @@ public class MemberDAO {
         }
     }
 
-
+    public boolean hasIssueHistory(int memberId) {
+        return !session.createQuery("FROM BookIssue bi WHERE bi.memberId = :memberId", BookIssue.class)
+                .setParameter("memberId", memberId)
+                .setMaxResults(1)
+                .getResultList()
+                .isEmpty();
+    }
 }

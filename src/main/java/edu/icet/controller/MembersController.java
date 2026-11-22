@@ -19,6 +19,8 @@ import java.io.IOException;
 
 public class MembersController {
 
+    MemberDAO memberDAO = new MemberDAO();
+
     public void setMembersDataIntoTable(TextField searchField, TableView<Member> membersTable,
                                         TableColumn<Member, Number> memberIdColumn,
                                         TableColumn<Member, String> nameColumn,
@@ -112,24 +114,34 @@ public class MembersController {
             );
             return;
         }
+
+        if (memberDAO.hasIssueHistory(selectedMember.getMemberId())) {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Cannot Delete Member",
+                    "This Member has transaction history. Therefore, cannot be deleted!"
+            );
+            return;
+        }
+
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.setTitle("Delete Member");
         confirmation.setHeaderText("Delete " + selectedMember.getName() + "?");
         confirmation.setContentText("Are you sure you want to delete this Member?");
         confirmation.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                if (new MemberDAO().deleteMember(String.valueOf(selectedMember.getMemberId()))) {
+                if (memberDAO.deleteMember(String.valueOf(selectedMember.getMemberId()))) {
                     showAlert(
                             Alert.AlertType.INFORMATION,
-                            "Book Deleted",
-                            "The book was deleted successfully."
+                            "Member Deleted",
+                            "The Member was deleted successfully."
                     );
                     loadMembers(searchField, membersTable);
                 } else {
                     showAlert(
                             Alert.AlertType.ERROR,
                             "Database Error",
-                            "Failed to delete the book from the database."
+                            "Failed to delete the Member from the database."
                     );
                 }
             }
@@ -138,7 +150,6 @@ public class MembersController {
 
     public void getSearchMember(TextField searchField, TableView<Member> membersTable) {
         final String searchData = searchField.getText().trim();
-        MemberDAO memberDAO = new MemberDAO();
         ObservableList<Member> filteredMemberList = FXCollections.observableArrayList();
         ObservableList<Member> membersList = FXCollections.observableArrayList(memberDAO.getAllMembers());
         for (Member member : membersList) {
