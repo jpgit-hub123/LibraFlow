@@ -155,7 +155,7 @@ public class BooksController {
             return;
         }
 
-        if (bookDAO.hasIssueHistory(selectedBook.getIsbn())) {
+        if (bookDAO.hasIssueHistory(selectedBook.getBookId())) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "Cannot Delete Book",

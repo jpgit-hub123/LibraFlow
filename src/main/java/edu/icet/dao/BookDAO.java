@@ -64,10 +64,10 @@ public class BookDAO {
         }
     }
 
-    public boolean hasIssueHistory(String isbn) {
+    public boolean hasIssueHistory(Long bookId) {
         return !session
-                .createQuery("FROM BookIssue bi WHERE bi.isbn = :isbn", BookIssue.class)
-                .setParameter("isbn", isbn)
+                .createQuery("FROM BookIssue bi WHERE bi.book.bookId = :bookId", BookIssue.class)
+                .setParameter("bookId", bookId)
                 .setMaxResults(1)
                 .getResultList()
                 .isEmpty();

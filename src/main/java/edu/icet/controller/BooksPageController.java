@@ -29,6 +29,7 @@ public class BooksPageController {
     @FXML
     private TableColumn<Book, Integer> quantityColumn;
 
+    @FXML
     public BooksController booksController = new BooksController();
 
     @FXML

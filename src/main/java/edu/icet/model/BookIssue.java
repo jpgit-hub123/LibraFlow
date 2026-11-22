@@ -49,13 +49,6 @@ public class BookIssue {
         this.dueDate = dueDate;
     }
 
-//    public BookIssue(int memberId, String isbn, LocalDate issueDate, LocalDate dueDate) {
-//        this.memberId = memberId;
-//        this.isbn = isbn;
-//        this.issueDate = issueDate;
-//        this.dueDate = dueDate;
-//    }
-
     public int getIssueId() {
         return issueId;
     }
