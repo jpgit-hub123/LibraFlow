@@ -1,6 +1,7 @@
 package edu.icet.controller;
 
 import edu.icet.model.entity.BookEntity;
+import edu.icet.service.impl.BooksServiceImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,51 +31,51 @@ public class BooksPageController {
     private TableColumn<BookEntity, Integer> quantityColumn;
 
     @FXML
-    public BooksController booksController = new BooksController();
+    private final BooksServiceImpl booksServiceImpl = new BooksServiceImpl();
 
     @FXML
     private void showDashboardOnAction() {
-        booksController.loadPage("/edu/icet/view/Dashboard.fxml", searchField);
+        booksServiceImpl.loadPage("/edu/icet/view/Dashboard.fxml", searchField);
     }
 
     @FXML
     public void showMembersOnAction() {
-        booksController.loadPage("/edu/icet/view/Members.fxml", searchField);
+        booksServiceImpl.loadPage("/edu/icet/view/Members.fxml", searchField);
     }
 
     @FXML
     public void showIssueReturnOnAction() {
-        booksController.loadPage("/edu/icet/view/IssueReturn.fxml", searchField);
+        booksServiceImpl.loadPage("/edu/icet/view/IssueReturn.fxml", searchField);
     }
 
     @FXML
     public void logoutOnAction() {
-        booksController.loadPage("/edu/icet/view/LoginPage.fxml", searchField);
+        booksServiceImpl.loadPage("/edu/icet/view/LoginPage.fxml", searchField);
     }
 
     @FXML
     private void showAddBookFormOnAction() {
-        booksController.loadForm(searchField, booksTable);
+        booksServiceImpl.loadForm(searchField, booksTable);
     }
 
     @FXML
     public void initialize() {
-        booksController.setBooksDataIntoTable(isbnColumn, titleColumn, authorColumn, categoryColumn, quantityColumn, booksTable);
+        booksServiceImpl.setBooksDataIntoTable(isbnColumn, titleColumn, authorColumn, categoryColumn, quantityColumn, booksTable);
     }
 
     @FXML
     public void searchBooks() {
-        booksController.getRelatedBooks(searchField, booksTable);
+        booksServiceImpl.getRelatedBooks(searchField, booksTable);
     }
 
     @FXML
     public void editBookOnAction() {
-        booksController.editTheSelectedBook(searchField, booksTable);
+        booksServiceImpl.editTheSelectedBook(searchField, booksTable);
     }
 
     @FXML
     public void deleteBookOnAction() {
-        booksController.deleteSelectedBook(searchField, booksTable);
+        booksServiceImpl.deleteSelectedBook(searchField, booksTable);
     }
 
 }

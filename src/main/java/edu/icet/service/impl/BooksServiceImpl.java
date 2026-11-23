@@ -1,7 +1,10 @@
-package edu.icet.controller;
+package edu.icet.service.impl;
 
+import edu.icet.controller.AddBookPageController;
 import edu.icet.model.dto.BookDTO;
 import edu.icet.model.entity.BookEntity;
+import edu.icet.repository.impl.BooksRepositoryImpl;
+import edu.icet.service.BooksService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -17,26 +20,24 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class BooksController {
+public class BooksServiceImpl implements BooksService {
 
     private ObservableList<BookEntity> booksList;
-    private final BookDTO bookDTO = new BookDTO();
 
+    private final BooksRepositoryImpl booksRepository = new BooksRepositoryImpl();
+
+    @Override
     public void loadPage(String fxmlFile, TextField searchField) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-
             Parent rootNode = loader.load();
-
             searchField.getScene().setRoot(rootNode);
-
         } catch (IOException e) {
-
             throw new RuntimeException(e);
-
         }
     }
 
+    @Override
     public void setBooksDataIntoTable(TableColumn<BookEntity, String> isbnColumn, TableColumn<BookEntity, String> titleColumn,
                                       TableColumn<BookEntity, String> authorColumn, TableColumn<BookEntity, String> categoryColumn,
                                       TableColumn<BookEntity, Integer> quantityColumn, TableView<BookEntity> booksTable) {
@@ -47,17 +48,17 @@ public class BooksController {
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        booksList = FXCollections.observableArrayList(bookDTO.getAllBooks());
+        booksList = FXCollections.observableArrayList(booksRepository.getAllBooks());
         booksTable.setItems(booksList);
     }
 
+    @Override
     public void getRelatedBooks(TextField searchField, TableView<BookEntity> booksTable) {
 
         String searchWord = searchField.getText().trim().toLowerCase();
         ObservableList<BookEntity> filterBookEntities = FXCollections.observableArrayList();
 
         for (BookEntity bookEntity : booksList) {
-
             if (bookEntity.getIsbn().toLowerCase().contains(searchWord)
                 || bookEntity.getTitle().toLowerCase().contains(searchWord)
                 || bookEntity.getAuthor().toLowerCase().contains(searchWord)
@@ -69,10 +70,10 @@ public class BooksController {
         booksTable.setItems(filterBookEntities);
     }
 
+    @Override
     public void loadForm(TextField searchField, TableView<BookEntity> booksTable) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddBook.fxml"));
-
             Parent form = loader.load();
 
             AddBookPageController addBookPageController = loader.getController();
@@ -100,6 +101,7 @@ public class BooksController {
         }
     }
 
+    @Override
     public void editTheSelectedBook(TextField searchField, TableView<BookEntity> booksTable) {
         BookEntity selectedBookEntity = booksTable.getSelectionModel().getSelectedItem();
 
@@ -128,14 +130,15 @@ public class BooksController {
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
-            booksList.setAll(bookDTO.getAllBooks());
+            booksList.setAll(booksRepository.getAllBooks());
             getRelatedBooks(searchField, booksTable);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void showAlert(Alert.AlertType alertType, String info, String message) {
+    @Override
+    public void showAlert(Alert.AlertType alertType, String info, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(info);
         alert.setHeaderText(null);
@@ -143,6 +146,7 @@ public class BooksController {
         alert.showAndWait();
     }
 
+    @Override
     public void deleteSelectedBook(TextField searchField, TableView<BookEntity> booksTable) {
         BookEntity selectedBookEntity = booksTable.getSelectionModel().getSelectedItem();
 
@@ -155,7 +159,7 @@ public class BooksController {
             return;
         }
 
-        if (bookDTO.hasIssueHistory(selectedBookEntity.getBookId())) {
+        if (booksRepository.hasIssueHistory(selectedBookEntity.getBookId())) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "Cannot Delete Book",
@@ -171,7 +175,7 @@ public class BooksController {
 
         confirmation.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                if (bookDTO.deleteBook(selectedBookEntity.getIsbn())) {
+                if (booksRepository.deleteBook(selectedBookEntity.getIsbn())) {
                     booksList.remove(selectedBookEntity);
                     getRelatedBooks(searchField, booksTable);
                     showAlert(
