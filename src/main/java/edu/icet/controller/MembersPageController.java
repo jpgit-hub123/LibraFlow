@@ -1,6 +1,6 @@
 package edu.icet.controller;
 
-import edu.icet.model.Member;
+import edu.icet.model.entity.MemberEntity;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -12,22 +12,22 @@ public class MembersPageController {
     private TextField searchField;
 
     @FXML
-    private TableView<Member> membersTable;
+    private TableView<MemberEntity> membersTable;
 
     @FXML
-    private TableColumn<Member, Number> memberIdColumn;
+    private TableColumn<MemberEntity, Number> memberIdColumn;
 
     @FXML
-    private TableColumn<Member, String> nameColumn;
+    private TableColumn<MemberEntity, String> nameColumn;
 
     @FXML
-    private TableColumn<Member, String> emailColumn;
+    private TableColumn<MemberEntity, String> emailColumn;
 
     @FXML
-    private TableColumn<Member, String> phoneColumn;
+    private TableColumn<MemberEntity, String> phoneColumn;
 
     @FXML
-    private TableColumn<Member, String> addressColumn;
+    private TableColumn<MemberEntity, String> addressColumn;
 
     public MembersController membersController = new MembersController();
 

@@ -1,33 +1,33 @@
-package edu.icet.dao;
+package edu.icet.model.dto;
 
 import edu.icet.db.DBConnection;
-import edu.icet.model.BookIssue;
-import edu.icet.model.Member;
+import edu.icet.model.entity.BookIssueEntity;
+import edu.icet.model.entity.MemberEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
-public class MemberDAO {
+public class MemberDTO {
 
     Session session = DBConnection.getSession();
 
     public int getTotalMembers() {
         Long totalMembersResult = session
-                .createQuery("SELECT COUNT(m) FROM Member m", Long.class)
+                .createQuery("SELECT COUNT(m) FROM MemberEntity m", Long.class)
                 .getSingleResult();
         return totalMembersResult.intValue();
     }
 
-    public List<Member> getAllMembers() {
+    public List<MemberEntity> getAllMembers() {
         return session
-                .createQuery("FROM Member", Member.class)
+                .createQuery("FROM MemberEntity", MemberEntity.class)
                 .getResultList();
     }
 
-    public boolean saveMember(Member member) {
+    public boolean saveMember(MemberEntity memberEntity) {
         try {
             Transaction transaction = session.beginTransaction();
-            session.persist(member);
+            session.persist(memberEntity);
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -35,16 +35,16 @@ public class MemberDAO {
         }
     }
 
-    public boolean updateMember(String memberId, Member member) {
+    public boolean updateMember(String memberId, MemberEntity memberEntity) {
         Transaction transaction = session.beginTransaction();
-        Member existingMember = session.find(Member.class, memberId);
-        if (existingMember == null) {
+        MemberEntity existingMemberEntity = session.find(MemberEntity.class, memberId);
+        if (existingMemberEntity == null) {
             return false;
         }
-        existingMember.setName(member.getName());
-        existingMember.setEmail(member.getEmail());
-        existingMember.setPhone(member.getPhone());
-        existingMember.setAddress(member.getAddress());
+        existingMemberEntity.setName(memberEntity.getName());
+        existingMemberEntity.setEmail(memberEntity.getEmail());
+        existingMemberEntity.setPhone(memberEntity.getPhone());
+        existingMemberEntity.setAddress(memberEntity.getAddress());
         transaction.commit();
         return true;
     }
@@ -52,11 +52,11 @@ public class MemberDAO {
     public boolean deleteMember(String memberId) {
         try {
             Transaction transaction = session.beginTransaction();
-            Member member = session.find(Member.class, memberId);
-            if (member == null) {
+            MemberEntity memberEntity = session.find(MemberEntity.class, memberId);
+            if (memberEntity == null) {
                 return false;
             }
-            session.remove(member);
+            session.remove(memberEntity);
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class MemberDAO {
     }
 
     public boolean hasIssueHistory(int memberId) {
-        return !session.createQuery("FROM BookIssue bi WHERE bi.memberId = :memberId", BookIssue.class)
+        return !session.createQuery("FROM BookIssueEntity bi WHERE bi.memberId = :memberId", BookIssueEntity.class)
                 .setParameter("memberId", memberId)
                 .setMaxResults(1)
                 .getResultList()

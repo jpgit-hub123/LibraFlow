@@ -23,7 +23,7 @@
             text="Add New Book"
             style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
-    <Label text="Enter the book details below."
+    <Label text="Enter the bookEntity details below."
            style="-fx-text-fill: #64748b;"/>
 
     <GridPane hgap="12" vgap="15">
@@ -36,7 +36,7 @@
 
         <Label text="Title:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
         <TextField fx:id="titleField"
-                   promptText="Enter book title"
+                   promptText="Enter bookEntity title"
                    GridPane.rowIndex="1"
                    GridPane.columnIndex="1"/>
 

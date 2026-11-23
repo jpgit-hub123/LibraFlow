@@ -1,6 +1,6 @@
 package edu.icet.controller;
 
-import edu.icet.model.Book;
+import edu.icet.model.entity.BookEntity;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -71,8 +71,8 @@ public class AddBookPageController {
     }
 
     @FXML
-    public void toEditBook(Book book){
-        addBookController.setBookToEdit(isbnField, titleField, authorField, categoryField, quantityField, book,
+    public void toEditBook(BookEntity bookEntity){
+        addBookController.setBookToEdit(isbnField, titleField, authorField, categoryField, quantityField, bookEntity,
                 saveButton, titleLabel);
     }
 }

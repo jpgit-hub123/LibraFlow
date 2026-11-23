@@ -1,5 +1,7 @@
 package edu.icet.controller;
 
+import edu.icet.service.LoginService;
+import edu.icet.service.impl.LoginServiceImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -16,12 +18,12 @@ public class LoginPageController {
     private TextField passwordField;
 
     @FXML
-    private final LoginController loginController = new LoginController();
+    private final LoginService loginService = new LoginServiceImpl();
 
     @FXML
     private void handleLoginOnAction() {
-        if (loginController.authenticate(usernameField, passwordField)) {
-            loginController.loadPage("/edu/icet/view/Dashboard.fxml", rootPane);
+        if (loginService.authenticate(usernameField, passwordField)) {
+            loginService.loadPage("/edu/icet/view/Dashboard.fxml", rootPane);
         } else {
             System.out.println("hii");
         }

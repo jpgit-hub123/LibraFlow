@@ -1,9 +1,9 @@
 package edu.icet.db;
 
-import edu.icet.model.Book;
-import edu.icet.model.BookIssue;
-import edu.icet.model.Member;
-import edu.icet.model.User;
+import edu.icet.model.entity.BookEntity;
+import edu.icet.model.entity.BookIssueEntity;
+import edu.icet.model.entity.MemberEntity;
+import edu.icet.model.entity.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -17,10 +17,10 @@ public class DBConnection {
                     .setProperty("hibernate.connection.username", "root")
                     .setProperty("hibernate.connection.password", "JP26@MySQL")
                     .setProperty("hibernate.hbm2ddl.auto", "update")
-                    .addAnnotatedClass(User.class)
-                    .addAnnotatedClass(Member.class)
-                    .addAnnotatedClass(BookIssue.class)
-                    .addAnnotatedClass(Book.class)
+                    .addAnnotatedClass(UserEntity.class)
+                    .addAnnotatedClass(MemberEntity.class)
+                    .addAnnotatedClass(BookIssueEntity.class)
+                    .addAnnotatedClass(BookEntity.class)
                     .buildSessionFactory();
 
     public static Session getSession() {

@@ -1,4 +1,4 @@
-package edu.icet.model;
+package edu.icet.model.entity;
 
 import jakarta.persistence.*;
 
@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "book_issues")
-public class BookIssue {
+public class BookIssueEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class BookIssue {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    private BookEntity bookEntity;
 
     @Column(name = "isbn", length = 20)
     private String isbn;
@@ -37,14 +37,14 @@ public class BookIssue {
 
     private String status;
 
-    public BookIssue() {
+    public BookIssueEntity() {
     }
 
-    public BookIssue(int memberId, Book book, LocalDate issueDate, LocalDate dueDate) {
+    public BookIssueEntity(int memberId, BookEntity bookEntity, LocalDate issueDate, LocalDate dueDate) {
         this.memberId = memberId;
-        this.book = book;
-        this.isbn = book.getIsbn();
-        this.bookTitle = book.getTitle();
+        this.bookEntity = bookEntity;
+        this.isbn = bookEntity.getIsbn();
+        this.bookTitle = bookEntity.getTitle();
         this.issueDate = issueDate;
         this.dueDate = dueDate;
     }
@@ -65,13 +65,13 @@ public class BookIssue {
         this.memberId = memberId;
     }
 
-    public Book getBook() {
-        return book;
+    public BookEntity getBook() {
+        return bookEntity;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
-        this.isbn = book != null ? book.getIsbn() : null;
+    public void setBook(BookEntity bookEntity) {
+        this.bookEntity = bookEntity;
+        this.isbn = bookEntity != null ? bookEntity.getIsbn() : null;
     }
 
     public String getIsbn() {
@@ -83,8 +83,8 @@ public class BookIssue {
     }
 
     public String getBookTitle() {
-        if (book != null) {
-            return book.getTitle();
+        if (bookEntity != null) {
+            return bookEntity.getTitle();
         }
         return bookTitle;
     }

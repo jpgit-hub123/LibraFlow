@@ -1,7 +1,7 @@
 package edu.icet.controller;
 
-import edu.icet.dao.BookDAO;
-import edu.icet.model.Book;
+import edu.icet.model.dto.BookDTO;
+import edu.icet.model.entity.BookEntity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -19,8 +19,8 @@ import java.io.IOException;
 
 public class BooksController {
 
-    private ObservableList<Book> booksList;
-    private final BookDAO bookDAO = new BookDAO();
+    private ObservableList<BookEntity> booksList;
+    private final BookDTO bookDTO = new BookDTO();
 
     public void loadPage(String fxmlFile, TextField searchField) {
         try {
@@ -37,9 +37,9 @@ public class BooksController {
         }
     }
 
-    public void setBooksDataIntoTable(TableColumn<Book, String> isbnColumn, TableColumn<Book, String> titleColumn,
-                                      TableColumn<Book, String> authorColumn, TableColumn<Book, String> categoryColumn,
-                                      TableColumn<Book, Integer> quantityColumn, TableView<Book> booksTable) {
+    public void setBooksDataIntoTable(TableColumn<BookEntity, String> isbnColumn, TableColumn<BookEntity, String> titleColumn,
+                                      TableColumn<BookEntity, String> authorColumn, TableColumn<BookEntity, String> categoryColumn,
+                                      TableColumn<BookEntity, Integer> quantityColumn, TableView<BookEntity> booksTable) {
 
         isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -47,29 +47,29 @@ public class BooksController {
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        booksList = FXCollections.observableArrayList(bookDAO.getAllBooks());
+        booksList = FXCollections.observableArrayList(bookDTO.getAllBooks());
         booksTable.setItems(booksList);
     }
 
-    public void getRelatedBooks(TextField searchField, TableView<Book> booksTable) {
+    public void getRelatedBooks(TextField searchField, TableView<BookEntity> booksTable) {
 
         String searchWord = searchField.getText().trim().toLowerCase();
-        ObservableList<Book> filterBooks = FXCollections.observableArrayList();
+        ObservableList<BookEntity> filterBookEntities = FXCollections.observableArrayList();
 
-        for (Book book : booksList) {
+        for (BookEntity bookEntity : booksList) {
 
-            if (book.getIsbn().toLowerCase().contains(searchWord)
-                || book.getTitle().toLowerCase().contains(searchWord)
-                || book.getAuthor().toLowerCase().contains(searchWord)
-                || book.getCategory().toLowerCase().contains(searchWord)) {
+            if (bookEntity.getIsbn().toLowerCase().contains(searchWord)
+                || bookEntity.getTitle().toLowerCase().contains(searchWord)
+                || bookEntity.getAuthor().toLowerCase().contains(searchWord)
+                || bookEntity.getCategory().toLowerCase().contains(searchWord)) {
 
-                filterBooks.add(book);
+                filterBookEntities.add(bookEntity);
             }
         }
-        booksTable.setItems(filterBooks);
+        booksTable.setItems(filterBookEntities);
     }
 
-    public void loadForm(TextField searchField, TableView<Book> booksTable) {
+    public void loadForm(TextField searchField, TableView<BookEntity> booksTable) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddBook.fxml"));
 
@@ -88,10 +88,10 @@ public class BooksController {
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
 
-            Book newBook = addBookPageController.addBookController.getNewBook();
+            BookEntity newBookEntity = addBookPageController.addBookController.getNewBook();
 
-            if (newBook != null) {
-                booksList.add(newBook);
+            if (newBookEntity != null) {
+                booksList.add(newBookEntity);
                 getRelatedBooks(searchField, booksTable);
             }
 
@@ -100,10 +100,10 @@ public class BooksController {
         }
     }
 
-    public void editTheSelectedBook(TextField searchField, TableView<Book> booksTable) {
-        Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
+    public void editTheSelectedBook(TextField searchField, TableView<BookEntity> booksTable) {
+        BookEntity selectedBookEntity = booksTable.getSelectionModel().getSelectedItem();
 
-        if (selectedBook == null) {
+        if (selectedBookEntity == null) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "No Book Selected",
@@ -118,7 +118,7 @@ public class BooksController {
 
             AddBookPageController addBookPageController = loader.getController();
             addBookPageController.addBookController.setExistingBooks(booksList);
-            addBookPageController.toEditBook(selectedBook);
+            addBookPageController.toEditBook(selectedBookEntity);
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("LibraFlow | Edit Book");
@@ -128,7 +128,7 @@ public class BooksController {
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
-            booksList.setAll(bookDAO.getAllBooks());
+            booksList.setAll(bookDTO.getAllBooks());
             getRelatedBooks(searchField, booksTable);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -143,10 +143,10 @@ public class BooksController {
         alert.showAndWait();
     }
 
-    public void deleteSelectedBook(TextField searchField, TableView<Book> booksTable) {
-        Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
+    public void deleteSelectedBook(TextField searchField, TableView<BookEntity> booksTable) {
+        BookEntity selectedBookEntity = booksTable.getSelectionModel().getSelectedItem();
 
-        if (selectedBook == null) {
+        if (selectedBookEntity == null) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "No Book Selected",
@@ -155,7 +155,7 @@ public class BooksController {
             return;
         }
 
-        if (bookDAO.hasIssueHistory(selectedBook.getBookId())) {
+        if (bookDTO.hasIssueHistory(selectedBookEntity.getBookId())) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "Cannot Delete Book",
@@ -166,13 +166,13 @@ public class BooksController {
 
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.setTitle("Delete Book");
-        confirmation.setHeaderText("Delete " + selectedBook.getTitle() + "?");
+        confirmation.setHeaderText("Delete " + selectedBookEntity.getTitle() + "?");
         confirmation.setContentText("Are you sure you want to delete this book?");
 
         confirmation.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                if (bookDAO.deleteBook(selectedBook.getIsbn())) {
-                    booksList.remove(selectedBook);
+                if (bookDTO.deleteBook(selectedBookEntity.getIsbn())) {
+                    booksList.remove(selectedBookEntity);
                     getRelatedBooks(searchField, booksTable);
                     showAlert(
                             Alert.AlertType.INFORMATION,

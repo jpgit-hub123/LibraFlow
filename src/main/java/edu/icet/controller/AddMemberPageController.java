@@ -1,6 +1,6 @@
 package edu.icet.controller;
 
-import edu.icet.model.Member;
+import edu.icet.model.entity.MemberEntity;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -44,8 +44,8 @@ public class AddMemberPageController {
     }
 
     @FXML
-    public void selectedMemberToEdit(Member selectedMember) {
-        addMemberController.setEditedMemberInfoToEditMemberForm(selectedMember, nameField, emailField, phoneField,
+    public void selectedMemberToEdit(MemberEntity selectedMemberEntity) {
+        addMemberController.setEditedMemberInfoToEditMemberForm(selectedMemberEntity, nameField, emailField, phoneField,
                 addressField, titleLabel, subTitleLabel, btnSave);
     }
 

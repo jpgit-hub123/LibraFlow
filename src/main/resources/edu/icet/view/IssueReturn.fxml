@@ -66,7 +66,7 @@
                 <Label text="Issue &amp; Return"
                        styleClass="page-title"/>
 
-                <Label text="Manage book issues and returns"
+                <Label text="Manage bookEntity issues and returns"
                        styleClass="subtitle"/>
             </VBox>
 
@@ -128,7 +128,7 @@
 
             </HBox>
 
-            <!-- Issue book form -->
+            <!-- Issue bookEntity form -->
 
             <VBox spacing="10"
                   styleClass="transactions-card">
@@ -146,7 +146,7 @@
                         <Label text="Select Member"/>
 
                         <ComboBox fx:id="memberComboBox"
-                                  promptText="Choose a member"
+                                  promptText="Choose a memberEntity"
                                   maxWidth="Infinity"
                                   prefHeight="38"/>
 
@@ -160,7 +160,7 @@
                         <Label text="Select Book"/>
 
                         <ComboBox fx:id="bookComboBox"
-                                  promptText="Choose a book"
+                                  promptText="Choose a bookEntity"
                                   maxWidth="Infinity"
                                   prefHeight="38"/>
 

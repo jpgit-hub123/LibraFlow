@@ -1,20 +1,20 @@
-package edu.icet.dao;
+package edu.icet.model.dto;
 
 import edu.icet.db.DBConnection;
-import edu.icet.model.Book;
-import edu.icet.model.BookIssue;
+import edu.icet.model.entity.BookEntity;
+import edu.icet.model.entity.BookIssueEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
-public class BookDAO {
+public class BookDTO {
 
     Session session = DBConnection.getSession();
 
-    public boolean saveBook(Book book) {
+    public boolean saveBook(BookEntity bookEntity) {
         try {
             Transaction transaction = session.beginTransaction();
-            session.persist(book);
+            session.persist(bookEntity);
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -22,26 +22,26 @@ public class BookDAO {
         }
     }
 
-    public List<Book> getAllBooks() {
+    public List<BookEntity> getAllBooks() {
         return session
-                .createQuery("FROM Book", Book.class)
+                .createQuery("FROM BookEntity", BookEntity.class)
                 .getResultList();
     }
 
-    public boolean updateBook(String originalIsbn, Book book) {
+    public boolean updateBook(String originalIsbn, BookEntity bookEntity) {
         Transaction transaction = session.beginTransaction();
-        Book existingBook = session.createQuery(
-                "FROM Book b WHERE b.isbn = :isbn", Book.class)
+        BookEntity existingBookEntity = session.createQuery(
+                "FROM BookEntity b WHERE b.isbn = :isbn", BookEntity.class)
                 .setParameter("isbn", originalIsbn)
                 .uniqueResult();
-        if (existingBook == null) {
+        if (existingBookEntity == null) {
             return false;
         }
-        existingBook.setIsbn(book.getIsbn());
-        existingBook.setTitle(book.getTitle());
-        existingBook.setAuthor(book.getAuthor());
-        existingBook.setCategory(book.getCategory());
-        existingBook.setQuantity(book.getQuantity());
+        existingBookEntity.setIsbn(bookEntity.getIsbn());
+        existingBookEntity.setTitle(bookEntity.getTitle());
+        existingBookEntity.setAuthor(bookEntity.getAuthor());
+        existingBookEntity.setCategory(bookEntity.getCategory());
+        existingBookEntity.setQuantity(bookEntity.getQuantity());
         transaction.commit();
         return true;
     }
@@ -49,14 +49,14 @@ public class BookDAO {
     public boolean deleteBook(String isbn) {
         try {
             Transaction transaction = session.beginTransaction();
-            Book book = session.createQuery(
-                    "FROM Book b WHERE b.isbn = :isbn", Book.class)
+            BookEntity bookEntity = session.createQuery(
+                    "FROM BookEntity b WHERE b.isbn = :isbn", BookEntity.class)
                     .setParameter("isbn", isbn)
                     .uniqueResult();
-            if (book == null) {
+            if (bookEntity == null) {
                 return false;
             }
-            session.remove(book);
+            session.remove(bookEntity);
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class BookDAO {
 
     public boolean hasIssueHistory(Long bookId) {
         return !session
-                .createQuery("FROM BookIssue bi WHERE bi.book.bookId = :bookId", BookIssue.class)
+                .createQuery("FROM BookIssueEntity bi WHERE bi.BookEntity.bookId = :bookId", BookIssueEntity.class)
                 .setParameter("bookId", bookId)
                 .setMaxResults(1)
                 .getResultList()
@@ -75,21 +75,21 @@ public class BookDAO {
 
     public int getTotalBooks() {
         Long totalBooksResult = session
-                .createQuery("SELECT COUNT(b) FROM Book b", Long.class)
+                .createQuery("SELECT COUNT(b) FROM BookEntity b", Long.class)
                 .getSingleResult();
         return totalBooksResult.intValue();
     }
 
     public int getTotalQuantity() {
         Long totalBookQuantityResult = session
-                .createQuery("SELECT SUM(b.quantity) FROM Book b", Long.class)
+                .createQuery("SELECT SUM(b.quantity) FROM BookEntity b", Long.class)
                 .getSingleResult();
         return totalBookQuantityResult.intValue();
     }
 
     public int getTotalCategories() {
         Long totalCategoryResult = session
-                .createQuery("SELECT COUNT(DISTINCT b.category) FROM Book b", Long.class)
+                .createQuery("SELECT COUNT(DISTINCT b.category) FROM BookEntity b", Long.class)
                 .getSingleResult();
         return totalCategoryResult.intValue();
     }

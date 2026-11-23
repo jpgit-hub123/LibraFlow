@@ -1,10 +1,10 @@
 package edu.icet.controller;
 
-import edu.icet.dao.BookDAO;
-import edu.icet.dao.MemberDAO;
-import edu.icet.model.Book;
-import edu.icet.model.BookIssue;
-import edu.icet.model.Member;
+import edu.icet.model.dto.BookDTO;
+import edu.icet.model.dto.MemberDTO;
+import edu.icet.model.entity.BookEntity;
+import edu.icet.model.entity.BookIssueEntity;
+import edu.icet.model.entity.MemberEntity;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,10 +16,10 @@ import java.time.LocalDate;
 public class IssueReturnPageController {
 
     @FXML
-    public ComboBox<Member> memberComboBox;
+    public ComboBox<MemberEntity> memberComboBox;
 
     @FXML
-    public ComboBox<Book> bookComboBox;
+    public ComboBox<BookEntity> bookComboBox;
 
     @FXML
     public DatePicker issueDatePicker;
@@ -28,31 +28,31 @@ public class IssueReturnPageController {
     public DatePicker dueDatePicker;
 
     @FXML
-    public TableColumn<BookIssue, Double> fineAmountColumn;
+    public TableColumn<BookIssueEntity, Double> fineAmountColumn;
 
     @FXML
-    private TableColumn<BookIssue, Long> overdueDaysColumn;
+    private TableColumn<BookIssueEntity, Long> overdueDaysColumn;
 
     @FXML
-    private TableView<BookIssue> issuedBooksTable;
+    private TableView<BookIssueEntity> issuedBooksTable;
 
     @FXML
-    private TableColumn<BookIssue, Integer> memberIdColumn;
+    private TableColumn<BookIssueEntity, Integer> memberIdColumn;
 
     @FXML
-    private TableColumn<BookIssue, String> isbnColumn;
+    private TableColumn<BookIssueEntity, String> isbnColumn;
 
     @FXML
-    private TableColumn<BookIssue, String> bookTitleColumn;
+    private TableColumn<BookIssueEntity, String> bookTitleColumn;
 
     @FXML
-    private TableColumn<BookIssue, LocalDate> issueDateColumn;
+    private TableColumn<BookIssueEntity, LocalDate> issueDateColumn;
 
     @FXML
-    private TableColumn<BookIssue, LocalDate> dueDateColumn;
+    private TableColumn<BookIssueEntity, LocalDate> dueDateColumn;
 
     @FXML
-    private TableColumn<BookIssue, String> statusColumn;
+    private TableColumn<BookIssueEntity, String> statusColumn;
 
     @FXML
     private Label totalIssuedLabel;
@@ -72,34 +72,34 @@ public class IssueReturnPageController {
     @FXML
     public void initialize() {
 
-        memberComboBox.setItems(FXCollections.observableArrayList(new MemberDAO().getAllMembers()));
+        memberComboBox.setItems(FXCollections.observableArrayList(new MemberDTO().getAllMembers()));
         memberComboBox.setConverter(new StringConverter<>() {
             @Override
-            public String toString(Member member) {
-                if (member == null) {
+            public String toString(MemberEntity memberEntity) {
+                if (memberEntity == null) {
                     return "";
                 }
-                return member.getMemberId() + " - " + member.getName();
+                return memberEntity.getMemberId() + " - " + memberEntity.getName();
             }
 
             @Override
-            public Member fromString(String s) {
+            public MemberEntity fromString(String s) {
                 return null;
             }
         });
 
-        bookComboBox.setItems(FXCollections.observableArrayList(new BookDAO().getAllBooks()));
+        bookComboBox.setItems(FXCollections.observableArrayList(new BookDTO().getAllBooks()));
         bookComboBox.setConverter(new StringConverter<>() {
             @Override
-            public String toString(Book book) {
-                if (book == null) {
+            public String toString(BookEntity bookEntity) {
+                if (bookEntity == null) {
                     return "";
                 }
-                return book.getIsbn() + " - " + book.getTitle() + " (Available: " + book.getQuantity() + ")";
+                return bookEntity.getIsbn() + " - " + bookEntity.getTitle() + " (Available: " + bookEntity.getQuantity() + ")";
             }
 
             @Override
-            public Book fromString(String s) {
+            public BookEntity fromString(String s) {
                 return null;
             }
         });
@@ -113,7 +113,7 @@ public class IssueReturnPageController {
         issueDateColumn.setCellValueFactory(new PropertyValueFactory<>("issueDate"));
         dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
         statusColumn.setCellValueFactory(cellData -> {
-            BookIssue issue = cellData.getValue();
+            BookIssueEntity issue = cellData.getValue();
             String displayStatus;
             if (issue.isOverdue()) {
                 displayStatus = "OVERDUE";

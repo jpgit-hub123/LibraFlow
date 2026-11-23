@@ -1,6 +1,6 @@
 package edu.icet.controller;
 
-import edu.icet.model.Book;
+import edu.icet.model.entity.BookEntity;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -12,22 +12,22 @@ public class BooksPageController {
     private TextField searchField;
 
     @FXML
-    private TableView<Book> booksTable;
+    private TableView<BookEntity> booksTable;
 
     @FXML
-    private TableColumn<Book, String> isbnColumn;
+    private TableColumn<BookEntity, String> isbnColumn;
 
     @FXML
-    private TableColumn<Book, String> titleColumn;
+    private TableColumn<BookEntity, String> titleColumn;
 
     @FXML
-    private TableColumn<Book, String> authorColumn;
+    private TableColumn<BookEntity, String> authorColumn;
 
     @FXML
-    private TableColumn<Book, String> categoryColumn;
+    private TableColumn<BookEntity, String> categoryColumn;
 
     @FXML
-    private TableColumn<Book, Integer> quantityColumn;
+    private TableColumn<BookEntity, Integer> quantityColumn;
 
     @FXML
     public BooksController booksController = new BooksController();

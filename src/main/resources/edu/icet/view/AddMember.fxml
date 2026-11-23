@@ -40,7 +40,7 @@
                               -fx-text-fill: #172B4D;"/>
 
                 <Label fx:id="subTitleLabel"
-                        text="Enter the member details below to register a new member."
+                        text="Enter the memberEntity details below to register a new memberEntity."
                        wrapText="true"
                        style="-fx-font-size: 12;
                               -fx-text-fill: #718096;"/>

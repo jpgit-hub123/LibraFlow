@@ -1,4 +1,4 @@
-package edu.icet.model;
+package edu.icet.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -6,17 +6,17 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class UserEntity {
 
     @Id
     private int user_id;
     private String username;
     private String password_hash;
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(int user_id, String username, String password_hash) {
+    public UserEntity(int user_id, String username, String password_hash) {
         this.user_id = user_id;
         this.username = username;
         this.password_hash = password_hash;

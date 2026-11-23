@@ -1,9 +1,9 @@
 package edu.icet.controller;
 
-import edu.icet.dao.BookDAO;
-import edu.icet.dao.BookIssueDAO;
-import edu.icet.dao.MemberDAO;
-import edu.icet.model.BookIssue;
+import edu.icet.model.dto.BookDTO;
+import edu.icet.model.dto.BookIssueDTO;
+import edu.icet.model.dto.MemberDTO;
+import edu.icet.model.entity.BookIssueEntity;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class DashboardController {
 
-    BookDAO bookDAO = new BookDAO();
+    BookDTO bookDTO = new BookDTO();
 
     public void loadPage(String fxmlFile, BorderPane rootPane) {
 
@@ -31,25 +31,25 @@ public class DashboardController {
     }
 
     public int getTotalBooksCount() {
-        return bookDAO.getTotalBooks();
+        return bookDTO.getTotalBooks();
     }
 
     public int getTotalQuantityCount() {
-        return bookDAO.getTotalQuantity();
+        return bookDTO.getTotalQuantity();
     }
 
     public int getTotalCategories() {
-        return bookDAO.getTotalCategories();
+        return bookDTO.getTotalCategories();
     }
 
     public int getTotalMemberCount() {
-        return new MemberDAO().getTotalMembers();
+        return new MemberDTO().getTotalMembers();
     }
 
-    public void loadRecentTransactions(TableView<BookIssue> recentTransactionsTable) {
+    public void loadRecentTransactions(TableView<BookIssueEntity> recentTransactionsTable) {
         recentTransactionsTable.setItems(
                 FXCollections.observableArrayList(
-                        new BookIssueDAO().getAllIssues()
+                        new BookIssueDTO().getAllIssues()
                                 .stream()
                                 .limit(10)
                                 .toList()

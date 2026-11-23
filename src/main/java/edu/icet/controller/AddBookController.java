@@ -1,7 +1,7 @@
 package edu.icet.controller;
 
-import edu.icet.dao.BookDAO;
-import edu.icet.model.Book;
+import edu.icet.model.dto.BookDTO;
+import edu.icet.model.entity.BookEntity;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -11,10 +11,10 @@ import javafx.stage.Stage;
 
 public class AddBookController {
 
-    private final BookDAO bookDAO = new BookDAO();
-    private ObservableList<Book> existingBooks;
-    private Book newBook;
-    private Book bookToEdit;
+    private final BookDTO bookDTO = new BookDTO();
+    private ObservableList<BookEntity> existingBookEntities;
+    private BookEntity newBookEntity;
+    private BookEntity bookEntityToEdit;
 
     public void validateBookDetails(TextField isbnField, TextField titleField, TextField authorField,
                                     TextField categoryField, TextField quantityField) {
@@ -67,14 +67,14 @@ public class AddBookController {
             return;
         }
 
-        if (bookToEdit == null) {
+        if (bookEntityToEdit == null) {
             if (isDuplicateIsbn(isbn)){
                 return;
             }
-            Book book = new Book(isbn, title, author, category, quantity);
+            BookEntity bookEntity = new BookEntity(isbn, title, author, category, quantity);
 
-            if (bookDAO.saveBook(book)) {
-                newBook = book;
+            if (bookDTO.saveBook(bookEntity)) {
+                newBookEntity = bookEntity;
             } else {
                 showAlert(
                         Alert.AlertType.ERROR,
@@ -85,20 +85,20 @@ public class AddBookController {
             }
         } else {
 
-            String originalIsbnOfEditedBook = bookToEdit.getIsbn();
+            String originalIsbnOfEditedBook = bookEntityToEdit.getIsbn();
 
             if (isDuplicateIsbn(isbn)) {
                 return;
             }
 
-            Book updatedBook = new Book(isbn, title, author, category, quantity);
+            BookEntity updatedBookEntity = new BookEntity(isbn, title, author, category, quantity);
 
-            if (bookDAO.updateBook(originalIsbnOfEditedBook, updatedBook)) {
-                bookToEdit.setIsbn(isbn);
-                bookToEdit.setTitle(title);
-                bookToEdit.setAuthor(author);
-                bookToEdit.setCategory(category);
-                bookToEdit.setQuantity(quantity);
+            if (bookDTO.updateBook(originalIsbnOfEditedBook, updatedBookEntity)) {
+                bookEntityToEdit.setIsbn(isbn);
+                bookEntityToEdit.setTitle(title);
+                bookEntityToEdit.setAuthor(author);
+                bookEntityToEdit.setCategory(category);
+                bookEntityToEdit.setQuantity(quantity);
             } else {
                 showAlert(
                         Alert.AlertType.ERROR,
@@ -114,13 +114,13 @@ public class AddBookController {
     }
 
     private boolean isDuplicateIsbn(String isbn) {
-        for (Book book : existingBooks) {
-            if (book.getIsbn().equalsIgnoreCase(isbn)) {
-                if (bookToEdit != null && book.getIsbn().equalsIgnoreCase(bookToEdit.getIsbn())) {
+        for (BookEntity bookEntity : existingBookEntities) {
+            if (bookEntity.getIsbn().equalsIgnoreCase(isbn)) {
+                if (bookEntityToEdit != null && bookEntity.getIsbn().equalsIgnoreCase(bookEntityToEdit.getIsbn())) {
                     continue;
                 }
             }
-            if (book.getIsbn().equalsIgnoreCase(isbn)) {
+            if (bookEntity.getIsbn().equalsIgnoreCase(isbn)) {
                 showAlert(
                         Alert.AlertType.WARNING,
                         "Duplicate ISBN",
@@ -140,8 +140,8 @@ public class AddBookController {
         alert.showAndWait();
     }
 
-    public Book getNewBook() {
-        return newBook;
+    public BookEntity getNewBook() {
+        return newBookEntity;
     }
 
     public void closedTheAddBookForm(TextField isbnField) {
@@ -149,21 +149,21 @@ public class AddBookController {
         addBookWindow.close();
     }
 
-    public void setExistingBooks(ObservableList<Book> booksList) {
-        this.existingBooks = booksList;
+    public void setExistingBooks(ObservableList<BookEntity> booksList) {
+        this.existingBookEntities = booksList;
     }
 
     public void setBookToEdit(TextField isbnField, TextField titleField, TextField authorField,
-                              TextField categoryField, TextField quantityField, Book book,
+                              TextField categoryField, TextField quantityField, BookEntity bookEntity,
                               Button saveButton, Label titleLabel) {
 
-        this.bookToEdit = book;
+        this.bookEntityToEdit = bookEntity;
 
-        isbnField.setText(book.getIsbn());
-        titleField.setText(book.getTitle());
-        authorField.setText(book.getAuthor());
-        categoryField.setText(book.getCategory());
-        quantityField.setText(String.valueOf(book.getQuantity()));
+        isbnField.setText(bookEntity.getIsbn());
+        titleField.setText(bookEntity.getTitle());
+        authorField.setText(bookEntity.getAuthor());
+        categoryField.setText(bookEntity.getCategory());
+        quantityField.setText(String.valueOf(bookEntity.getQuantity()));
 
         saveButton.setText("Update");
         titleLabel.setText("Update Book");

@@ -1,33 +1,30 @@
-package edu.icet.dao;
+package edu.icet.repository.impl;
 
 import edu.icet.db.DBConnection;
-import edu.icet.model.User;
+import edu.icet.model.entity.UserEntity;
+import edu.icet.repository.LoginRepository;
 import javafx.scene.control.TextField;
 import org.hibernate.Session;
 
-public class UserDAO {
+public class LoginRepositoryImpl implements LoginRepository {
 
     public boolean checkLoginDetails(TextField usernameField, TextField passwordField) {
-
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
 
         try {
             Session session = DBConnection.getSession();
-            User user = session
-                    .createQuery("FROM User WHERE username = :username", User.class)
+            UserEntity userEntity = session
+                    .createQuery("FROM UserEntity WHERE username = :username", UserEntity.class)
                     .setParameter("username", username)
                     .uniqueResult();
-            if (user != null && user.getPassword_hash().equals(password)) {
-                System.out.println("Login successful");
+            if (userEntity != null && userEntity.getPassword_hash().equals(password)) {
                 return true;
             } else {
-                System.out.println("Login failed");
                 return false;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
 }

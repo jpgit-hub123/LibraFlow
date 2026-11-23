@@ -1,11 +1,11 @@
 package edu.icet.controller;
 
-import edu.icet.dao.BookDAO;
-import edu.icet.dao.BookIssueDAO;
-import edu.icet.dao.MemberDAO;
-import edu.icet.model.Book;
-import edu.icet.model.BookIssue;
-import edu.icet.model.Member;
+import edu.icet.model.dto.BookDTO;
+import edu.icet.model.dto.BookIssueDTO;
+import edu.icet.model.dto.MemberDTO;
+import edu.icet.model.entity.BookEntity;
+import edu.icet.model.entity.BookIssueEntity;
+import edu.icet.model.entity.MemberEntity;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,9 +16,9 @@ import java.time.LocalDate;
 
 public class IssueReturnController {
 
-    BookIssueDAO bookIssueDAO = new BookIssueDAO();
+    BookIssueDTO bookIssueDTO = new BookIssueDTO();
 
-    public void loadPage(String fxmlFile, ComboBox<Member> memberComboBox) {
+    public void loadPage(String fxmlFile, ComboBox<MemberEntity> memberComboBox) {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         try {
@@ -40,15 +40,15 @@ public class IssueReturnController {
 
     }
 
-    public void issuedTheBook(ComboBox<Member> memberComboBox, ComboBox<Book> bookComboBox, DatePicker issueDatePicker,
-                              DatePicker dueDatePicker, TableView<BookIssue> issuedBooksTable) {
+    public void issuedTheBook(ComboBox<MemberEntity> memberComboBox, ComboBox<BookEntity> bookComboBox, DatePicker issueDatePicker,
+                              DatePicker dueDatePicker, TableView<BookIssueEntity> issuedBooksTable) {
 
-        Member member = memberComboBox.getValue();
-        Book book = bookComboBox.getValue();
+        MemberEntity memberEntity = memberComboBox.getValue();
+        BookEntity bookEntity = bookComboBox.getValue();
         LocalDate issueDate = issueDatePicker.getValue();
         LocalDate dueDate = dueDatePicker.getValue();
 
-        if (member == null || book == null || issueDate == null || dueDate == null) {
+        if (memberEntity == null || bookEntity == null || issueDate == null || dueDate == null) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "No required details selected!",
@@ -66,7 +66,7 @@ public class IssueReturnController {
             return;
         }
 
-        if (book.getQuantity() == 0) {
+        if (bookEntity.getQuantity() == 0) {
             showAlert(
                     Alert.AlertType.INFORMATION,
                     "Unavailable!",
@@ -75,9 +75,9 @@ public class IssueReturnController {
             return;
         }
 
-        BookIssue bookIssue = new BookIssue(member.getMemberId(), book, issueDate, dueDate);
+        BookIssueEntity bookIssueEntity = new BookIssueEntity(memberEntity.getMemberId(), bookEntity, issueDate, dueDate);
 
-        if (bookIssueDAO.issueBook(bookIssue)) {
+        if (bookIssueDTO.issueBook(bookIssueEntity)) {
             showAlert(
                     Alert.AlertType.CONFIRMATION,
                     "Success!",
@@ -87,8 +87,8 @@ public class IssueReturnController {
             bookComboBox.getSelectionModel().clearSelection();
             issueDatePicker.setValue(LocalDate.now());
             dueDatePicker.setValue(LocalDate.now().plusDays(14));
-            bookComboBox.setItems(FXCollections.observableArrayList(new BookDAO().getAllBooks()));
-            memberComboBox.setItems(FXCollections.observableArrayList(new MemberDAO().getAllMembers()));
+            bookComboBox.setItems(FXCollections.observableArrayList(new BookDTO().getAllBooks()));
+            memberComboBox.setItems(FXCollections.observableArrayList(new MemberDTO().getAllMembers()));
             loadIssuedBooks(issuedBooksTable);
         } else {
             showAlert(
@@ -100,13 +100,13 @@ public class IssueReturnController {
 
     }
 
-    public void loadIssuedBooks(TableView<BookIssue> issuedBooksTable) {
-        issuedBooksTable.setItems(FXCollections.observableArrayList(bookIssueDAO.getAllIssues()));
+    public void loadIssuedBooks(TableView<BookIssueEntity> issuedBooksTable) {
+        issuedBooksTable.setItems(FXCollections.observableArrayList(bookIssueDTO.getAllIssues()));
     }
 
-    public void returnBook(TableView<BookIssue> issuedBooksTable, ComboBox<Book> bookComboBox, ComboBox<Member> memberComboBox) {
+    public void returnBook(TableView<BookIssueEntity> issuedBooksTable, ComboBox<BookEntity> bookComboBox, ComboBox<MemberEntity> memberComboBox) {
 
-        BookIssue selectedIssue = issuedBooksTable.getSelectionModel().getSelectedItem();
+        BookIssueEntity selectedIssue = issuedBooksTable.getSelectionModel().getSelectedItem();
 
         if (selectedIssue == null) {
             showAlert(
@@ -126,7 +126,7 @@ public class IssueReturnController {
             return;
         }
 
-        if (bookIssueDAO.returnBook(selectedIssue.getIssueId())) {
+        if (bookIssueDTO.returnBook(selectedIssue.getIssueId())) {
 
             showAlert(
                     Alert.AlertType.CONFIRMATION,
@@ -135,8 +135,8 @@ public class IssueReturnController {
             );
 
             loadIssuedBooks(issuedBooksTable);
-            bookComboBox.setItems(FXCollections.observableArrayList(new BookDAO().getAllBooks()));
-            memberComboBox.setItems(FXCollections.observableArrayList(new MemberDAO().getAllMembers()));
+            bookComboBox.setItems(FXCollections.observableArrayList(new BookDTO().getAllBooks()));
+            memberComboBox.setItems(FXCollections.observableArrayList(new MemberDTO().getAllMembers()));
         } else {
 
             showAlert(
@@ -147,10 +147,10 @@ public class IssueReturnController {
         }
     }
 
-    public void showOverdueBooks(TableView<BookIssue> issuedBooksTable) {
-        var overdueIssues = bookIssueDAO.getAllIssues()
+    public void showOverdueBooks(TableView<BookIssueEntity> issuedBooksTable) {
+        var overdueIssues = bookIssueDTO.getAllIssues()
                 .stream()
-                .filter(BookIssue::isOverdue)
+                .filter(BookIssueEntity::isOverdue)
                 .toList();
 
         issuedBooksTable.setItems(
@@ -161,19 +161,19 @@ public class IssueReturnController {
     public void updateStatCards(Label totalIssuedLabel, Label borrowedLabel, Label returnedLabel, Label overdueLabel) {
 
         totalIssuedLabel.setText(
-                String.valueOf(bookIssueDAO.getTotalIssuedBooks())
+                String.valueOf(bookIssueDTO.getTotalIssuedBooks())
         );
 
         borrowedLabel.setText(
-                String.valueOf(bookIssueDAO.getCurrentlyBorrowedBooks())
+                String.valueOf(bookIssueDTO.getCurrentlyBorrowedBooks())
         );
 
         overdueLabel.setText(
-                String.valueOf(bookIssueDAO.getOverdueBooks())
+                String.valueOf(bookIssueDTO.getOverdueBooks())
         );
 
         returnedLabel.setText(
-                String.valueOf(bookIssueDAO.getReturnedBooks())
+                String.valueOf(bookIssueDTO.getReturnedBooks())
         );
     }
 }

@@ -119,7 +119,7 @@
                             text="0"
                            styleClass="stat-value"/>
 
-                    <Label text="Different book categories"
+                    <Label text="Different bookEntity categories"
                            styleClass="stat-description"/>
 
                 </VBox>

@@ -1,10 +1,10 @@
-package edu.icet.model;
+package edu.icet.model.entity;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "books")
-public class Book {
+public class BookEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +17,10 @@ public class Book {
     private String category;
     private int quantity;
 
-    public Book() {
+    public BookEntity() {
     }
 
-    public Book(String isbn, String title, String author, String category, int quantity) {
+    public BookEntity(String isbn, String title, String author, String category, int quantity) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;

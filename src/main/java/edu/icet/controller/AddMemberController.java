@@ -1,14 +1,14 @@
 package edu.icet.controller;
 
-import edu.icet.dao.MemberDAO;
-import edu.icet.model.Member;
+import edu.icet.model.dto.MemberDTO;
+import edu.icet.model.entity.MemberEntity;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 public class AddMemberController {
 
-    private final MemberDAO memberDAO = new MemberDAO();
-    private Member memberToEdit;
+    private final MemberDTO memberDTO = new MemberDTO();
+    private MemberEntity memberEntityToEdit;
 
     public void closeAddMemberForm(TextField nameField) {
         Stage addMemberWindow = (Stage) nameField.getScene().getWindow();
@@ -42,10 +42,10 @@ public class AddMemberController {
             return;
         }
 
-        if (memberToEdit == null) {
-            Member member = new Member(name, email, phone, address);
+        if (memberEntityToEdit == null) {
+            MemberEntity memberEntity = new MemberEntity(name, email, phone, address);
 
-            if (memberDAO.saveMember(member)) {
+            if (memberDTO.saveMember(memberEntity)) {
                 showAlert(
                         Alert.AlertType.INFORMATION,
                         "Success",
@@ -60,7 +60,7 @@ public class AddMemberController {
                 return;
             }
         } else {
-            if (!memberDAO.updateMember(String.valueOf(memberToEdit.getMemberId()), new Member(name, email, phone, address))) {
+            if (!memberDTO.updateMember(String.valueOf(memberEntityToEdit.getMemberId()), new MemberEntity(name, email, phone, address))) {
                 showAlert(
                         Alert.AlertType.ERROR,
                         "Database Error",
@@ -82,17 +82,17 @@ public class AddMemberController {
         alert.showAndWait();
     }
 
-    public void setEditedMemberInfoToEditMemberForm(Member selectedMember, TextField nameField,
+    public void setEditedMemberInfoToEditMemberForm(MemberEntity selectedMemberEntity, TextField nameField,
                                                     TextField emailField, TextField phoneField,
                                                     TextArea addressField, Label titleLabel,
                                                     Label subTitleLabel, Button btnSave) {
 
-        this.memberToEdit = selectedMember;
+        this.memberEntityToEdit = selectedMemberEntity;
 
-        nameField.setText(selectedMember.getName());
-        emailField.setText(selectedMember.getEmail());
-        phoneField.setText(selectedMember.getPhone());
-        addressField.setText(selectedMember.getAddress());
+        nameField.setText(selectedMemberEntity.getName());
+        emailField.setText(selectedMemberEntity.getEmail());
+        phoneField.setText(selectedMemberEntity.getPhone());
+        addressField.setText(selectedMemberEntity.getAddress());
 
         titleLabel.setText("Update Member Form");
         subTitleLabel.setText("Enter the member details below to edit member.");
