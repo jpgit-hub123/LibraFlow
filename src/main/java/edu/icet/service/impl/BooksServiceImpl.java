@@ -1,7 +1,6 @@
 package edu.icet.service.impl;
 
 import edu.icet.controller.AddBookPageController;
-import edu.icet.model.dto.BookDTO;
 import edu.icet.model.entity.BookEntity;
 import edu.icet.repository.impl.BooksRepositoryImpl;
 import edu.icet.service.BooksService;
@@ -77,7 +76,7 @@ public class BooksServiceImpl implements BooksService {
             Parent form = loader.load();
 
             AddBookPageController addBookPageController = loader.getController();
-            addBookPageController.addBookController.setExistingBooks(booksList);
+            addBookPageController.addBookService.setExistingBooks(booksList);
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("LibraFlow | Add New Book");
@@ -89,7 +88,7 @@ public class BooksServiceImpl implements BooksService {
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
 
-            BookEntity newBookEntity = addBookPageController.addBookController.getNewBook();
+            BookEntity newBookEntity = addBookPageController.addBookService.getNewBook();
 
             if (newBookEntity != null) {
                 booksList.add(newBookEntity);
@@ -119,7 +118,7 @@ public class BooksServiceImpl implements BooksService {
             Parent form = loader.load();
 
             AddBookPageController addBookPageController = loader.getController();
-            addBookPageController.addBookController.setExistingBooks(booksList);
+            addBookPageController.addBookService.setExistingBooks(booksList);
             addBookPageController.toEditBook(selectedBookEntity);
 
             Stage dialogStage = new Stage();

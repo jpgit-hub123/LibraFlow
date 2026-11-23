@@ -1,7 +1,10 @@
-package edu.icet.controller;
+package edu.icet.service.impl;
 
 import edu.icet.model.dto.BookDTO;
 import edu.icet.model.entity.BookEntity;
+import edu.icet.repository.AddBookRepository;
+import edu.icet.repository.impl.AddBookRepositoryImpl;
+import edu.icet.service.AddBookService;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -9,12 +12,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class AddBookController {
+public class AddBookServiceImpl implements AddBookService {
 
-    private final BookDTO bookDTO = new BookDTO();
     private ObservableList<BookEntity> existingBookEntities;
     private BookEntity newBookEntity;
     private BookEntity bookEntityToEdit;
+    private final AddBookRepository addBookRepository = new AddBookRepositoryImpl();
 
     public void validateBookDetails(TextField isbnField, TextField titleField, TextField authorField,
                                     TextField categoryField, TextField quantityField) {
@@ -73,7 +76,7 @@ public class AddBookController {
             }
             BookEntity bookEntity = new BookEntity(isbn, title, author, category, quantity);
 
-            if (bookDTO.saveBook(bookEntity)) {
+            if (addBookRepository.saveBook(bookEntity)) {
                 newBookEntity = bookEntity;
             } else {
                 showAlert(
@@ -93,7 +96,7 @@ public class AddBookController {
 
             BookEntity updatedBookEntity = new BookEntity(isbn, title, author, category, quantity);
 
-            if (bookDTO.updateBook(originalIsbnOfEditedBook, updatedBookEntity)) {
+            if (addBookRepository.updateBook(originalIsbnOfEditedBook, updatedBookEntity)) {
                 bookEntityToEdit.setIsbn(isbn);
                 bookEntityToEdit.setTitle(title);
                 bookEntityToEdit.setAuthor(author);
