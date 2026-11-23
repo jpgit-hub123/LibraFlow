@@ -5,6 +5,8 @@ import edu.icet.model.dto.MemberDTO;
 import edu.icet.model.entity.BookEntity;
 import edu.icet.model.entity.BookIssueEntity;
 import edu.icet.model.entity.MemberEntity;
+import edu.icet.service.IssueReturnService;
+import edu.icet.service.impl.IssueReturnServiceImpl;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -67,7 +69,7 @@ public class IssueReturnPageController {
     private Label returnedLabel;
 
     @FXML
-    public IssueReturnController issueReturnController = new IssueReturnController();
+    public IssueReturnService issueReturnService = new IssueReturnServiceImpl();
 
     @FXML
     public void initialize() {
@@ -134,49 +136,49 @@ public class IssueReturnPageController {
                 ).asObject()
         );
 
-        issueReturnController.loadIssuedBooks(issuedBooksTable);
-        issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
+        issueReturnService.loadIssuedBooks(issuedBooksTable);
+        issueReturnService.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
     }
 
     @FXML
     public void showDashboardOnAction() {
-        issueReturnController.loadPage("/edu/icet/view/Dashboard.fxml", memberComboBox);
+        issueReturnService.loadPage("/edu/icet/view/Dashboard.fxml", memberComboBox);
     }
 
     @FXML
     public void showBooksOnAction() {
-        issueReturnController.loadPage("/edu/icet/view/Books.fxml", memberComboBox);
+        issueReturnService.loadPage("/edu/icet/view/Books.fxml", memberComboBox);
     }
 
     @FXML
     public void showMembersOnAction() {
-        issueReturnController.loadPage("/edu/icet/view/Members.fxml", memberComboBox);
+        issueReturnService.loadPage("/edu/icet/view/Members.fxml", memberComboBox);
     }
 
     @FXML
     public void logoutOnAction() {
-        issueReturnController.loadPage("/edu/icet/view/LoginPage.fxml", memberComboBox);
+        issueReturnService.loadPage("/edu/icet/view/LoginPage.fxml", memberComboBox);
     }
 
     @FXML
     public void issueBookOnAction() {
-        issueReturnController.issuedTheBook(memberComboBox, bookComboBox, issueDatePicker, dueDatePicker, issuedBooksTable);
-        issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
+        issueReturnService.issuedTheBook(memberComboBox, bookComboBox, issueDatePicker, dueDatePicker, issuedBooksTable);
+        issueReturnService.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
     }
 
     @FXML
     public void returnBookOnAction() {
-        issueReturnController.returnBook(issuedBooksTable, bookComboBox, memberComboBox);
-        issueReturnController.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
+        issueReturnService.returnBook(issuedBooksTable, bookComboBox, memberComboBox);
+        issueReturnService.updateStatCards(totalIssuedLabel, borrowedLabel, returnedLabel, overdueLabel);
     }
 
     @FXML
     public void showOverdueBooksOnAction() {
-        issueReturnController.showOverdueBooks(issuedBooksTable);
+        issueReturnService.showOverdueBooks(issuedBooksTable);
     }
 
     @FXML
     public void showAllIssuesOnAction() {
-        issueReturnController.loadIssuedBooks(issuedBooksTable);
+        issueReturnService.loadIssuedBooks(issuedBooksTable);
     }
 }

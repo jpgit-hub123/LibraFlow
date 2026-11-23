@@ -62,7 +62,7 @@ public class BookIssueDTO {
 
     public int getTotalIssuedBooks() {
         Long totalIssuedBooksResult = session
-                .createQuery("SELECT COUNT(bi) FROM BookIssueEntity bi", Long.class)
+                .createQuery("SELECT COUNT(bie) FROM BookIssueEntity bie", Long.class)
                 .getSingleResult();
         return totalIssuedBooksResult.intValue();
     }
