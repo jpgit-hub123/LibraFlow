@@ -11,13 +11,6 @@ public class MemberDTO {
 
     Session session = DBConnection.getSession();
 
-    public int getTotalMembers() {
-        Long totalMembersResult = session
-                .createQuery("SELECT COUNT(m) FROM MemberEntity m", Long.class)
-                .getSingleResult();
-        return totalMembersResult.intValue();
-    }
-
     public List<MemberEntity> getAllMembers() {
         return session
                 .createQuery("FROM MemberEntity", MemberEntity.class)

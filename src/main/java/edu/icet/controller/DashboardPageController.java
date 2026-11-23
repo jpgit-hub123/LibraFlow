@@ -1,6 +1,8 @@
 package edu.icet.controller;
 
 import edu.icet.model.entity.BookIssueEntity;
+import edu.icet.service.DashboardService;
+import edu.icet.service.impl.DashboardServiceImpl;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -48,44 +50,45 @@ public class DashboardPageController {
     private TableColumn<BookIssueEntity, String> transactionStatusColumn;
 
     @FXML
-    public DashboardController dashboardController = new DashboardController();
+    public final DashboardService dashboardService = new DashboardServiceImpl();
 
     @FXML
     private void showDashboardOnAction() {
-        dashboardController.loadPage("/edu/icet/view/Dashboard.fxml", rootPane);
+        dashboardService.loadPage("/edu/icet/view/Dashboard.fxml", rootPane);
     }
 
     @FXML
     private void showBooksOnAction() {
-        dashboardController.loadPage("/edu/icet/view/Books.fxml", rootPane);
+        dashboardService.loadPage("/edu/icet/view/Books.fxml", rootPane);
     }
 
     @FXML
     public void showMembersOnAction() {
-        dashboardController.loadPage("/edu/icet/view/Members.fxml", rootPane);
+        dashboardService.loadPage("/edu/icet/view/Members.fxml", rootPane);
     }
 
     @FXML
     public void showIssueReturnOnAction() {
-        dashboardController.loadPage("/edu/icet/view/IssueReturn.fxml", rootPane);
+        dashboardService.loadPage("/edu/icet/view/IssueReturn.fxml", rootPane);
     }
 
+    @FXML
     public void logoutOnAction() {
-        dashboardController.loadPage("/edu/icet/view/LoginPage.fxml", rootPane);
+        dashboardService.loadPage("/edu/icet/view/LoginPage.fxml", rootPane);
     }
 
     @FXML
     public void initialize() {
-        int totalBooks = dashboardController.getTotalBooksCount();
+        int totalBooks = dashboardService.getTotalBooksCount();
         totalBooksLabel.setText(String.valueOf(totalBooks));
 
-        int totalQuantity = dashboardController.getTotalQuantityCount();
+        int totalQuantity = dashboardService.getTotalQuantityCount();
         totalQuantityLabel.setText(String.valueOf(totalQuantity));
 
-        int totalCategories = dashboardController.getTotalCategories();
+        int totalCategories = dashboardService.getTotalCategories();
         totalCategoryLabel.setText(String.valueOf(totalCategories));
 
-        int totalMembers = dashboardController.getTotalMemberCount();
+        int totalMembers = dashboardService.getTotalMemberCount();
         totalMembersLabel.setText(String.valueOf(totalMembers));
 
         recentTransactionsTable.setColumnResizePolicy(
@@ -130,6 +133,6 @@ public class DashboardPageController {
             return new SimpleStringProperty(status);
         });
 
-        dashboardController.loadRecentTransactions(recentTransactionsTable);
+        dashboardService.loadRecentTransactions(recentTransactionsTable);
     }
 }

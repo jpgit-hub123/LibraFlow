@@ -73,26 +73,7 @@ public class BookDTO {
                 .isEmpty();
     }
 
-    public int getTotalBooks() {
-        Long totalBooksResult = session
-                .createQuery("SELECT COUNT(b) FROM BookEntity b", Long.class)
-                .getSingleResult();
-        return totalBooksResult.intValue();
-    }
 
-    public int getTotalQuantity() {
-        Long totalBookQuantityResult = session
-                .createQuery("SELECT SUM(b.quantity) FROM BookEntity b", Long.class)
-                .getSingleResult();
-        return totalBookQuantityResult.intValue();
-    }
-
-    public int getTotalCategories() {
-        Long totalCategoryResult = session
-                .createQuery("SELECT COUNT(DISTINCT b.category) FROM BookEntity b", Long.class)
-                .getSingleResult();
-        return totalCategoryResult.intValue();
-    }
 
 }
 
