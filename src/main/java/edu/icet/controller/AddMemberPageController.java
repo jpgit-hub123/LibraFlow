@@ -1,6 +1,8 @@
 package edu.icet.controller;
 
 import edu.icet.model.entity.MemberEntity;
+import edu.icet.service.AddMemberService;
+import edu.icet.service.impl.AddMemberServiceImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,7 +24,7 @@ public class AddMemberPageController {
     public TextArea addressField;
 
     @FXML
-    public AddMemberController addMemberController = new AddMemberController();
+    public final AddMemberService addMemberService = new AddMemberServiceImpl();
 
     @FXML
     public Label titleLabel;
@@ -35,18 +37,17 @@ public class AddMemberPageController {
 
     @FXML
     public void closeFormOnAction() {
-        addMemberController.closeAddMemberForm(nameField);
+        addMemberService.closeAddMemberForm(nameField);
     }
 
     @FXML
     public void saveMemberOnAction() {
-        addMemberController.registerNewMember(nameField, emailField, phoneField, addressField);
+        addMemberService.registerNewMember(nameField, emailField, phoneField, addressField);
     }
 
     @FXML
     public void selectedMemberToEdit(MemberEntity selectedMemberEntity) {
-        addMemberController.setEditedMemberInfoToEditMemberForm(selectedMemberEntity, nameField, emailField, phoneField,
+        addMemberService.setEditedMemberInfoToEditMemberForm(selectedMemberEntity, nameField, emailField, phoneField,
                 addressField, titleLabel, subTitleLabel, btnSave);
     }
-
 }

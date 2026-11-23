@@ -1,20 +1,24 @@
-package edu.icet.controller;
+package edu.icet.service.impl;
 
-import edu.icet.model.dto.MemberDTO;
 import edu.icet.model.entity.MemberEntity;
+import edu.icet.repository.AddMemberRepository;
+import edu.icet.repository.impl.AddMemberRepositoryImpl;
+import edu.icet.service.AddMemberService;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-public class AddMemberController {
+public class AddMemberServiceImpl implements AddMemberService {
 
-    private final MemberDTO memberDTO = new MemberDTO();
     private MemberEntity memberEntityToEdit;
+    private final AddMemberRepository addMemberRepository = new AddMemberRepositoryImpl();
 
+    @Override
     public void closeAddMemberForm(TextField nameField) {
         Stage addMemberWindow = (Stage) nameField.getScene().getWindow();
         addMemberWindow.close();
     }
 
+    @Override
     public void registerNewMember(TextField nameField, TextField emailField, TextField phoneField,
                                   TextArea addressField) {
 
@@ -44,8 +48,7 @@ public class AddMemberController {
 
         if (memberEntityToEdit == null) {
             MemberEntity memberEntity = new MemberEntity(name, email, phone, address);
-
-            if (memberDTO.saveMember(memberEntity)) {
+            if (addMemberRepository.saveMember(memberEntity)) {
                 showAlert(
                         Alert.AlertType.INFORMATION,
                         "Success",
@@ -60,7 +63,7 @@ public class AddMemberController {
                 return;
             }
         } else {
-            if (!memberDTO.updateMember(String.valueOf(memberEntityToEdit.getMemberId()), new MemberEntity(name, email, phone, address))) {
+            if (!addMemberRepository.updateMember(String.valueOf(memberEntityToEdit.getMemberId()), new MemberEntity(name, email, phone, address))) {
                 showAlert(
                         Alert.AlertType.ERROR,
                         "Database Error",
@@ -74,7 +77,8 @@ public class AddMemberController {
 
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
+    @Override
+    public void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -82,6 +86,7 @@ public class AddMemberController {
         alert.showAndWait();
     }
 
+    @Override
     public void setEditedMemberInfoToEditMemberForm(MemberEntity selectedMemberEntity, TextField nameField,
                                                     TextField emailField, TextField phoneField,
                                                     TextArea addressField, Label titleLabel,
