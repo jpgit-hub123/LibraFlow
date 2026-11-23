@@ -1,7 +1,10 @@
-package edu.icet.controller;
+package edu.icet.service.impl;
 
-import edu.icet.model.dto.MemberDTO;
+import edu.icet.controller.AddMemberPageController;
 import edu.icet.model.entity.MemberEntity;
+import edu.icet.repository.MembersRepository;
+import edu.icet.repository.impl.MembersRepositoryImpl;
+import edu.icet.service.MembersService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -17,10 +20,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MembersController {
+public class MembersServiceImpl implements MembersService {
 
-    MemberDTO memberDTO = new MemberDTO();
+    private final MembersRepository membersRepository = new MembersRepositoryImpl();
 
+    @Override
     public void setMembersDataIntoTable(TextField searchField, TableView<MemberEntity> membersTable,
                                         TableColumn<MemberEntity, Number> memberIdColumn,
                                         TableColumn<MemberEntity, String> nameColumn,
@@ -37,10 +41,12 @@ public class MembersController {
         loadMembers(searchField, membersTable);
     }
 
+    @Override
     public void loadMembers(TextField searchField, TableView<MemberEntity> membersTable) {
         getSearchMember(searchField, membersTable);
     }
 
+    @Override
     public void loadPage(String fxmlFile, TextField searchField) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -51,6 +57,7 @@ public class MembersController {
         }
     }
 
+    @Override
     public void loadForm(TextField searchField, TableView<MemberEntity> membersTable) {
 
         try {
@@ -69,6 +76,7 @@ public class MembersController {
         }
     }
 
+    @Override
     public void editMembersInfo(TextField searchField, TableView<MemberEntity> membersTable) {
         MemberEntity selectedMemberEntity = membersTable.getSelectionModel().getSelectedItem();
         if (selectedMemberEntity == null) {
@@ -96,7 +104,8 @@ public class MembersController {
         }
     }
 
-    private void showAlert(Alert.AlertType alertType, String info, String message) {
+    @Override
+    public void showAlert(Alert.AlertType alertType, String info, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(info);
         alert.setHeaderText(null);
@@ -104,6 +113,7 @@ public class MembersController {
         alert.showAndWait();
     }
 
+    @Override
     public void removeMember(TextField searchField, TableView<MemberEntity> membersTable) {
         MemberEntity selectedMemberEntity = membersTable.getSelectionModel().getSelectedItem();
         if (selectedMemberEntity == null) {
@@ -115,7 +125,7 @@ public class MembersController {
             return;
         }
 
-        if (memberDTO.hasIssueHistory(selectedMemberEntity.getMemberId())) {
+        if (membersRepository.hasIssueHistory(selectedMemberEntity.getMemberId())) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "Cannot Delete Member",
@@ -130,7 +140,7 @@ public class MembersController {
         confirmation.setContentText("Are you sure you want to delete this Member?");
         confirmation.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                if (memberDTO.deleteMember(String.valueOf(selectedMemberEntity.getMemberId()))) {
+                if (membersRepository.deleteMember(String.valueOf(selectedMemberEntity.getMemberId()))) {
                     showAlert(
                             Alert.AlertType.INFORMATION,
                             "Member Deleted",
@@ -148,10 +158,11 @@ public class MembersController {
         });
     }
 
+    @Override
     public void getSearchMember(TextField searchField, TableView<MemberEntity> membersTable) {
         final String searchData = searchField.getText().trim();
         ObservableList<MemberEntity> filteredMemberEntityList = FXCollections.observableArrayList();
-        ObservableList<MemberEntity> membersList = FXCollections.observableArrayList(memberDTO.getAllMembers());
+        ObservableList<MemberEntity> membersList = FXCollections.observableArrayList(membersRepository.getAllMembers());
         for (MemberEntity memberEntity : membersList) {
             if (memberEntity.getName().toLowerCase().contains(searchData)
                 || memberEntity.getEmail().toLowerCase().contains(searchData)

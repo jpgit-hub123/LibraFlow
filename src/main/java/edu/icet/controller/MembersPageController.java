@@ -1,6 +1,8 @@
 package edu.icet.controller;
 
 import edu.icet.model.entity.MemberEntity;
+import edu.icet.service.MembersService;
+import edu.icet.service.impl.MembersServiceImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -29,51 +31,51 @@ public class MembersPageController {
     @FXML
     private TableColumn<MemberEntity, String> addressColumn;
 
-    public MembersController membersController = new MembersController();
+    @FXML
+    public MembersService membersServiceImpl = new MembersServiceImpl();
 
     @FXML
     public void initialize() {
-        membersController.setMembersDataIntoTable(searchField, membersTable, memberIdColumn, nameColumn, emailColumn, phoneColumn, addressColumn);
+        membersServiceImpl.setMembersDataIntoTable(searchField, membersTable, memberIdColumn, nameColumn, emailColumn, phoneColumn, addressColumn);
     }
 
     @FXML
     private void searchMembers() {
-        membersController.getSearchMember(searchField, membersTable);
+        membersServiceImpl.getSearchMember(searchField, membersTable);
     }
 
     @FXML
     private void addMemberOnAction() {
-        membersController.loadForm(searchField, membersTable);
+        membersServiceImpl.loadForm(searchField, membersTable);
     }
 
     @FXML
     private void editMemberOnAction() {
-        membersController.editMembersInfo(searchField, membersTable);
+        membersServiceImpl.editMembersInfo(searchField, membersTable);
     }
 
     @FXML
     private void deleteMemberOnAction() {
-        membersController.removeMember(searchField, membersTable);
+        membersServiceImpl.removeMember(searchField, membersTable);
     }
 
     @FXML
     public void showDashboardOnAction() {
-        membersController.loadPage("/edu/icet/view/Dashboard.fxml", searchField);
+        membersServiceImpl.loadPage("/edu/icet/view/Dashboard.fxml", searchField);
     }
 
     @FXML
     public void showBooksOnAction() {
-        membersController.loadPage("/edu/icet/view/Books.fxml", searchField);
+        membersServiceImpl.loadPage("/edu/icet/view/Books.fxml", searchField);
     }
 
     @FXML
     public void showIssueReturnOnAction() {
-        membersController.loadPage("/edu/icet/view/IssueReturn.fxml", searchField);
+        membersServiceImpl.loadPage("/edu/icet/view/IssueReturn.fxml", searchField);
     }
 
     @FXML
     public void logoutOnAction() {
-        membersController.loadPage("/edu/icet/view/LoginPage.fxml", searchField);
+        membersServiceImpl.loadPage("/edu/icet/view/LoginPage.fxml", searchField);
     }
-
 }
