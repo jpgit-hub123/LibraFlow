@@ -8,9 +8,8 @@ import org.hibernate.Transaction;
 
 public class AddMemberRepositoryImpl implements AddMemberRepository {
 
-    private final Session session = DBConnection.getSession();
-
     public boolean saveMember(MemberEntity memberEntity) {
+        Session session = DBConnection.getSession();
         try {
             Transaction transaction = session.beginTransaction();
             session.persist(memberEntity);
@@ -22,6 +21,7 @@ public class AddMemberRepositoryImpl implements AddMemberRepository {
     }
 
     public boolean updateMember(String memberId, MemberEntity memberEntity) {
+        Session session = DBConnection.getSession();
         Transaction transaction = session.beginTransaction();
         MemberEntity existingMemberEntity = session.find(MemberEntity.class, memberId);
         if (existingMemberEntity == null) {

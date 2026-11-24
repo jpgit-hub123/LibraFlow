@@ -90,7 +90,7 @@ public class IssueReturnPageController {
             }
         });
 
-        bookComboBox.setItems(FXCollections.observableArrayList(new BookDTO().getAllBooks()));
+        bookComboBox.setItems(FXCollections.observableArrayList(issueReturnService.getAllBooks()));
         bookComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(BookEntity bookEntity) {

@@ -1,6 +1,6 @@
 package edu.icet.controller;
 
-import edu.icet.model.entity.BookEntity;
+import edu.icet.model.dto.BookDTO;
 import edu.icet.service.AddBookService;
 import edu.icet.service.impl.AddBookServiceImpl;
 import javafx.fxml.FXML;
@@ -33,7 +33,7 @@ public class AddBookPageController {
     private TextField quantityField;
 
     @FXML
-    private final AddBookService addBookService = new AddBookServiceImpl();
+    public final AddBookService addBookService = new AddBookServiceImpl();
 
     @FXML
     private void saveBookOnAction() {
@@ -73,8 +73,8 @@ public class AddBookPageController {
     }
 
     @FXML
-    public void toEditBook(BookEntity bookEntity){
-        addBookService.setBookToEdit(isbnField, titleField, authorField, categoryField, quantityField, bookEntity,
+    public void toEditBook(BookDTO bookDTO){
+        addBookService.setBookToEdit(isbnField, titleField, authorField, categoryField, quantityField, bookDTO,
                 saveButton, titleLabel);
     }
 }

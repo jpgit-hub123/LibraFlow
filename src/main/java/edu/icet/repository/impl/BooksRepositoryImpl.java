@@ -11,11 +11,9 @@ import java.util.List;
 
 public class BooksRepositoryImpl implements BooksRepository {
 
-    private final Session session = DBConnection.getSession();
-
     @Override
     public List<BookEntity> getAllBooks() {
-
+        Session session = DBConnection.getSession();
         return session
                 .createQuery("FROM BookEntity", BookEntity.class)
                 .getResultList();
@@ -23,30 +21,33 @@ public class BooksRepositoryImpl implements BooksRepository {
 
     @Override
     public boolean hasIssueHistory(Long bookId) {
-        return !session
-                .createQuery("FROM BookIssueEntity bi WHERE bi.BookEntity.bookId = :bookId", BookIssueEntity.class)
-                .setParameter("bookId", bookId)
-                .setMaxResults(1)
-                .getResultList()
-                .isEmpty();
+        try (Session session = DBConnection.getSession()) {
+            final Long bookIdCount = session
+                    .createQuery("SELECT COUNT(bie) FROM BookIssueEntity bie WHERE bie.bookEntity.bookId = :bookId", Long.class)
+                    .setParameter("bookId", bookId)
+                    .getSingleResult();
+            return bookIdCount > 0;
+        }
     }
 
     @Override
-    public boolean deleteBook(String isbn) {
-        try {
-            Transaction transaction = session.beginTransaction();
-            BookEntity bookEntity = session.createQuery(
-                            "FROM BookEntity b WHERE b.isbn = :isbn", BookEntity.class)
-                    .setParameter("isbn", isbn)
-                    .uniqueResult();
+    public boolean deleteBook(Long bookId) {
+        Transaction transaction = null;
+        try (Session session = DBConnection.getSession()) {
+            transaction = session.beginTransaction();
+            BookEntity bookEntity = session.find(BookEntity.class, bookId);
             if (bookEntity == null) {
+                transaction.rollback();
                 return false;
             }
             session.remove(bookEntity);
             transaction.commit();
             return true;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Failed to delete book", e);
         }
     }
 }

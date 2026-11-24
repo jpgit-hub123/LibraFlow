@@ -1,7 +1,7 @@
 package edu.icet.service.impl;
 
+import edu.icet.mapper.BookMapper;
 import edu.icet.model.dto.BookDTO;
-import edu.icet.model.entity.BookEntity;
 import edu.icet.repository.AddBookRepository;
 import edu.icet.repository.impl.AddBookRepositoryImpl;
 import edu.icet.service.AddBookService;
@@ -14,11 +14,13 @@ import javafx.stage.Stage;
 
 public class AddBookServiceImpl implements AddBookService {
 
-    private ObservableList<BookEntity> existingBookEntities;
-    private BookEntity newBookEntity;
-    private BookEntity bookEntityToEdit;
+    private ObservableList<BookDTO> existingBookDTOs;
+    private final BookMapper bookMapper = new BookMapper();
+    private BookDTO newBookDTO;
+    private BookDTO bookDtoToEdit;
     private final AddBookRepository addBookRepository = new AddBookRepositoryImpl();
 
+    @Override
     public void validateBookDetails(TextField isbnField, TextField titleField, TextField authorField,
                                     TextField categoryField, TextField quantityField) {
 
@@ -70,14 +72,14 @@ public class AddBookServiceImpl implements AddBookService {
             return;
         }
 
-        if (bookEntityToEdit == null) {
+        if (bookDtoToEdit == null) {
             if (isDuplicateIsbn(isbn)){
                 return;
             }
-            BookEntity bookEntity = new BookEntity(isbn, title, author, category, quantity);
+            BookDTO bookDTO = new BookDTO(isbn, title, author, category, quantity);
 
-            if (addBookRepository.saveBook(bookEntity)) {
-                newBookEntity = bookEntity;
+            if (addBookRepository.saveBook(bookMapper.toEntity(bookDTO))) {
+                newBookDTO = bookDTO;
             } else {
                 showAlert(
                         Alert.AlertType.ERROR,
@@ -88,20 +90,20 @@ public class AddBookServiceImpl implements AddBookService {
             }
         } else {
 
-            String originalIsbnOfEditedBook = bookEntityToEdit.getIsbn();
+            String originalIsbnOfEditedBook = bookDtoToEdit.getIsbn();
 
             if (isDuplicateIsbn(isbn)) {
                 return;
             }
 
-            BookEntity updatedBookEntity = new BookEntity(isbn, title, author, category, quantity);
+            BookDTO updatedBookDTO = new BookDTO(isbn, title, author, category, quantity);
 
-            if (addBookRepository.updateBook(originalIsbnOfEditedBook, updatedBookEntity)) {
-                bookEntityToEdit.setIsbn(isbn);
-                bookEntityToEdit.setTitle(title);
-                bookEntityToEdit.setAuthor(author);
-                bookEntityToEdit.setCategory(category);
-                bookEntityToEdit.setQuantity(quantity);
+            if (addBookRepository.updateBook(originalIsbnOfEditedBook, bookMapper.toEntity(updatedBookDTO))) {
+                bookDtoToEdit.setIsbn(isbn);
+                bookDtoToEdit.setTitle(title);
+                bookDtoToEdit.setAuthor(author);
+                bookDtoToEdit.setCategory(category);
+                bookDtoToEdit.setQuantity(quantity);
             } else {
                 showAlert(
                         Alert.AlertType.ERROR,
@@ -111,19 +113,19 @@ public class AddBookServiceImpl implements AddBookService {
                 return;
             }
         }
-
         Stage stage = (Stage) isbnField.getScene().getWindow();
         stage.close();
     }
 
-    private boolean isDuplicateIsbn(String isbn) {
-        for (BookEntity bookEntity : existingBookEntities) {
-            if (bookEntity.getIsbn().equalsIgnoreCase(isbn)) {
-                if (bookEntityToEdit != null && bookEntity.getIsbn().equalsIgnoreCase(bookEntityToEdit.getIsbn())) {
+    @Override
+    public boolean isDuplicateIsbn(String isbn) {
+        for (BookDTO bookDTO : existingBookDTOs) {
+            if (bookDTO.getIsbn().equalsIgnoreCase(isbn)) {
+                if (bookDtoToEdit != null && bookDTO.getIsbn().equalsIgnoreCase(bookDtoToEdit.getIsbn())) {
                     continue;
                 }
             }
-            if (bookEntity.getIsbn().equalsIgnoreCase(isbn)) {
+            if (bookDTO.getIsbn().equalsIgnoreCase(isbn)) {
                 showAlert(
                         Alert.AlertType.WARNING,
                         "Duplicate ISBN",
@@ -135,7 +137,8 @@ public class AddBookServiceImpl implements AddBookService {
         return false;
     }
 
-    private void showAlert(Alert.AlertType alertType, String info, String message) {
+    @Override
+    public void showAlert(Alert.AlertType alertType, String info, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(info);
         alert.setHeaderText(null);
@@ -143,30 +146,34 @@ public class AddBookServiceImpl implements AddBookService {
         alert.showAndWait();
     }
 
-    public BookEntity getNewBook() {
-        return newBookEntity;
+    @Override
+    public BookDTO getNewBook() {
+        return newBookDTO;
     }
 
+    @Override
     public void closedTheAddBookForm(TextField isbnField) {
         Stage addBookWindow = (Stage) isbnField.getScene().getWindow();
         addBookWindow.close();
     }
 
-    public void setExistingBooks(ObservableList<BookEntity> booksList) {
-        this.existingBookEntities = booksList;
+    @Override
+    public void setExistingBooks(ObservableList<BookDTO> booksList) {
+        this.existingBookDTOs = booksList;
     }
 
+    @Override
     public void setBookToEdit(TextField isbnField, TextField titleField, TextField authorField,
-                              TextField categoryField, TextField quantityField, BookEntity bookEntity,
+                              TextField categoryField, TextField quantityField, BookDTO bookDTO,
                               Button saveButton, Label titleLabel) {
 
-        this.bookEntityToEdit = bookEntity;
+        this.bookDtoToEdit = bookDTO;
 
-        isbnField.setText(bookEntity.getIsbn());
-        titleField.setText(bookEntity.getTitle());
-        authorField.setText(bookEntity.getAuthor());
-        categoryField.setText(bookEntity.getCategory());
-        quantityField.setText(String.valueOf(bookEntity.getQuantity()));
+        isbnField.setText(bookDTO.getIsbn());
+        titleField.setText(bookDTO.getTitle());
+        authorField.setText(bookDTO.getAuthor());
+        categoryField.setText(bookDTO.getCategory());
+        quantityField.setText(String.valueOf(bookDTO.getQuantity()));
 
         saveButton.setText("Update");
         titleLabel.setText("Update Book");

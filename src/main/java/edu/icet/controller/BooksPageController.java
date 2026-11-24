@@ -1,6 +1,7 @@
 package edu.icet.controller;
 
-import edu.icet.model.entity.BookEntity;
+import edu.icet.model.dto.BookDTO;
+import edu.icet.service.BooksService;
 import edu.icet.service.impl.BooksServiceImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -13,25 +14,25 @@ public class BooksPageController {
     private TextField searchField;
 
     @FXML
-    private TableView<BookEntity> booksTable;
+    private TableView<BookDTO> booksTable;
 
     @FXML
-    private TableColumn<BookEntity, String> isbnColumn;
+    private TableColumn<BookDTO, String> isbnColumn;
 
     @FXML
-    private TableColumn<BookEntity, String> titleColumn;
+    private TableColumn<BookDTO, String> titleColumn;
 
     @FXML
-    private TableColumn<BookEntity, String> authorColumn;
+    private TableColumn<BookDTO, String> authorColumn;
 
     @FXML
-    private TableColumn<BookEntity, String> categoryColumn;
+    private TableColumn<BookDTO, String> categoryColumn;
 
     @FXML
-    private TableColumn<BookEntity, Integer> quantityColumn;
+    private TableColumn<BookDTO, Integer> quantityColumn;
 
     @FXML
-    private final BooksServiceImpl booksServiceImpl = new BooksServiceImpl();
+    private final BooksService booksServiceImpl = new BooksServiceImpl();
 
     @FXML
     private void showDashboardOnAction() {

@@ -157,6 +157,11 @@ public class IssueReturnServiceImpl implements IssueReturnService {
         );
     }
 
+    @Override
+    public List<BookEntity> getAllBooks() {
+        return issueReturnRepository.getAllBooks();
+    }
+
     public void updateStatCards(Label totalIssuedLabel, Label borrowedLabel, Label returnedLabel, Label overdueLabel) {
 
         totalIssuedLabel.setText(

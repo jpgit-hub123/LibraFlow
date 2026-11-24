@@ -12,9 +12,13 @@ public class BookEntity {
     private Long bookId;
     @Column(name = "isbn", length = 20, nullable = false, unique = true)
     private String isbn;
+    @Column(name = "title")
     private String title;
+    @Column(name = "author")
     private String author;
+    @Column(name = "category")
     private String category;
+    @Column(name = "quantity")
     private int quantity;
 
     public BookEntity() {
@@ -30,10 +34,6 @@ public class BookEntity {
 
     public Long getBookId() {
         return bookId;
-    }
-
-    public void setBookId(Long bookId) {
-        this.bookId = bookId;
     }
 
     public String getIsbn() {

@@ -8,9 +8,8 @@ import org.hibernate.Transaction;
 
 public class AddBookRepositoryImpl implements AddBookRepository {
 
-    private final Session session = DBConnection.getSession();
-
     public boolean saveBook(BookEntity bookEntity) {
+        Session session = DBConnection.getSession();
         try {
             Transaction transaction = session.beginTransaction();
             session.persist(bookEntity);
@@ -22,6 +21,7 @@ public class AddBookRepositoryImpl implements AddBookRepository {
     }
 
     public boolean updateBook(String originalIsbnOfEditedBook, BookEntity updatedBookEntity) {
+        Session session = DBConnection.getSession();
         Transaction transaction = session.beginTransaction();
         BookEntity existingBookEntity = session.createQuery(
                         "FROM BookEntity b WHERE b.isbn = :isbn", BookEntity.class)

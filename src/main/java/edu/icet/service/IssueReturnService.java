@@ -5,6 +5,8 @@ import edu.icet.model.entity.BookIssueEntity;
 import edu.icet.model.entity.MemberEntity;
 import javafx.scene.control.*;
 
+import java.util.List;
+
 public interface IssueReturnService {
 
 
@@ -21,5 +23,8 @@ public interface IssueReturnService {
     void returnBook(TableView<BookIssueEntity> issuedBooksTable, ComboBox<BookEntity> bookComboBox, ComboBox<MemberEntity> memberComboBox);
 
     void showOverdueBooks(TableView<BookIssueEntity> issuedBooksTable);
+
+    List<BookEntity> getAllBooks();
 }
+
 

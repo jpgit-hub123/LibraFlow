@@ -1,7 +1,9 @@
 package edu.icet.service.impl;
 
 import edu.icet.controller.AddBookPageController;
-import edu.icet.model.entity.BookEntity;
+import edu.icet.mapper.BookMapper;
+import edu.icet.model.dto.BookDTO;
+import edu.icet.repository.BooksRepository;
 import edu.icet.repository.impl.BooksRepositoryImpl;
 import edu.icet.service.BooksService;
 import javafx.collections.FXCollections;
@@ -18,12 +20,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class BooksServiceImpl implements BooksService {
 
-    private ObservableList<BookEntity> booksList;
-
-    private final BooksRepositoryImpl booksRepository = new BooksRepositoryImpl();
+    private ObservableList<BookDTO> booksList;
+    private final BookMapper bookMapper = new BookMapper();
+    private final BooksRepository booksRepository = new BooksRepositoryImpl();
 
     @Override
     public void loadPage(String fxmlFile, TextField searchField) {
@@ -37,9 +40,9 @@ public class BooksServiceImpl implements BooksService {
     }
 
     @Override
-    public void setBooksDataIntoTable(TableColumn<BookEntity, String> isbnColumn, TableColumn<BookEntity, String> titleColumn,
-                                      TableColumn<BookEntity, String> authorColumn, TableColumn<BookEntity, String> categoryColumn,
-                                      TableColumn<BookEntity, Integer> quantityColumn, TableView<BookEntity> booksTable) {
+    public void setBooksDataIntoTable(TableColumn<BookDTO, String> isbnColumn, TableColumn<BookDTO, String> titleColumn,
+                                      TableColumn<BookDTO, String> authorColumn, TableColumn<BookDTO, String> categoryColumn,
+                                      TableColumn<BookDTO, Integer> quantityColumn, TableView<BookDTO> booksTable) {
 
         isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -47,30 +50,31 @@ public class BooksServiceImpl implements BooksService {
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        booksList = FXCollections.observableArrayList(booksRepository.getAllBooks());
+        List<BookDTO> bookDTOList = booksRepository.getAllBooks().stream().map(bookMapper::toDTO).toList();
+        booksList = FXCollections.observableArrayList(bookDTOList);
         booksTable.setItems(booksList);
     }
 
     @Override
-    public void getRelatedBooks(TextField searchField, TableView<BookEntity> booksTable) {
+    public void getRelatedBooks(TextField searchField, TableView<BookDTO> booksTable) {
 
         String searchWord = searchField.getText().trim().toLowerCase();
-        ObservableList<BookEntity> filterBookEntities = FXCollections.observableArrayList();
+        ObservableList<BookDTO> filteredBookDTOs = FXCollections.observableArrayList();
 
-        for (BookEntity bookEntity : booksList) {
-            if (bookEntity.getIsbn().toLowerCase().contains(searchWord)
-                || bookEntity.getTitle().toLowerCase().contains(searchWord)
-                || bookEntity.getAuthor().toLowerCase().contains(searchWord)
-                || bookEntity.getCategory().toLowerCase().contains(searchWord)) {
+        for (BookDTO bookDTO : booksList) {
+            if (bookDTO.getIsbn().toLowerCase().contains(searchWord)
+                || bookDTO.getTitle().toLowerCase().contains(searchWord)
+                || bookDTO.getAuthor().toLowerCase().contains(searchWord)
+                || bookDTO.getCategory().toLowerCase().contains(searchWord)) {
 
-                filterBookEntities.add(bookEntity);
+                filteredBookDTOs.add(bookDTO);
             }
         }
-        booksTable.setItems(filterBookEntities);
+        booksTable.setItems(filteredBookDTOs);
     }
 
     @Override
-    public void loadForm(TextField searchField, TableView<BookEntity> booksTable) {
+    public void loadForm(TextField searchField, TableView<BookDTO> booksTable) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddBook.fxml"));
             Parent form = loader.load();
@@ -88,10 +92,10 @@ public class BooksServiceImpl implements BooksService {
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
 
-            BookEntity newBookEntity = addBookPageController.addBookService.getNewBook();
+            BookDTO newBookDTO = addBookPageController.addBookService.getNewBook();
 
-            if (newBookEntity != null) {
-                booksList.add(newBookEntity);
+            if (newBookDTO != null) {
+                booksList.add(newBookDTO);
                 getRelatedBooks(searchField, booksTable);
             }
 
@@ -101,10 +105,10 @@ public class BooksServiceImpl implements BooksService {
     }
 
     @Override
-    public void editTheSelectedBook(TextField searchField, TableView<BookEntity> booksTable) {
-        BookEntity selectedBookEntity = booksTable.getSelectionModel().getSelectedItem();
+    public void editTheSelectedBook(TextField searchField, TableView<BookDTO> booksTable) {
+        BookDTO selectedBookDTO = booksTable.getSelectionModel().getSelectedItem();
 
-        if (selectedBookEntity == null) {
+        if (selectedBookDTO == null) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "No Book Selected",
@@ -119,7 +123,7 @@ public class BooksServiceImpl implements BooksService {
 
             AddBookPageController addBookPageController = loader.getController();
             addBookPageController.addBookService.setExistingBooks(booksList);
-            addBookPageController.toEditBook(selectedBookEntity);
+            addBookPageController.toEditBook(selectedBookDTO);
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("LibraFlow | Edit Book");
@@ -129,7 +133,7 @@ public class BooksServiceImpl implements BooksService {
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
-            booksList.setAll(booksRepository.getAllBooks());
+            booksList.setAll(booksRepository.getAllBooks().stream().map(bookMapper::toDTO).toList());
             getRelatedBooks(searchField, booksTable);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -146,10 +150,10 @@ public class BooksServiceImpl implements BooksService {
     }
 
     @Override
-    public void deleteSelectedBook(TextField searchField, TableView<BookEntity> booksTable) {
-        BookEntity selectedBookEntity = booksTable.getSelectionModel().getSelectedItem();
+    public void deleteSelectedBook(TextField searchField, TableView<BookDTO> booksTable) {
+        BookDTO selectedBooKDTO = booksTable.getSelectionModel().getSelectedItem();
 
-        if (selectedBookEntity == null) {
+        if (selectedBooKDTO == null) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "No Book Selected",
@@ -158,7 +162,7 @@ public class BooksServiceImpl implements BooksService {
             return;
         }
 
-        if (booksRepository.hasIssueHistory(selectedBookEntity.getBookId())) {
+        if (booksRepository.hasIssueHistory(selectedBooKDTO.getBookId())) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "Cannot Delete Book",
@@ -169,13 +173,13 @@ public class BooksServiceImpl implements BooksService {
 
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.setTitle("Delete Book");
-        confirmation.setHeaderText("Delete " + selectedBookEntity.getTitle() + "?");
+        confirmation.setHeaderText("Delete " + selectedBooKDTO.getTitle() + "?");
         confirmation.setContentText("Are you sure you want to delete this book?");
 
         confirmation.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                if (booksRepository.deleteBook(selectedBookEntity.getIsbn())) {
-                    booksList.remove(selectedBookEntity);
+                if (booksRepository.deleteBook(selectedBooKDTO.getBookId())) {
+                    booksList.remove(selectedBooKDTO);
                     getRelatedBooks(searchField, booksTable);
                     showAlert(
                             Alert.AlertType.INFORMATION,

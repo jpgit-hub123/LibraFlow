@@ -15,11 +15,9 @@ import java.util.List;
 
 public class IssueReturnRepositoryImpl implements IssueReturnRepository {
 
-    private final Session session = DBConnection.getSession();
-
     @Override
     public boolean issueBook(BookIssueEntity bookIssueEntity) {
-
+        Session session = DBConnection.getSession();
         Transaction transaction = session.beginTransaction();
         BookEntity bookEntity = session.createQuery(
                         "FROM BookEntity b WHERE b.isbn = :isbn", BookEntity.class)
@@ -46,6 +44,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
 
     @Override
     public List<BookEntity> getAllBooks() {
+        Session session = DBConnection.getSession();
         return session
                 .createQuery("FROM BookEntity", BookEntity.class)
                 .getResultList();
@@ -53,6 +52,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
 
     @Override
     public List<MemberEntity> getAllMembers() {
+        Session session = DBConnection.getSession();
         return session
                 .createQuery("FROM MemberEntity", MemberEntity.class)
                 .getResultList();
@@ -60,6 +60,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
 
     @Override
     public List<BookIssueEntity> getAllIssues() {
+        Session session = DBConnection.getSession();
         List<Object[]> issueBookResults = session
                 .createQuery("SELECT bie, be.title FROM BookIssueEntity bie JOIN BookEntity be ON bie.bookEntity.bookId = be.bookId ORDER BY bie.issueId DESC", Object[].class)
                 .getResultList();
@@ -75,6 +76,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
 
     @Override
     public int getTotalIssuedBooks() {
+        Session session = DBConnection.getSession();
         Long totalIssuedBooksResult = session
                 .createQuery("SELECT COUNT(bie) FROM BookIssueEntity bie", Long.class)
                 .getSingleResult();
@@ -83,6 +85,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
 
     @Override
     public int getCurrentlyBorrowedBooks() {
+        Session session = DBConnection.getSession();
         Long totalIssuedBooksResult = session
                 .createQuery("SELECT COUNT(bie) FROM BookIssueEntity bie WHERE status = :status", Long.class)
                 .setParameter("status", "BORROWED")
@@ -92,6 +95,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
 
     @Override
     public int getOverdueBooks() {
+        Session session = DBConnection.getSession();
         Long overdueBooksResult = session.createQuery(
                 "SELECT COUNT(bie) FROM BookIssueEntity bie WHERE bie.returnDate IS NULL AND bie.dueDate < CURRENT_DATE",
                 Long.class
@@ -101,6 +105,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
 
     @Override
     public int getReturnedBooks() {
+        Session session = DBConnection.getSession();
         Long totalIssuedBooksResult = session
                 .createQuery("SELECT COUNT(bie) FROM BookIssueEntity bie WHERE status = :status", Long.class)
                 .setParameter("status", "RETURNED")
@@ -110,6 +115,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
 
     @Override
     public boolean returnBook(int issueId) {
+        Session session = DBConnection.getSession();
         Transaction transaction = session.beginTransaction();
         BookIssueEntity bookIssueEntity = session.find(BookIssueEntity.class, issueId, LockModeType.PESSIMISTIC_WRITE);
         if (bookIssueEntity == null) {

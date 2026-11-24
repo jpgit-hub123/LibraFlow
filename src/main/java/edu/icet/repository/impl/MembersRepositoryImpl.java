@@ -11,9 +11,8 @@ import java.util.List;
 
 public class MembersRepositoryImpl implements MembersRepository {
 
-    private final Session session = DBConnection.getSession();
-
     public boolean hasIssueHistory(int memberId) {
+        Session session = DBConnection.getSession();
         return !session.createQuery("FROM BookIssueEntity bi WHERE bi.memberId = :memberId", BookIssueEntity.class)
                 .setParameter("memberId", memberId)
                 .setMaxResults(1)
@@ -22,6 +21,7 @@ public class MembersRepositoryImpl implements MembersRepository {
     }
 
     public boolean deleteMember(String memberId) {
+        Session session = DBConnection.getSession();
         try {
             Transaction transaction = session.beginTransaction();
             MemberEntity memberEntity = session.find(MemberEntity.class, memberId);
@@ -37,6 +37,7 @@ public class MembersRepositoryImpl implements MembersRepository {
     }
 
     public List<MemberEntity> getAllMembers() {
+        Session session = DBConnection.getSession();
         return session
                 .createQuery("FROM MemberEntity", MemberEntity.class)
                 .getResultList();

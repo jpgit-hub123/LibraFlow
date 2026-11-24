@@ -10,5 +10,6 @@ public interface BooksRepository {
 
     boolean hasIssueHistory(Long bookId);
 
-    boolean deleteBook(String isbn);
+    boolean deleteBook(Long bookId);
 }
+

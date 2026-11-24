@@ -1,79 +1,72 @@
 package edu.icet.model.dto;
 
-import edu.icet.db.DBConnection;
-import edu.icet.model.entity.BookEntity;
-import edu.icet.model.entity.BookIssueEntity;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import java.util.List;
-
 public class BookDTO {
 
-    Session session = DBConnection.getSession();
-
-    public boolean saveBook(BookEntity bookEntity) {
-        try {
-            Transaction transaction = session.beginTransaction();
-            session.persist(bookEntity);
-            transaction.commit();
-            return true;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    private Long bookId;
+    private String isbn;
+    private String title;
+    private String author;
+    private String category;
+    private int quantity;
+    public BookDTO(Long bookId, String isbn, String title, String author, String category, int quantity) {
+        this.bookId = bookId;
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.category = category;
+        this.quantity = quantity;
     }
 
-    public List<BookEntity> getAllBooks() {
-        return session
-                .createQuery("FROM BookEntity", BookEntity.class)
-                .getResultList();
+    public BookDTO(String isbn, String title, String author, String category, int quantity) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.category = category;
+        this.quantity = quantity;
     }
 
-    public boolean updateBook(String originalIsbn, BookEntity bookEntity) {
-        Transaction transaction = session.beginTransaction();
-        BookEntity existingBookEntity = session.createQuery(
-                "FROM BookEntity b WHERE b.isbn = :isbn", BookEntity.class)
-                .setParameter("isbn", originalIsbn)
-                .uniqueResult();
-        if (existingBookEntity == null) {
-            return false;
-        }
-        existingBookEntity.setIsbn(bookEntity.getIsbn());
-        existingBookEntity.setTitle(bookEntity.getTitle());
-        existingBookEntity.setAuthor(bookEntity.getAuthor());
-        existingBookEntity.setCategory(bookEntity.getCategory());
-        existingBookEntity.setQuantity(bookEntity.getQuantity());
-        transaction.commit();
-        return true;
+    public Long getBookId() {
+        return bookId;
     }
 
-    public boolean deleteBook(String isbn) {
-        try {
-            Transaction transaction = session.beginTransaction();
-            BookEntity bookEntity = session.createQuery(
-                    "FROM BookEntity b WHERE b.isbn = :isbn", BookEntity.class)
-                    .setParameter("isbn", isbn)
-                    .uniqueResult();
-            if (bookEntity == null) {
-                return false;
-            }
-            session.remove(bookEntity);
-            transaction.commit();
-            return true;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public String getIsbn() {
+        return isbn;
     }
 
-    public boolean hasIssueHistory(Long bookId) {
-        return !session
-                .createQuery("FROM BookIssueEntity bi WHERE bi.BookEntity.bookId = :bookId", BookIssueEntity.class)
-                .setParameter("bookId", bookId)
-                .setMaxResults(1)
-                .getResultList()
-                .isEmpty();
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
+    public String getTitle() {
+        return title;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
 
