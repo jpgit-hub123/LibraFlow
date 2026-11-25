@@ -1,6 +1,5 @@
 package edu.icet.controller;
 
-import edu.icet.model.dto.BookDTO;
 import edu.icet.model.dto.MemberDTO;
 import edu.icet.model.entity.BookEntity;
 import edu.icet.model.entity.BookIssueEntity;
@@ -74,7 +73,7 @@ public class IssueReturnPageController {
     @FXML
     public void initialize() {
 
-        memberComboBox.setItems(FXCollections.observableArrayList(new MemberDTO().getAllMembers()));
+        memberComboBox.setItems(FXCollections.observableArrayList(issueReturnService.getAllMembers()));
         memberComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(MemberEntity memberEntity) {

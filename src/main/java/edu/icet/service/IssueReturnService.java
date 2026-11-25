@@ -25,6 +25,9 @@ public interface IssueReturnService {
     void showOverdueBooks(TableView<BookIssueEntity> issuedBooksTable);
 
     List<BookEntity> getAllBooks();
+
+    List<MemberEntity> getAllMembers();
 }
+
 
 

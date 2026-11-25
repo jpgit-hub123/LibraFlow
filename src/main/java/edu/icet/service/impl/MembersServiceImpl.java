@@ -1,7 +1,8 @@
 package edu.icet.service.impl;
 
 import edu.icet.controller.AddMemberPageController;
-import edu.icet.model.entity.MemberEntity;
+import edu.icet.mapper.MemberMapper;
+import edu.icet.model.dto.MemberDTO;
 import edu.icet.repository.MembersRepository;
 import edu.icet.repository.impl.MembersRepositoryImpl;
 import edu.icet.service.MembersService;
@@ -25,12 +26,12 @@ public class MembersServiceImpl implements MembersService {
     private final MembersRepository membersRepository = new MembersRepositoryImpl();
 
     @Override
-    public void setMembersDataIntoTable(TextField searchField, TableView<MemberEntity> membersTable,
-                                        TableColumn<MemberEntity, Number> memberIdColumn,
-                                        TableColumn<MemberEntity, String> nameColumn,
-                                        TableColumn<MemberEntity, String> emailColumn,
-                                        TableColumn<MemberEntity, String> phoneColumn,
-                                        TableColumn<MemberEntity, String> addressColumn) {
+    public void setMembersDataIntoTable(TextField searchField, TableView<MemberDTO> membersTable,
+                                        TableColumn<MemberDTO, Number> memberIdColumn,
+                                        TableColumn<MemberDTO, String> nameColumn,
+                                        TableColumn<MemberDTO, String> emailColumn,
+                                        TableColumn<MemberDTO, String> phoneColumn,
+                                        TableColumn<MemberDTO, String> addressColumn) {
 
         memberIdColumn.setCellValueFactory(new PropertyValueFactory<>("memberId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -42,7 +43,7 @@ public class MembersServiceImpl implements MembersService {
     }
 
     @Override
-    public void loadMembers(TextField searchField, TableView<MemberEntity> membersTable) {
+    public void loadMembers(TextField searchField, TableView<MemberDTO> membersTable) {
         getSearchMember(searchField, membersTable);
     }
 
@@ -58,7 +59,7 @@ public class MembersServiceImpl implements MembersService {
     }
 
     @Override
-    public void loadForm(TextField searchField, TableView<MemberEntity> membersTable) {
+    public void loadForm(TextField searchField, TableView<MemberDTO> membersTable) {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/icet/view/AddMember.fxml"));
@@ -77,9 +78,9 @@ public class MembersServiceImpl implements MembersService {
     }
 
     @Override
-    public void editMembersInfo(TextField searchField, TableView<MemberEntity> membersTable) {
-        MemberEntity selectedMemberEntity = membersTable.getSelectionModel().getSelectedItem();
-        if (selectedMemberEntity == null) {
+    public void editMembersInfo(TextField searchField, TableView<MemberDTO> membersTable) {
+        MemberDTO selectedMemberDTO = membersTable.getSelectionModel().getSelectedItem();
+        if (selectedMemberDTO == null) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "No Member Selected",
@@ -91,7 +92,7 @@ public class MembersServiceImpl implements MembersService {
         try {
             Parent root = loader.load();
             AddMemberPageController addMemberPageController = loader.getController();
-            addMemberPageController.selectedMemberToEdit(selectedMemberEntity);
+            addMemberPageController.selectedMemberToEdit(selectedMemberDTO);
             Stage addMemberStage = new Stage();
             addMemberStage.setTitle("LibraFlow | Update Member");
             addMemberStage.initModality(Modality.APPLICATION_MODAL);
@@ -114,9 +115,9 @@ public class MembersServiceImpl implements MembersService {
     }
 
     @Override
-    public void removeMember(TextField searchField, TableView<MemberEntity> membersTable) {
-        MemberEntity selectedMemberEntity = membersTable.getSelectionModel().getSelectedItem();
-        if (selectedMemberEntity == null) {
+    public void removeMember(TextField searchField, TableView<MemberDTO> membersTable) {
+        MemberDTO selectedMemberDTO = membersTable.getSelectionModel().getSelectedItem();
+        if (selectedMemberDTO == null) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "No Member Selected",
@@ -125,7 +126,7 @@ public class MembersServiceImpl implements MembersService {
             return;
         }
 
-        if (membersRepository.hasIssueHistory(selectedMemberEntity.getMemberId())) {
+        if (membersRepository.hasIssueHistory(selectedMemberDTO.getMemberId())) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "Cannot Delete Member",
@@ -136,11 +137,11 @@ public class MembersServiceImpl implements MembersService {
 
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.setTitle("Delete Member");
-        confirmation.setHeaderText("Delete " + selectedMemberEntity.getName() + "?");
+        confirmation.setHeaderText("Delete " + selectedMemberDTO.getName() + "?");
         confirmation.setContentText("Are you sure you want to delete this Member?");
         confirmation.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                if (membersRepository.deleteMember(String.valueOf(selectedMemberEntity.getMemberId()))) {
+                if (membersRepository.deleteMember(String.valueOf(selectedMemberDTO.getMemberId()))) {
                     showAlert(
                             Alert.AlertType.INFORMATION,
                             "Member Deleted",
@@ -159,18 +160,19 @@ public class MembersServiceImpl implements MembersService {
     }
 
     @Override
-    public void getSearchMember(TextField searchField, TableView<MemberEntity> membersTable) {
+    public void getSearchMember(TextField searchField, TableView<MemberDTO> membersTable) {
         final String searchData = searchField.getText().trim();
-        ObservableList<MemberEntity> filteredMemberEntityList = FXCollections.observableArrayList();
-        ObservableList<MemberEntity> membersList = FXCollections.observableArrayList(membersRepository.getAllMembers());
-        for (MemberEntity memberEntity : membersList) {
-            if (memberEntity.getName().toLowerCase().contains(searchData)
-                || memberEntity.getEmail().toLowerCase().contains(searchData)
-                || memberEntity.getPhone().toLowerCase().contains(searchData)) {
-
-                filteredMemberEntityList.add(memberEntity);
+        ObservableList<MemberDTO> filteredMemberDTOList = FXCollections.observableArrayList();
+        MemberMapper memberMapper = new MemberMapper();
+        ObservableList<MemberDTO> membersDTOList = FXCollections.observableArrayList(
+                membersRepository.getAllMembers().stream().map(memberMapper::toDTO).toList());
+        for (MemberDTO memberDTO : membersDTOList) {
+            if (memberDTO.getName().toLowerCase().contains(searchData)
+                || memberDTO.getEmail().toLowerCase().contains(searchData)
+                || memberDTO.getPhone().toLowerCase().contains(searchData)) {
+                filteredMemberDTOList.add(memberDTO);
             }
         }
-        membersTable.setItems(filteredMemberEntityList);
+        membersTable.setItems(filteredMemberDTOList);
     }
 }

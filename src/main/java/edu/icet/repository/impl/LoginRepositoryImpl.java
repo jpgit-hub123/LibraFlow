@@ -18,11 +18,7 @@ public class LoginRepositoryImpl implements LoginRepository {
                     .createQuery("FROM UserEntity WHERE username = :username", UserEntity.class)
                     .setParameter("username", username)
                     .uniqueResult();
-            if (userEntity != null && userEntity.getPassword_hash().equals(password)) {
-                return true;
-            } else {
-                return false;
-            }
+            return userEntity != null && userEntity.getPassword_hash().equals(password);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

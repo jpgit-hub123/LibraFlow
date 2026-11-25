@@ -1,5 +1,6 @@
 package edu.icet.controller;
 
+import edu.icet.model.dto.MemberDTO;
 import edu.icet.model.entity.MemberEntity;
 import edu.icet.service.AddMemberService;
 import edu.icet.service.impl.AddMemberServiceImpl;
@@ -46,8 +47,8 @@ public class AddMemberPageController {
     }
 
     @FXML
-    public void selectedMemberToEdit(MemberEntity selectedMemberEntity) {
-        addMemberService.setEditedMemberInfoToEditMemberForm(selectedMemberEntity, nameField, emailField, phoneField,
+    public void selectedMemberToEdit(MemberDTO selectedMemberDTO) {
+        addMemberService.setEditedMemberInfoToEditMemberForm(selectedMemberDTO, nameField, emailField, phoneField,
                 addressField, titleLabel, subTitleLabel, btnSave);
     }
 }

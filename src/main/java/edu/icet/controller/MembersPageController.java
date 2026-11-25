@@ -1,6 +1,6 @@
 package edu.icet.controller;
 
-import edu.icet.model.entity.MemberEntity;
+import edu.icet.model.dto.MemberDTO;
 import edu.icet.service.MembersService;
 import edu.icet.service.impl.MembersServiceImpl;
 import javafx.fxml.FXML;
@@ -14,22 +14,22 @@ public class MembersPageController {
     private TextField searchField;
 
     @FXML
-    private TableView<MemberEntity> membersTable;
+    private TableView<MemberDTO> membersTable;
 
     @FXML
-    private TableColumn<MemberEntity, Number> memberIdColumn;
+    private TableColumn<MemberDTO, Number> memberIdColumn;
 
     @FXML
-    private TableColumn<MemberEntity, String> nameColumn;
+    private TableColumn<MemberDTO, String> nameColumn;
 
     @FXML
-    private TableColumn<MemberEntity, String> emailColumn;
+    private TableColumn<MemberDTO, String> emailColumn;
 
     @FXML
-    private TableColumn<MemberEntity, String> phoneColumn;
+    private TableColumn<MemberDTO, String> phoneColumn;
 
     @FXML
-    private TableColumn<MemberEntity, String> addressColumn;
+    private TableColumn<MemberDTO, String> addressColumn;
 
     @FXML
     public MembersService membersServiceImpl = new MembersServiceImpl();

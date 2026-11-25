@@ -1,44 +1,61 @@
 package edu.icet.model.dto;
 
-import edu.icet.db.DBConnection;
-import edu.icet.model.entity.BookIssueEntity;
-import edu.icet.model.entity.MemberEntity;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import java.util.List;
-
 public class MemberDTO {
 
-    Session session = DBConnection.getSession();
+    private int memberId;
+    private String name;
+    private String email;
+    private String phone;
+    private String address;
 
-    public List<MemberEntity> getAllMembers() {
-        return session
-                .createQuery("FROM MemberEntity", MemberEntity.class)
-                .getResultList();
+    public MemberDTO() {
     }
 
-    public boolean saveMember(MemberEntity memberEntity) {
-        try {
-            Transaction transaction = session.beginTransaction();
-            session.persist(memberEntity);
-            transaction.commit();
-            return true;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public MemberDTO(int id, String name, String email, String phone, String address) {
+        this.memberId = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
     }
 
-    public boolean updateMember(String memberId, MemberEntity memberEntity) {
-        Transaction transaction = session.beginTransaction();
-        MemberEntity existingMemberEntity = session.find(MemberEntity.class, memberId);
-        if (existingMemberEntity == null) {
-            return false;
-        }
-        existingMemberEntity.setName(memberEntity.getName());
-        existingMemberEntity.setEmail(memberEntity.getEmail());
-        existingMemberEntity.setPhone(memberEntity.getPhone());
-        existingMemberEntity.setAddress(memberEntity.getAddress());
-        transaction.commit();
-        return true;
+    public int getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(int id) {
+        this.memberId = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

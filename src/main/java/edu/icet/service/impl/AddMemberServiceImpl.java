@@ -1,5 +1,6 @@
 package edu.icet.service.impl;
 
+import edu.icet.model.dto.MemberDTO;
 import edu.icet.model.entity.MemberEntity;
 import edu.icet.repository.AddMemberRepository;
 import edu.icet.repository.impl.AddMemberRepositoryImpl;
@@ -9,7 +10,7 @@ import javafx.stage.Stage;
 
 public class AddMemberServiceImpl implements AddMemberService {
 
-    private MemberEntity memberEntityToEdit;
+    private MemberDTO memberDTOToEdit;
     private final AddMemberRepository addMemberRepository = new AddMemberRepositoryImpl();
 
     @Override
@@ -46,7 +47,7 @@ public class AddMemberServiceImpl implements AddMemberService {
             return;
         }
 
-        if (memberEntityToEdit == null) {
+        if (memberDTOToEdit == null) {
             MemberEntity memberEntity = new MemberEntity(name, email, phone, address);
             if (addMemberRepository.saveMember(memberEntity)) {
                 showAlert(
@@ -63,7 +64,7 @@ public class AddMemberServiceImpl implements AddMemberService {
                 return;
             }
         } else {
-            if (!addMemberRepository.updateMember(String.valueOf(memberEntityToEdit.getMemberId()), new MemberEntity(name, email, phone, address))) {
+            if (!addMemberRepository.updateMember(String.valueOf(memberDTOToEdit.getMemberId()), new MemberEntity(name, email, phone, address))) {
                 showAlert(
                         Alert.AlertType.ERROR,
                         "Database Error",
@@ -87,17 +88,17 @@ public class AddMemberServiceImpl implements AddMemberService {
     }
 
     @Override
-    public void setEditedMemberInfoToEditMemberForm(MemberEntity selectedMemberEntity, TextField nameField,
+    public void setEditedMemberInfoToEditMemberForm(MemberDTO selectedMemberDTO, TextField nameField,
                                                     TextField emailField, TextField phoneField,
                                                     TextArea addressField, Label titleLabel,
                                                     Label subTitleLabel, Button btnSave) {
 
-        this.memberEntityToEdit = selectedMemberEntity;
+        this.memberDTOToEdit = selectedMemberDTO;
 
-        nameField.setText(selectedMemberEntity.getName());
-        emailField.setText(selectedMemberEntity.getEmail());
-        phoneField.setText(selectedMemberEntity.getPhone());
-        addressField.setText(selectedMemberEntity.getAddress());
+        nameField.setText(selectedMemberDTO.getName());
+        emailField.setText(selectedMemberDTO.getEmail());
+        phoneField.setText(selectedMemberDTO.getPhone());
+        addressField.setText(selectedMemberDTO.getAddress());
 
         titleLabel.setText("Update Member Form");
         subTitleLabel.setText("Enter the member details below to edit member.");

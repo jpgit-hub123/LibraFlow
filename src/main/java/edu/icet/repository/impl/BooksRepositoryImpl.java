@@ -2,7 +2,6 @@ package edu.icet.repository.impl;
 
 import edu.icet.db.DBConnection;
 import edu.icet.model.entity.BookEntity;
-import edu.icet.model.entity.BookIssueEntity;
 import edu.icet.repository.BooksRepository;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
