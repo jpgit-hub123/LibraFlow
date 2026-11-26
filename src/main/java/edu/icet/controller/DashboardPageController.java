@@ -1,5 +1,6 @@
 package edu.icet.controller;
 
+import edu.icet.model.dto.BookIssueDTO;
 import edu.icet.model.entity.BookIssueEntity;
 import edu.icet.service.DashboardService;
 import edu.icet.service.impl.DashboardServiceImpl;
@@ -32,22 +33,22 @@ public class DashboardPageController {
     private Label totalMembersLabel;
 
     @FXML
-    private TableView<BookIssueEntity> recentTransactionsTable;
+    private TableView<BookIssueDTO> recentTransactionsTable;
 
     @FXML
-    private TableColumn<BookIssueEntity, Integer> transactionMemberColumn;
+    private TableColumn<BookIssueDTO, Integer> transactionMemberColumn;
 
     @FXML
-    private TableColumn<BookIssueEntity, String> transactionBookColumn;
+    private TableColumn<BookIssueDTO, String> transactionBookColumn;
 
     @FXML
-    private TableColumn<BookIssueEntity, String> transactionTypeColumn;
+    private TableColumn<BookIssueDTO, String> transactionTypeColumn;
 
     @FXML
-    private TableColumn<BookIssueEntity, LocalDate> transactionDateColumn;
+    private TableColumn<BookIssueDTO, LocalDate> transactionDateColumn;
 
     @FXML
-    private TableColumn<BookIssueEntity, String> transactionStatusColumn;
+    private TableColumn<BookIssueDTO, String> transactionStatusColumn;
 
     @FXML
     public final DashboardService dashboardService = new DashboardServiceImpl();
@@ -104,7 +105,7 @@ public class DashboardPageController {
         );
 
         transactionTypeColumn.setCellValueFactory(cellData -> {
-            BookIssueEntity issue = cellData.getValue();
+            BookIssueDTO issue = cellData.getValue();
 
             String type = "RETURNED".equals(issue.getStatus())
                     ? "Return"
@@ -114,7 +115,7 @@ public class DashboardPageController {
         });
 
         transactionDateColumn.setCellValueFactory(cellData -> {
-            BookIssueEntity issue = cellData.getValue();
+            BookIssueDTO issue = cellData.getValue();
 
             LocalDate date = "RETURNED".equals(issue.getStatus())
                     ? issue.getReturnDate()
@@ -124,7 +125,7 @@ public class DashboardPageController {
         });
 
         transactionStatusColumn.setCellValueFactory(cellData -> {
-            BookIssueEntity issue = cellData.getValue();
+            BookIssueDTO issue = cellData.getValue();
 
             String status = issue.isOverdue()
                     ? "OVERDUE"

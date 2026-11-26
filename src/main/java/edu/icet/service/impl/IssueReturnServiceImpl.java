@@ -1,8 +1,11 @@
 package edu.icet.service.impl;
 
-import edu.icet.model.entity.BookEntity;
-import edu.icet.model.entity.BookIssueEntity;
-import edu.icet.model.entity.MemberEntity;
+import edu.icet.mapper.BookMapper;
+import edu.icet.mapper.IssueReturnMapper;
+import edu.icet.mapper.MemberMapper;
+import edu.icet.model.dto.BookDTO;
+import edu.icet.model.dto.BookIssueDTO;
+import edu.icet.model.dto.MemberDTO;
 import edu.icet.repository.IssueReturnRepository;
 import edu.icet.repository.impl.IssueReturnRepositoryImpl;
 import edu.icet.service.IssueReturnService;
@@ -19,7 +22,7 @@ public class IssueReturnServiceImpl implements IssueReturnService {
     private final IssueReturnRepository issueReturnRepository = new IssueReturnRepositoryImpl();
 
     @Override
-    public void loadPage(String fxmlFile, ComboBox<MemberEntity> memberComboBox) {
+    public void loadPage(String fxmlFile, ComboBox<MemberDTO> memberComboBox) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         try {
             Parent rootNode = loader.load();
@@ -39,15 +42,15 @@ public class IssueReturnServiceImpl implements IssueReturnService {
     }
 
     @Override
-    public void issuedTheBook(ComboBox<MemberEntity> memberComboBox, ComboBox<BookEntity> bookComboBox, DatePicker issueDatePicker,
-                              DatePicker dueDatePicker, TableView<BookIssueEntity> issuedBooksTable) {
+    public void issuedTheBook(ComboBox<MemberDTO> memberComboBox, ComboBox<BookDTO> bookComboBox, DatePicker issueDatePicker,
+                              DatePicker dueDatePicker, TableView<BookIssueDTO> issuedBooksTable) {
 
-        MemberEntity memberEntity = memberComboBox.getValue();
-        BookEntity bookEntity = bookComboBox.getValue();
+        MemberDTO memberDTO = memberComboBox.getValue();
+        BookDTO bookDTO = bookComboBox.getValue();
         LocalDate issueDate = issueDatePicker.getValue();
         LocalDate dueDate = dueDatePicker.getValue();
 
-        if (memberEntity == null || bookEntity == null || issueDate == null || dueDate == null) {
+        if (memberDTO == null || bookDTO == null || issueDate == null || dueDate == null) {
             showAlert(
                     Alert.AlertType.WARNING,
                     "No required details selected!",
@@ -65,7 +68,7 @@ public class IssueReturnServiceImpl implements IssueReturnService {
             return;
         }
 
-        if (bookEntity.getQuantity() == 0) {
+        if (bookDTO.getQuantity() == 0) {
             showAlert(
                     Alert.AlertType.INFORMATION,
                     "Unavailable!",
@@ -74,9 +77,20 @@ public class IssueReturnServiceImpl implements IssueReturnService {
             return;
         }
 
-        BookIssueEntity bookIssueEntity = new BookIssueEntity(memberEntity.getMemberId(), bookEntity, issueDate, dueDate);
+        BookIssueDTO bookIssueDTO = new BookIssueDTO();
 
-        if (issueReturnRepository.issueBook(bookIssueEntity)) {
+        bookIssueDTO.setMemberId(memberDTO.getMemberId());
+        bookIssueDTO.setBookId(bookDTO.getBookId());
+        bookIssueDTO.setIsbn(bookDTO.getIsbn());
+        bookIssueDTO.setBookTitle(bookDTO.getTitle());
+        bookIssueDTO.setIssueDate(issueDate);
+        bookIssueDTO.setDueDate(dueDate);
+
+        IssueReturnMapper issueReturnMapper = new IssueReturnMapper();
+        MemberMapper memberMapper = new MemberMapper();
+        BookMapper bookMapper = new BookMapper();
+
+        if (issueReturnRepository.issueBook(issueReturnMapper.toEntity(bookIssueDTO, bookMapper.toEntity(bookDTO)))) {
             showAlert(
                     Alert.AlertType.CONFIRMATION,
                     "Success!",
@@ -86,8 +100,11 @@ public class IssueReturnServiceImpl implements IssueReturnService {
             bookComboBox.getSelectionModel().clearSelection();
             issueDatePicker.setValue(LocalDate.now());
             dueDatePicker.setValue(LocalDate.now().plusDays(14));
-            bookComboBox.setItems(FXCollections.observableArrayList(issueReturnRepository.getAllBooks()));
-            memberComboBox.setItems(FXCollections.observableArrayList(issueReturnRepository.getAllMembers()));
+            bookComboBox.setItems(FXCollections.observableArrayList(
+                    issueReturnRepository.getAllBooks().stream().map(bookMapper::toDTO).toList())
+            );
+            memberComboBox.setItems(FXCollections.observableArrayList(
+                    issueReturnRepository.getAllMembers().stream().map(memberMapper::toDTO).toList()));
             loadIssuedBooks(issuedBooksTable);
         } else {
             showAlert(
@@ -99,13 +116,18 @@ public class IssueReturnServiceImpl implements IssueReturnService {
 
     }
 
-    public void loadIssuedBooks(TableView<BookIssueEntity> issuedBooksTable) {
-        issuedBooksTable.setItems(FXCollections.observableArrayList(issueReturnRepository.getAllIssues()));
+    @Override
+    public void loadIssuedBooks(TableView<BookIssueDTO> issuedBooksTable) {
+        IssueReturnMapper issueReturnMapper = new IssueReturnMapper();
+        issuedBooksTable.setItems(FXCollections.observableArrayList(
+                issueReturnRepository.getAllIssues().stream().map(issueReturnMapper::toDTO).toList())
+        );
     }
 
-    public void returnBook(TableView<BookIssueEntity> issuedBooksTable, ComboBox<BookEntity> bookComboBox, ComboBox<MemberEntity> memberComboBox) {
+    @Override
+    public void returnBook(TableView<BookIssueDTO> issuedBooksTable, ComboBox<BookDTO> bookComboBox, ComboBox<MemberDTO> memberComboBox) {
 
-        BookIssueEntity selectedIssue = issuedBooksTable.getSelectionModel().getSelectedItem();
+        BookIssueDTO selectedIssue = issuedBooksTable.getSelectionModel().getSelectedItem();
 
         if (selectedIssue == null) {
             showAlert(
@@ -125,6 +147,9 @@ public class IssueReturnServiceImpl implements IssueReturnService {
             return;
         }
 
+        MemberMapper memberMapper = new MemberMapper();
+        BookMapper bookMapper = new BookMapper();
+
         if (issueReturnRepository.returnBook(selectedIssue.getIssueId())) {
 
             showAlert(
@@ -134,8 +159,12 @@ public class IssueReturnServiceImpl implements IssueReturnService {
             );
 
             loadIssuedBooks(issuedBooksTable);
-            bookComboBox.setItems(FXCollections.observableArrayList(issueReturnRepository.getAllBooks()));
-            memberComboBox.setItems(FXCollections.observableArrayList(issueReturnRepository.getAllMembers()));
+            bookComboBox.setItems(FXCollections.observableArrayList(
+                    issueReturnRepository.getAllBooks().stream().map(bookMapper::toDTO).toList())
+            );
+            memberComboBox.setItems(FXCollections.observableArrayList(
+                    issueReturnRepository.getAllMembers().stream().map(memberMapper::toDTO).toList())
+            );
         } else {
 
             showAlert(
@@ -146,25 +175,24 @@ public class IssueReturnServiceImpl implements IssueReturnService {
         }
     }
 
-    public void showOverdueBooks(TableView<BookIssueEntity> issuedBooksTable) {
-        List<BookIssueEntity> overdueIssues = issueReturnRepository.getAllIssues()
-                .stream()
-                .filter(BookIssueEntity::isOverdue)
-                .toList();
-
-        issuedBooksTable.setItems(
-                FXCollections.observableArrayList(overdueIssues)
-        );
+    @Override
+    public void showOverdueBooks(TableView<BookIssueDTO> issuedBooksTable) {
+        IssueReturnMapper issueReturnMapper = new IssueReturnMapper();
+        final List<BookIssueDTO> dtoList = issueReturnRepository.getAllIssues().stream().map(issueReturnMapper::toDTO).toList();
+        final List<BookIssueDTO> overdueDtoList = dtoList.stream().filter(BookIssueDTO::isOverdue).toList();
+        issuedBooksTable.setItems(FXCollections.observableArrayList(overdueDtoList));
     }
 
     @Override
-    public List<BookEntity> getAllBooks() {
-        return issueReturnRepository.getAllBooks();
+    public List<BookDTO> getAllBooks() {
+        BookMapper bookMapper = new BookMapper();
+        return issueReturnRepository.getAllBooks().stream().map(bookMapper::toDTO).toList();
     }
 
     @Override
-    public List<MemberEntity> getAllMembers() {
-        return issueReturnRepository.getAllMembers();
+    public List<MemberDTO> getAllMembers() {
+        MemberMapper memberMapper = new MemberMapper();
+        return issueReturnRepository.getAllMembers().stream().map(memberMapper::toDTO).toList();
     }
 
     public void updateStatCards(Label totalIssuedLabel, Label borrowedLabel, Label returnedLabel, Label overdueLabel) {

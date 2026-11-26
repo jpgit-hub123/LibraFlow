@@ -1,7 +1,7 @@
 package edu.icet.service.impl;
 
+import edu.icet.mapper.MemberMapper;
 import edu.icet.model.dto.MemberDTO;
-import edu.icet.model.entity.MemberEntity;
 import edu.icet.repository.AddMemberRepository;
 import edu.icet.repository.impl.AddMemberRepositoryImpl;
 import edu.icet.service.AddMemberService;
@@ -47,9 +47,11 @@ public class AddMemberServiceImpl implements AddMemberService {
             return;
         }
 
+        MemberMapper memberMapper = new MemberMapper();
+        MemberDTO memberDTO = new MemberDTO(name, email, phone, address);
+
         if (memberDTOToEdit == null) {
-            MemberEntity memberEntity = new MemberEntity(name, email, phone, address);
-            if (addMemberRepository.saveMember(memberEntity)) {
+            if (addMemberRepository.saveMember(memberMapper.toEntity(memberDTO))) {
                 showAlert(
                         Alert.AlertType.INFORMATION,
                         "Success",
@@ -64,7 +66,7 @@ public class AddMemberServiceImpl implements AddMemberService {
                 return;
             }
         } else {
-            if (!addMemberRepository.updateMember(String.valueOf(memberDTOToEdit.getMemberId()), new MemberEntity(name, email, phone, address))) {
+            if (!addMemberRepository.updateMember(String.valueOf(memberDTOToEdit.getMemberId()), memberMapper.toEntity(memberDTO))) {
                 showAlert(
                         Alert.AlertType.ERROR,
                         "Database Error",
@@ -75,7 +77,6 @@ public class AddMemberServiceImpl implements AddMemberService {
 
         Stage currentWindow = (Stage) nameField.getScene().getWindow();
         currentWindow.close();
-
     }
 
     @Override

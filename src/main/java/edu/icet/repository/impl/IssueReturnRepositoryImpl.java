@@ -35,7 +35,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
         }
 
         bookEntity.setQuantity(bookEntity.getQuantity() - 1);
-        bookIssueEntity.setBook(bookEntity);
+        bookIssueEntity.setBookEntity(bookEntity);
         bookIssueEntity.setStatus("BORROWED");
         session.persist(bookIssueEntity);
         transaction.commit();
@@ -118,6 +118,7 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
         Session session = DBConnection.getSession();
         Transaction transaction = session.beginTransaction();
         BookIssueEntity bookIssueEntity = session.find(BookIssueEntity.class, issueId, LockModeType.PESSIMISTIC_WRITE);
+        System.out.println(bookIssueEntity);
         if (bookIssueEntity == null) {
             transaction.rollback();
             return false;
@@ -126,7 +127,8 @@ public class IssueReturnRepositoryImpl implements IssueReturnRepository {
             transaction.rollback();
             return false;
         }
-        BookEntity bookEntity = session.find(BookEntity.class, bookIssueEntity.getIsbn(), LockModeType.PESSIMISTIC_WRITE);
+        BookEntity bookEntity = session.find(BookEntity.class, bookIssueEntity.getBookEntity().getBookId(), LockModeType.PESSIMISTIC_WRITE);
+        System.out.println(bookEntity);
         if (bookEntity == null) {
             transaction.rollback();
             return false;

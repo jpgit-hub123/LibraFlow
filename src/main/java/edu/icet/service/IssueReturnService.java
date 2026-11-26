@@ -1,33 +1,33 @@
 package edu.icet.service;
 
-import edu.icet.model.entity.BookEntity;
-import edu.icet.model.entity.BookIssueEntity;
-import edu.icet.model.entity.MemberEntity;
+import edu.icet.model.dto.BookDTO;
+import edu.icet.model.dto.BookIssueDTO;
+import edu.icet.model.dto.MemberDTO;
 import javafx.scene.control.*;
 
 import java.util.List;
 
 public interface IssueReturnService {
 
-
-    void loadIssuedBooks(TableView<BookIssueEntity> issuedBooksTable);
+    void loadIssuedBooks(TableView<BookIssueDTO> issuedBooksTable);
 
     void updateStatCards(Label totalIssuedLabel, Label borrowedLabel, Label returnedLabel, Label overdueLabel);
 
-    void loadPage(String s, ComboBox<MemberEntity> memberComboBox);
+    void loadPage(String s, ComboBox<MemberDTO> memberComboBox);
 
     void showAlert(Alert.AlertType alertType, String info, String message);
 
-    void issuedTheBook(ComboBox<MemberEntity> memberComboBox, ComboBox<BookEntity> bookComboBox, DatePicker issueDatePicker, DatePicker dueDatePicker, TableView<BookIssueEntity> issuedBooksTable);
+    void issuedTheBook(ComboBox<MemberDTO> memberComboBox, ComboBox<BookDTO> bookComboBox, DatePicker issueDatePicker, DatePicker dueDatePicker, TableView<BookIssueDTO> issuedBooksTable);
 
-    void returnBook(TableView<BookIssueEntity> issuedBooksTable, ComboBox<BookEntity> bookComboBox, ComboBox<MemberEntity> memberComboBox);
+    void returnBook(TableView<BookIssueDTO> issuedBooksTable, ComboBox<BookDTO> bookComboBox, ComboBox<MemberDTO> memberComboBox);
 
-    void showOverdueBooks(TableView<BookIssueEntity> issuedBooksTable);
+    void showOverdueBooks(TableView<BookIssueDTO> issuedBooksTable);
 
-    List<BookEntity> getAllBooks();
+    List<BookDTO> getAllBooks();
 
-    List<MemberEntity> getAllMembers();
+    List<MemberDTO> getAllMembers();
 }
+
 
 
 

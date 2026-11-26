@@ -146,7 +146,7 @@
                         <Label text="Select Member"/>
 
                         <ComboBox fx:id="memberComboBox"
-                                  promptText="Choose a memberEntity"
+                                  promptText="Choose a member"
                                   maxWidth="Infinity"
                                   prefHeight="38"/>
 
@@ -160,7 +160,7 @@
                         <Label text="Select Book"/>
 
                         <ComboBox fx:id="bookComboBox"
-                                  promptText="Choose a bookEntity"
+                                  promptText="Choose a book"
                                   maxWidth="Infinity"
                                   prefHeight="38"/>
 

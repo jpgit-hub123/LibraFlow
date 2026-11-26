@@ -1,5 +1,6 @@
 package edu.icet.model.entity;
 
+import edu.icet.model.dto.BookDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -65,11 +66,11 @@ public class BookIssueEntity {
         this.memberId = memberId;
     }
 
-    public BookEntity getBook() {
+    public BookEntity getBookEntity() {
         return bookEntity;
     }
 
-    public void setBook(BookEntity bookEntity) {
+    public void setBookEntity(BookEntity bookEntity) {
         this.bookEntity = bookEntity;
         this.isbn = bookEntity != null ? bookEntity.getIsbn() : null;
     }
@@ -123,21 +124,5 @@ public class BookIssueEntity {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public boolean isOverdue() {
-        return "BORROWED".equals(status) && dueDate != null && dueDate.isBefore(java.time.LocalDate.now());
-    }
-
-    public long getOverdueDays() {
-        if (!isOverdue()) {
-            return 0;
-        }
-        return java.time.temporal.ChronoUnit.DAYS.between(dueDate, java.time.LocalDate.now());
-    }
-
-    public double getFineAmount() {
-        double finePerDay = 20.0;
-        return getOverdueDays() * finePerDay;
     }
 }

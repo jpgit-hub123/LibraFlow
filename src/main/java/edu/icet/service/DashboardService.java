@@ -1,5 +1,6 @@
 package edu.icet.service;
 
+import edu.icet.model.dto.BookIssueDTO;
 import edu.icet.model.entity.BookIssueEntity;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
@@ -16,5 +17,5 @@ public interface DashboardService {
 
     int getTotalMemberCount();
 
-    void loadRecentTransactions(TableView<BookIssueEntity> recentTransactionsTable);
+    void loadRecentTransactions(TableView<BookIssueDTO> recentTransactionsTable);
 }

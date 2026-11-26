@@ -1,124 +1,120 @@
 package edu.icet.model.dto;
 
-import edu.icet.db.DBConnection;
-import edu.icet.model.entity.BookEntity;
-import edu.icet.model.entity.BookIssueEntity;
-import jakarta.persistence.LockModeType;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BookIssueDTO {
 
-    Session session = DBConnection.getSession();
+    private int issueId;
+    private int memberId;
+    private Long bookId;
+    private String isbn;
+    private String bookTitle;
+    private LocalDate issueDate;
+    private LocalDate dueDate;
+    private LocalDate returnDate;
+    private String status;
 
-    public List<BookIssueEntity> getAllIssues() {
-
-        List<Object[]> issueBookResults = session
-                .createQuery("SELECT bi, b.title FROM BookIssueEntity bi JOIN BookEntity b ON bi.isbn = b.isbn ORDER BY bi.issueId DESC", Object[].class)
-                .getResultList();
-
-        List<BookIssueEntity> issuedBooks = new ArrayList<>();
-
-        for (Object[] row : issueBookResults) {
-            BookIssueEntity issuedBook = (BookIssueEntity) row[0];
-            String issuedBookTitle = (String) row[1];
-            issuedBook.setBookTitle(issuedBookTitle);
-            issuedBooks.add(issuedBook);
-        }
-
-        return issuedBooks;
+    public BookIssueDTO() {
     }
 
-    public boolean issueBook(BookIssueEntity bookIssueEntity) {
-
-        Transaction transaction = session.beginTransaction();
-        BookEntity bookEntity = session.createQuery(
-                "FROM BookEntity b WHERE b.isbn = :isbn", BookEntity.class)
-                .setParameter("isbn", bookIssueEntity.getIsbn())
-                .uniqueResult();
-
-        if (bookEntity == null) {
-            transaction.rollback();
-            return false;
-        }
-
-        if (bookEntity.getQuantity() == 0) {
-            transaction.rollback();
-            return false;
-        }
-
-        bookEntity.setQuantity(bookEntity.getQuantity() - 1);
-        bookIssueEntity.setBook(bookEntity);
-        bookIssueEntity.setStatus("BORROWED");
-        session.persist(bookIssueEntity);
-        transaction.commit();
-        return true;
+    public BookIssueDTO(int issueId, int memberId, Long bookId, String isbn, String bookTitle, LocalDate issueDate,
+                        LocalDate dueDate, LocalDate returnDate, String status) {
+        this.issueId = issueId;
+        this.memberId = memberId;
+        this.bookId = bookId;
+        this.isbn = isbn;
+        this.bookTitle = bookTitle;
+        this.issueDate = issueDate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
+        this.status = status;
     }
 
-
-    public int getTotalIssuedBooks() {
-        Long totalIssuedBooksResult = session
-                .createQuery("SELECT COUNT(bie) FROM BookIssueEntity bie", Long.class)
-                .getSingleResult();
-        return totalIssuedBooksResult.intValue();
+    public int getIssueId() {
+        return issueId;
     }
 
-    public int getCurrentlyBorrowedBooks() {
-        Long totalIssuedBooksResult = session
-                .createQuery("SELECT COUNT(bi) FROM BookIssueEntity bi WHERE status = :status", Long.class)
-                .setParameter("status", "BORROWED")
-                .getSingleResult();
-        return totalIssuedBooksResult.intValue();
+    public void setIssueId(int issueId) {
+        this.issueId = issueId;
     }
 
-    public int getOverdueBooks() {
-        Long overdueBooksResult = session.createQuery(
-                "SELECT COUNT(bi) FROM BookIssueEntity bi WHERE bi.returnDate IS NULL AND bi.dueDate < CURRENT_DATE",
-                Long.class
-        ).getSingleResult();
-
-        return overdueBooksResult.intValue();
+    public int getMemberId() {
+        return memberId;
     }
 
-    public int getReturnedBooks() {
-        Long totalIssuedBooksResult = session
-                .createQuery("SELECT COUNT(bi) FROM BookIssueEntity bi WHERE status = :status", Long.class)
-                .setParameter("status", "RETURNED")
-                .getSingleResult();
-        return totalIssuedBooksResult.intValue();
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
     }
 
-    public boolean returnBook(int issueId) {
+    public Long getBookId() {
+        return bookId;
+    }
 
-        Transaction transaction = session.beginTransaction();
-        BookIssueEntity bookIssueEntity = session.find(BookIssueEntity.class, issueId, LockModeType.PESSIMISTIC_WRITE);
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
 
-        if (bookIssueEntity == null) {
-            transaction.rollback();
-            return false;
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getBookTitle() {
+        return bookTitle;
+    }
+
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
+    }
+
+    public LocalDate getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(LocalDate issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public boolean isOverdue() {
+        return "BORROWED".equals(status) && dueDate != null && dueDate.isBefore(java.time.LocalDate.now());
+    }
+
+    public long getOverdueDays() {
+        if (!isOverdue()) {
+            return 0;
         }
+        return java.time.temporal.ChronoUnit.DAYS.between(dueDate, java.time.LocalDate.now());
+    }
 
-        if (bookIssueEntity.getReturnDate() != null) {
-            transaction.rollback();
-            return false;
-        }
-
-        BookEntity bookEntity = session.find(BookEntity.class, bookIssueEntity.getIsbn(), LockModeType.PESSIMISTIC_WRITE);
-
-        if (bookEntity == null) {
-            transaction.rollback();
-            return false;
-        }
-
-        bookEntity.setQuantity(bookEntity.getQuantity() + 1);
-        bookIssueEntity.setReturnDate(LocalDate.now());
-        bookIssueEntity.setStatus("RETURNED");
-        transaction.commit();
-        return true;
-
+    public double getFineAmount() {
+        double finePerDay = 20.0;
+        return getOverdueDays() * finePerDay;
     }
 }

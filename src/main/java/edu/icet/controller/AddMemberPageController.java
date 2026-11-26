@@ -1,7 +1,6 @@
 package edu.icet.controller;
 
 import edu.icet.model.dto.MemberDTO;
-import edu.icet.model.entity.MemberEntity;
 import edu.icet.service.AddMemberService;
 import edu.icet.service.impl.AddMemberServiceImpl;
 import javafx.fxml.FXML;

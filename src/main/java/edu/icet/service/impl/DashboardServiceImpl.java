@@ -1,21 +1,17 @@
 package edu.icet.service.impl;
 
-import edu.icet.model.dto.BookDTO;
+import edu.icet.mapper.IssueReturnMapper;
 import edu.icet.model.dto.BookIssueDTO;
-import edu.icet.model.dto.MemberDTO;
-import edu.icet.model.entity.BookIssueEntity;
 import edu.icet.repository.DashboardRepository;
 import edu.icet.repository.impl.DashboardRepositoryImpl;
 import edu.icet.service.DashboardService;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
-import java.util.List;
 
 public class DashboardServiceImpl implements DashboardService {
 
@@ -53,7 +49,10 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public void loadRecentTransactions(TableView<BookIssueEntity> recentTransactionsTable) {
-        recentTransactionsTable.setItems(dashboardRepository.getAllIssues());
+    public void loadRecentTransactions(TableView<BookIssueDTO> recentTransactionsTable) {
+        IssueReturnMapper issueReturnMapper = new IssueReturnMapper();
+        recentTransactionsTable.setItems(FXCollections.observableArrayList(
+                dashboardRepository.getAllIssues().stream().map(issueReturnMapper::toDTO).toList()
+        ));
     }
 }

@@ -19,6 +19,13 @@ public class MemberDTO {
         this.address = address;
     }
 
+    public MemberDTO(String name, String email, String phone, String address) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
+
     public int getMemberId() {
         return memberId;
     }
